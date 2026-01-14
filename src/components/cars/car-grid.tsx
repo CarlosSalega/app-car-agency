@@ -1,5 +1,5 @@
 import type { Car } from "@prisma/client";
-import { CarCard } from "@components/car-card";
+import { CarCard } from "@/components/cars/car-card";
 import { WithPagination } from "@components/with-pagination";
 import { PaginationProps } from "@components/pagination";
 

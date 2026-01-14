@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import { SearchFilters } from "@/components/search-filters";
-import { CarGrid } from "@/components/car-grid";
+import { CarGrid } from "@/components/cars/car-grid";
 import { Header } from "@/components/header/header";
 import { Footer } from "@/components/footer";
 import MobileFiltersSheet from "@/components/mobile-filters-sheet";

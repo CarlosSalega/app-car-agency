@@ -16,11 +16,11 @@ import { useCarFormData } from "@/hooks/use-car-form-data";
 import { useBrandModels } from "@/hooks/use-brand-models";
 import { useImageCleanup } from "@/hooks/use-image-cleanup";
 import { useTagSelection } from "@/hooks/use-tag-selection";
-import { CarFormFields } from "@/components/form/car-form-fields";
+import { CarFormFields } from "@/components/cars/car-form/car-form-fields";
 import { TagSelector } from "@/components/form/tag-selector";
 import { FormActions } from "@/components/form/form-actions";
 import { FormField } from "@/components/form/form-field";
-import { CarFormSkeleton } from "@/components/car-form-skeleton";
+import { CarFormSkeleton } from "@/components/cars/car-form/car-form-skeleton";
 import type { CarWithRelations } from "@/types/car-form";
 
 interface CarFormProps {

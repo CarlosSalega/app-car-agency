@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CldImage } from "next-cloudinary";
 import { ImageSkeleton } from "@/components/ui/image-skeleton";
-import { CarPlaceholderSVG } from "@/components/car-placeholder-svg";
+import { CarPlaceholderSVG } from "@/components/cars/car-placeholder-svg";
 import { cn } from "@/lib/utils";
 
 interface CarImageProps {

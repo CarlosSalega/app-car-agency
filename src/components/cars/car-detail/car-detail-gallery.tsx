@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { getPublicIdFromUrl } from "@/lib/utils";
-import { CarImage } from "@/components/car-image";
+import { CarImage } from "@/components/cars/car-image";
 
 interface CarDetailGalleryProps {
   images: string[];

@@ -5,7 +5,7 @@ import { TableRow, TableCell, TableHead } from "@/components/ui/table";
 import { AdminTable } from "@/components/admin/admin-table";
 import { ActionButtonsGroup } from "./admin/admin-action-buttons";
 import { CarStatusBadge } from "./status-badges";
-import { CarImage } from "./car-image";
+import { CarImage } from "./cars/car-image";
 import { safeJsonParse, getPublicIdFromUrl } from "@/lib/utils";
 import type { PaginationProps } from "./pagination";
 

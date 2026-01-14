@@ -13,7 +13,7 @@ import { Calendar, Gauge, Fuel, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CarImage } from "@/components/car-image";
+import { CarImage } from "@/components/cars/car-image";
 
 interface CarCardProps {
   car: Car & {

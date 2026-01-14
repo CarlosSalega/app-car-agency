@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { Header } from "@/components/header/header";
 import { Footer } from "@/components/footer";
-import { CarDetailGallery } from "@/components/car-detail-gallery";
-import { CarDetailInfo } from "@/components/car-detail-info";
-import { CarDetailSpecs } from "@/components/car-detail-specs";
+import { CarDetailGallery } from "@/components/cars/car-detail/car-detail-gallery";
+import { CarDetailInfo } from "@/components/cars/car-detail/car-detail-info";
+import { CarDetailSpecs } from "@/components/cars/car-detail/car-detail-specs";
 import { ReserveButton } from "@/components/reserve-button";
 import type { Metadata } from "next";
 
