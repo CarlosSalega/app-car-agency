@@ -9,8 +9,8 @@ interface AdminHeaderProps {
 
 export function AdminHeader({ user }: AdminHeaderProps) {
   return (
-    <header className="border-border bg-card/50 flex h-14 items-center border-b backdrop-blur-sm">
-      <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4">
+    <header className="border-border bg-card/50 border-b backdrop-blur-sm">
+      <div className="flex h-14 items-center justify-between px-4">
         <AdminLogo />
 
         <AdminNavigation user={user} />
