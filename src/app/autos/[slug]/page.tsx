@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { Header } from "@/components/header";
+import { Header } from "@/components/header/header";
 import { Footer } from "@/components/footer";
 import { CarDetailGallery } from "@/components/car-detail-gallery";
 import { CarDetailInfo } from "@/components/car-detail-info";

@@ -28,11 +28,11 @@ export default async function AdminPage() {
   const recentLogs = await prisma.log.findMany({
     include: { user: true },
     orderBy: { createdAt: "desc" },
-    take: 6,
+    take: 5,
   });
 
   return (
-    <div className="bg-background min-h-screen">
+    <>
       <AdminHeader user={session.user} />
 
       <div className="container mx-auto px-4 py-6">
@@ -67,6 +67,6 @@ export default async function AdminPage() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }

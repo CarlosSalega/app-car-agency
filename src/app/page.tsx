@@ -1,4 +1,4 @@
-import { Header } from "@/components/header";
+import { Header } from "@/components/header/header";
 import { Footer } from "@/components/footer";
 import { LatestArrivals } from "@/components/latest-arrivals";
 
