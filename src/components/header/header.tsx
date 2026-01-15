@@ -9,7 +9,7 @@ export async function Header() {
 
   return (
     <header className="border-border bg-card/50 border-b backdrop-blur-sm">
-      <div className="flex h-14 items-center justify-between px-4">
+      <div className="flex h-14 items-center justify-between px-4 md:px-8">
         <HeaderLogo />
 
         <HeaderSearch />
