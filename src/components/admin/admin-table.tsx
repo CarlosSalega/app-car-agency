@@ -9,37 +9,98 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
-import { PaginationProps } from "@/components/pagination";
 import { WithPagination } from "@/components/with-pagination";
+import type { PaginationProps } from "@/components/pagination";
 
-interface AdminTableProps {
+export interface AdminColumn<T> {
+  key: string;
   header: ReactNode;
-  body: ReactNode;
-  footerColSpan?: number;
+  cell: (row: T) => ReactNode;
+  className?: string;
+}
+
+interface AdminTableProps<T> {
+  data?: T[];
+  columns: AdminColumn<T>[];
+  rowKey: (row: T) => string;
+  isLoading?: boolean;
+  error?: string | null;
+  emptyState?: ReactNode;
+  loadingState?: ReactNode;
+  errorState?: ReactNode;
   pagination?: PaginationProps;
   className?: string;
 }
 
-export function AdminTable({
-  header,
-  body,
+export function AdminTable<T>({
+  data = [],
+  columns,
+  rowKey,
+  isLoading,
+  error,
+  emptyState,
+  loadingState,
+  errorState,
   pagination,
-  footerColSpan = 1,
   className,
-}: AdminTableProps) {
+}: AdminTableProps<T>) {
+  const colSpan = columns.length;
+
   return (
     <div className={`h-full rounded-lg border ${className ?? ""}`}>
       <Table>
-        <TableHeader className="[&_tr:hover]:bg-transparent">
-          {header}
+        <TableHeader>
+          <TableRow>
+            {columns.map((col) => (
+              <TableCell key={col.key} className={col.className}>
+                {col.header}
+              </TableCell>
+            ))}
+          </TableRow>
         </TableHeader>
 
-        <TableBody>{body}</TableBody>
+        <TableBody>
+          {/* Loading */}
+          {isLoading && (
+            <TableRow>
+              <TableCell colSpan={colSpan}>
+                {loadingState ?? "Cargando..."}
+              </TableCell>
+            </TableRow>
+          )}
+
+          {/* Error */}
+          {!isLoading && error && (
+            <TableRow>
+              <TableCell colSpan={colSpan}>{errorState ?? error}</TableCell>
+            </TableRow>
+          )}
+
+          {/* Empty */}
+          {!isLoading && !error && data.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={colSpan}>
+                {emptyState ?? "Sin resultados"}
+              </TableCell>
+            </TableRow>
+          )}
+
+          {/* Data */}
+          {!isLoading &&
+            !error &&
+            data.map((row) => (
+              <TableRow key={rowKey(row)}>
+                {columns.map((col) => (
+                  <TableCell key={col.key}>{col.cell(row)}</TableCell>
+                ))}
+              </TableRow>
+            ))}
+        </TableBody>
 
         {pagination && (
-          <TableFooter className="bg-background [&_tr:hover]:bg-transparent">
+          <TableFooter>
             <TableRow>
-              <TableCell colSpan={footerColSpan} className="p-0">
+              <TableCell colSpan={colSpan} className="p-0">
                 <WithPagination pagination={pagination} />
               </TableCell>
             </TableRow>
