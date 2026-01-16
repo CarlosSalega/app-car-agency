@@ -15,7 +15,7 @@ export function ViewButton({
 }: ViewButtonProps) {
   return (
     <Button
-      className="hover:text-background hover:bg-blue-500"
+      className="hover:text-background hover:bg-info"
       variant="ghost"
       size="icon"
       asChild
@@ -43,7 +43,7 @@ export function EditButton({
   if (href) {
     return (
       <Button
-        className="hover:text-background hover:bg-orange-500"
+        className="hover:text-background hover:bg-warning"
         variant="ghost"
         size="icon"
         asChild
@@ -59,7 +59,7 @@ export function EditButton({
 
   return (
     <Button
-      className="hover:text-background hover:bg-orange-500"
+      className="hover:text-background hover:bg-warning"
       variant="ghost"
       size="icon"
       onClick={onClick}
@@ -84,7 +84,7 @@ export function DeleteButton({
 }: DeleteButtonProps) {
   return (
     <Button
-      className="hover:text-background hover:bg-red-500"
+      className="hover:text-background hover:bg-destructive"
       variant="ghost"
       size="icon"
       onClick={onClick}
