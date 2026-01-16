@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,9 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { HamburgerButton } from "@/components/ui/hamburger-button";
-
 import { ADMIN_NAVIGATION } from "@/data/admin-navigation";
 import { isActiveRoute } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
@@ -43,15 +41,15 @@ export function AdminDropdown({ user }: AdminDropdownProps) {
   return (
     <DropdownMenu onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
+        <button
           aria-label="Menú de usuario"
-          type="button"
-          className="flex size-9 items-center justify-center rounded-md"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "icon" }),
+            "hover:bg-background focus-visible:ring-0 focus-visible:ring-offset-0",
+          )}
         >
           <HamburgerButton open={open} />
-        </Button>
+        </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56">
@@ -96,14 +94,11 @@ export function AdminDropdown({ user }: AdminDropdownProps) {
                 prefetch={false}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  // layout base
                   "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none",
 
-                  // hover normal SOLO para no-activos
                   !active &&
                     "data-[highlighted]:bg-primary data-[highlighted]:text-background",
 
-                  // neutralizar highlighted cuando es activo
                   active &&
                     "data-[highlighted]:text-primary data-[highlighted]:bg-transparent",
                 )}
@@ -113,10 +108,8 @@ export function AdminDropdown({ user }: AdminDropdownProps) {
                     className={cn(
                       "mr-2 size-4 shrink-0",
 
-                      // estado base
                       active ? "text-primary" : "text-current",
 
-                      // neutralizar highlighted en activo
                       active && "data-[highlighted]:text-primary",
                     )}
                   />
@@ -126,11 +119,9 @@ export function AdminDropdown({ user }: AdminDropdownProps) {
                   className={cn(
                     "inline-block",
 
-                    // activo
                     active &&
                       "text-primary border-primary -mb-1 border-b-2 pb-0.5",
 
-                    // neutralizar highlighted
                     active && "data-[highlighted]:no-border",
                   )}
                 >
