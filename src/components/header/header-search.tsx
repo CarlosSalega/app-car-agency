@@ -16,7 +16,6 @@ export function HeaderSearch() {
 
   return (
     <>
-      {/* Desktop search */}
       <form
         action="/autos"
         method="GET"
@@ -24,25 +23,18 @@ export function HeaderSearch() {
       >
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Input
-              name="search"
-              placeholder={search.placeholder}
-              className="h-9"
-            />
+            <Input name="search" placeholder={search.placeholder} />
           </div>
 
-          <Button type="submit" className="h-9 px-6">
+          <Button type="submit" className="px-6">
             <Search className="size-5" />
           </Button>
         </div>
       </form>
 
-      {/* Mobile search */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="outline"
-            size="icon"
             className="bg-primary text-background hover:bg-primary hover:text-background md:hidden"
             aria-label="Buscar"
           >

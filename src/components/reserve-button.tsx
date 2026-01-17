@@ -47,7 +47,7 @@ export function ReserveButton({ carId, carTitle, price }: ReserveButtonProps) {
   };
   return (
     <>
-      <Button size="lg" className="px-8" onClick={() => setIsOpen(true)}>
+      <Button className="px-8" onClick={() => setIsOpen(true)}>
         <CreditCard className="mr-2 h-5 w-5" />
         Reservar este auto
       </Button>
