@@ -194,9 +194,9 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
             <div className="flex flex-col gap-2">
               <Button
                 type="button"
-                onClick={handleOpen}
-                className="inline-flex max-w-48 items-center gap-2 bg-yellow-400 font-medium text-black hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50"
+                className="xs:max-w-48 inline-flex w-full items-center gap-2 bg-yellow-400 font-medium text-black hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isUploading || !canAddMore}
+                onClick={handleOpen}
               >
                 <ImagePlus className="size-4" />
                 <span>{isUploading ? "Subiendo..." : "Subir imágenes"}</span>
@@ -224,7 +224,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
           return (
             <span
               key={url}
-              className="inline-flex cursor-grab items-center gap-2 rounded-full bg-zinc-800 px-2 py-1 text-white"
+              className="bg-muted-foreground xs:max-w-40 inline-flex h-10 w-full cursor-grab items-center gap-2 rounded-md px-2 py-1 text-white"
               draggable
               onDragStart={(e) => {
                 e.dataTransfer.setData("text/plain", String(idx));
@@ -251,17 +251,17 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
                 alt={name}
                 className="size-8 rounded object-cover"
               />
-              <span className="max-w-[160px] truncate">{name}</span>
+              <span className="xs:max-w-40 w-full truncate">{name}</span>
 
               <div className="flex items-center gap-1">
                 <button
                   type="button"
                   onClick={() => handleRemoveClick(url)}
                   disabled={isDeleting}
-                  className="ml-2 rounded-full bg-black/40 p-1 transition-colors hover:bg-red-600/80 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="hover:bg-destructive bg-background ml-2 rounded-full p-1 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                   title="Eliminar imagen"
                 >
-                  <X className="size-3 text-white" />
+                  <X className="text-foreground hover:text-background size-4" />
                 </button>
               </div>
             </span>
