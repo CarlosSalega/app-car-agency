@@ -8,7 +8,7 @@ interface FormActionsProps {
 
 export function FormActions({ loading, mode, onCancel }: FormActionsProps) {
   return (
-    <div className="flex gap-4">
+    <div className="xs:flex-row flex w-full flex-col gap-4">
       <Button type="submit" disabled={loading}>
         {loading
           ? "Guardando..."
