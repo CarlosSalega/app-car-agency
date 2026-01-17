@@ -51,7 +51,7 @@ export function CarFormFields({
 }: CarFormFieldsProps) {
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="box-border grid grid-cols-1 gap-4 md:grid-cols-2">
         <FormField label="Título" error={errors.title} required htmlFor="title">
           <Input id="title" {...register("title")} required />
         </FormField>
@@ -182,9 +182,13 @@ export function CarFormFields({
             value={formData.locationId || ""}
             onValueChange={(value) => setValue("locationId", value)}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Seleccionar ubicación" />
+            <SelectTrigger className="xs:max-w-full max-w-46">
+              <SelectValue
+                placeholder="Seleccionar ubicación"
+                className="truncate"
+              />
             </SelectTrigger>
+
             <SelectContent>
               {locations.map((loc) => (
                 <SelectItem key={loc.id} value={loc.id}>

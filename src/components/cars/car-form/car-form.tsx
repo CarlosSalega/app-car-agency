@@ -80,15 +80,6 @@ export function CarForm({ car, mode }: CarFormProps) {
       const url = mode === "create" ? "/api/cars" : `/api/cars/${car?.id}`;
       const method = mode === "create" ? "POST" : "PUT";
       const payload = formValuesToPayload(data, selectedTags);
-
-      console.log("[CarForm] Enviando formulario:", {
-        mode,
-        imagesCount: Array.isArray(data.images) ? data.images.length : 0,
-        images: Array.isArray(data.images) ? data.images : [],
-        tempUploadedCount: tempUploaded.length,
-        tempUploaded,
-      });
-
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -97,15 +88,7 @@ export function CarForm({ car, mode }: CarFormProps) {
 
       if (res.ok) {
         const finalImages = Array.isArray(data.images) ? data.images : [];
-        console.log(
-          "[CarForm] Formulario guardado exitosamente. Limpiando imágenes temporales no usadas:",
-          {
-            finalImagesCount: finalImages.length,
-            finalImages,
-            tempUploadedCount: tempUploaded.length,
-            tempUploaded,
-          },
-        );
+
         cleanupUsedImages(finalImages);
         router.push("/admin/cars");
         router.refresh();
@@ -131,13 +114,13 @@ export function CarForm({ car, mode }: CarFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card className="mx-auto max-w-[920px] py-6">
+      <Card className="mx-auto max-w-[920px] px-2 py-6">
         <CardHeader>
           <CardTitle className="text-primary underline">
             {mode === "create" ? "Nuevo Vehículo" : "Editar Vehículo"}
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 px-2">
           <CarFormFields
             register={register}
             setValue={setValue}
