@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UseImageCleanupReturn {
   tempUploaded: string[];
@@ -8,112 +8,81 @@ interface UseImageCleanupReturn {
   cleanupUsedImages: (usedImages: string[]) => void;
 }
 
+const normalizeUrl = (url: string) => {
+  try {
+    const { protocol, host, pathname } = new URL(url);
+    return `${protocol}//${host}${pathname}`;
+  } catch {
+    return url.trim();
+  }
+};
+
+const deleteImages = async (urls: string[]) => {
+  await Promise.allSettled(
+    urls.map((url) =>
+      fetch("/api/upload", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      }),
+    ),
+  );
+};
+
 export function useImageCleanup(): UseImageCleanupReturn {
   const [tempUploaded, setTempUploaded] = useState<string[]>([]);
+
   const usedImagesRef = useRef<Set<string>>(new Set());
-  const isCleaningUpRef = useRef(false);
+  const isCleaningRef = useRef(false);
+
+  const cleanupUnused = (urls: string[]) => {
+    if (!urls.length || isCleaningRef.current) return;
+
+    const unused = urls.filter((url) => {
+      const normalized = normalizeUrl(url);
+      return (
+        !usedImagesRef.current.has(url) &&
+        !usedImagesRef.current.has(normalized)
+      );
+    });
+
+    if (unused.length) {
+      deleteImages(unused);
+    }
+  };
 
   useEffect(() => {
-    const normalizeUrl = (url: string) => {
-      try {
-        const urlObj = new URL(url);
-        return `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}`;
-      } catch {
-        return url.trim();
-      }
-    };
-
-    const cleanupImages = (urls: string[]) => {
-      const toDelete = urls.filter((url) => {
-        const normalized = normalizeUrl(url);
-        return (
-          !usedImagesRef.current.has(url) &&
-          !usedImagesRef.current.has(normalized)
-        );
-      });
-      if (toDelete.length > 0) {
-        console.log(
-          `[use-image-cleanup] Eliminando ${toDelete.length} imágenes no usadas en cleanup del useEffect`,
-        );
-        toDelete.forEach((url) => {
-          fetch("/api/upload", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url }),
-          }).catch((err) => {
-            console.error("Error al eliminar imagen en cleanup:", err);
-          });
-        });
-      } else if (urls.length > 0) {
-        console.log(
-          `[use-image-cleanup] Todas las ${urls.length} imágenes en cleanup ya fueron usadas, no se eliminan`,
-        );
-      }
-    };
-
-    const handleBeforeUnload = () => {
-      if (tempUploaded.length && !isCleaningUpRef.current) {
-        cleanupImages(tempUploaded);
-      }
-    };
+    const handleBeforeUnload = () => cleanupUnused(tempUploaded);
 
     window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      if (tempUploaded.length && !isCleaningUpRef.current) {
-        cleanupImages(tempUploaded);
-      }
+      cleanupUnused(tempUploaded);
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [tempUploaded]);
 
   const cleanupUsedImages = (usedImages: string[]) => {
-    isCleaningUpRef.current = true;
-
-    const normalizeUrl = (url: string) => {
-      try {
-        const urlObj = new URL(url);
-        return `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}`;
-      } catch {
-        return url.trim();
-      }
-    };
+    isCleaningRef.current = true;
 
     usedImages.forEach((url) => {
       usedImagesRef.current.add(url);
       usedImagesRef.current.add(normalizeUrl(url));
     });
 
-    const normalizedUsed = usedImages.map(normalizeUrl);
-    const unused = tempUploaded.filter(
-      (url) => !normalizedUsed.includes(normalizeUrl(url)),
-    );
-
-    if (unused.length) {
-      console.log(
-        `[use-image-cleanup] Limpiando ${unused.length} imágenes no utilizadas de ${tempUploaded.length} temporales`,
-      );
-      unused.forEach((url) => {
-        fetch("/api/upload", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url }),
-        }).catch((err) => {
-          console.error("Error al eliminar imagen temporal:", err);
-        });
-      });
-    } else {
-      console.log(
-        `[use-image-cleanup] Todas las ${tempUploaded.length} imágenes temporales se utilizaron correctamente`,
-      );
-    }
+    cleanupUnused(tempUploaded);
 
     setTempUploaded([]);
+
     setTimeout(() => {
-      isCleaningUpRef.current = false;
+      isCleaningRef.current = false;
       usedImagesRef.current.clear();
-    }, 1000);
+    }, 500);
   };
 
-  return { tempUploaded, setTempUploaded, cleanupUsedImages };
+  return {
+    tempUploaded,
+    setTempUploaded,
+    cleanupUsedImages,
+  };
 }

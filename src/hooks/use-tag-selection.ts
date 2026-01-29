@@ -15,13 +15,13 @@ export function useTagSelection(
   setValue?: UseFormSetValue<CarInput>,
 ): UseTagSelectionReturn {
   const [selectedTags, setSelectedTags] = useState<string[]>(
-    initialTags ? initialTags.map((t) => t.id) : [],
+    initialTags ? initialTags.map((tag) => tag.id) : [],
   );
 
   useEffect(() => {
     if (tagsList.length && selectedTags.length && setValue) {
       const names = selectedTags
-        .map((id) => tagsList.find((t) => t.id === id)?.name)
+        .map((id) => tagsList.find((tag) => tag.id === id)?.name)
         .filter(Boolean) as string[];
       setValue("tags", names.join(","));
     }

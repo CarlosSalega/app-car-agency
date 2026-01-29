@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Location, Tag } from "@prisma/client";
 import type { BrandWithModels } from "@/types/car-form";
 
@@ -9,41 +9,48 @@ interface UseCarFormDataReturn {
   loading: boolean;
 }
 
-export function useCarFormData(initialBrandId?: string): UseCarFormDataReturn {
+const safeJson = async <T>(res: Response, fallback: T): Promise<T> =>
+  res.ok ? res.json() : fallback;
+
+export function useCarFormData(): UseCarFormDataReturn {
   const [brands, setBrands] = useState<BrandWithModels[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchData = async () => {
       setLoading(true);
       try {
         const [brandsRes, locationsRes, tagsRes] = await Promise.all([
-          fetch("/api/brands"),
-          fetch("/api/locations"),
-          fetch("/api/tags"),
+          fetch("/api/brands", { signal: controller.signal }),
+          fetch("/api/locations", { signal: controller.signal }),
+          fetch("/api/tags", { signal: controller.signal }),
         ]);
 
         const [brandsData, locationsData, tagsData] = await Promise.all([
-          brandsRes.json(),
-          locationsRes.ok ? locationsRes.json() : [],
-          tagsRes.ok ? tagsRes.json() : [],
+          safeJson(brandsRes, []),
+          safeJson(locationsRes, []),
+          safeJson(tagsRes, []),
         ]);
 
         setBrands(brandsData);
         setLocations(locationsData);
         setTags(tagsData);
       } catch (error) {
-        console.error("Error fetching form data:", error);
-        setLocations([]);
-        setTags([]);
+        if (!(error instanceof DOMException)) {
+          console.error("Error fetching form data:", error);
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
+
+    return () => controller.abort();
   }, []);
 
   return { brands, locations, tags, loading };
