@@ -55,7 +55,7 @@ export function LoginForm() {
 
   return (
     <>
-      <Card className="w-full max-w-md py-6">
+      <Card className="w-full max-w-sm py-6">
         <CardHeader>
           <CardTitle className="text-center">Iniciar Sesión</CardTitle>
         </CardHeader>
