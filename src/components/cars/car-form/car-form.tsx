@@ -22,6 +22,7 @@ import { FormActions } from "@/components/form/form-actions";
 import { FormField } from "@/components/form/form-field";
 import { CarFormSkeleton } from "@/components/cars/car-form/car-form-skeleton";
 import type { CarWithRelations } from "@/types/car-form";
+import { Plus, Edit } from "lucide-react";
 
 interface CarFormProps {
   car?: CarWithRelations;
@@ -32,12 +33,7 @@ export function CarForm({ car, mode }: CarFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const {
-    brands,
-    locations,
-    tags,
-    loading: dataLoading,
-  } = useCarFormData(car?.brandId);
+  const { brands, locations, tags, loading: dataLoading } = useCarFormData();
 
   const initialFormValues = useMemo(() => carToFormValues(car), [car]);
   const initialImages = useMemo(
@@ -60,7 +56,7 @@ export function CarForm({ car, mode }: CarFormProps) {
 
   const formData = watch();
 
-  const { selectedBrandId, models, handleBrandChange } = useBrandModels(
+  const { brandId, models, handleBrandChange } = useBrandModels(
     brands,
     car?.brandId,
   );
@@ -114,9 +110,14 @@ export function CarForm({ car, mode }: CarFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card className="mx-auto max-w-[920px] px-2 py-6">
-        <CardHeader>
-          <CardTitle className="text-primary underline">
+      <Card className="mx-auto max-w-2xl px-2 py-6 md:px-4">
+        <CardHeader className="px-2">
+          <CardTitle className="text-primary flex items-center gap-2 underline">
+            {mode === "create" ? (
+              <Plus className="size-5" />
+            ) : (
+              <Edit className="size-5" />
+            )}
             {mode === "create" ? "Nuevo Vehículo" : "Editar Vehículo"}
           </CardTitle>
         </CardHeader>
@@ -129,7 +130,7 @@ export function CarForm({ car, mode }: CarFormProps) {
             brands={brands}
             models={models}
             locations={locations}
-            selectedBrandId={selectedBrandId}
+            selectedBrandId={brandId}
             onBrandChange={(brandId) => handleBrandChange(brandId, setValue)}
           />
 

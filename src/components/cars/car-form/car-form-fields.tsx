@@ -51,8 +51,14 @@ export function CarFormFields({
 }: CarFormFieldsProps) {
   return (
     <>
-      <div className="box-border grid grid-cols-1 gap-4 md:grid-cols-2">
-        <FormField label="Título" error={errors.title} required htmlFor="title">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <FormField
+          label="Título"
+          error={errors.title}
+          required
+          htmlFor="title"
+          className="md:col-span-2"
+        >
           <Input id="title" {...register("title")} required />
         </FormField>
 
@@ -99,7 +105,13 @@ export function CarFormFields({
           <Input id="version" {...register("version")} />
         </FormField>
 
-        <FormField label="Año" error={errors.year} required htmlFor="year">
+        <FormField
+          label="Año"
+          error={errors.year}
+          required
+          htmlFor="year"
+          className="max-w-20"
+        >
           <Input
             id="year"
             type="number"
@@ -114,16 +126,23 @@ export function CarFormFields({
           error={errors.kilometers}
           required
           htmlFor="kilometers"
+          className="max-w-30"
         >
           <Input
             id="kilometers"
             type="number"
             {...register("kilometers")}
             required
+            className="max-w-30"
           />
         </FormField>
 
-        <FormField label="Color" error={errors.color} htmlFor="color">
+        <FormField
+          label="Color"
+          error={errors.color}
+          htmlFor="color"
+          className="max-w-30"
+        >
           <Input id="color" {...register("color")} />
         </FormField>
 
@@ -157,7 +176,13 @@ export function CarFormFields({
           />
         </FormField>
 
-        <FormField label="Precio" error={errors.price} required htmlFor="price">
+        <FormField
+          label="Precio"
+          error={errors.price}
+          required
+          htmlFor="price"
+          className="max-w-32"
+        >
           <Input
             id="price"
             type="number"
@@ -198,14 +223,6 @@ export function CarFormFields({
             </SelectContent>
           </Select>
         </FormField>
-
-        <FormField label="Estado" error={errors.status} required>
-          <EnumSelect
-            value={formData.status || "AVAILABLE"}
-            onValueChange={(value: Car["status"]) => setValue("status", value)}
-            options={CAR_STATUS_OPTIONS}
-          />
-        </FormField>
       </div>
 
       <FormField
@@ -219,6 +236,14 @@ export function CarFormFields({
           {...register("description")}
           rows={4}
           required
+        />
+      </FormField>
+
+      <FormField label="Estado" error={errors.status} required>
+        <EnumSelect
+          value={formData.status || "AVAILABLE"}
+          onValueChange={(value: Car["status"]) => setValue("status", value)}
+          options={CAR_STATUS_OPTIONS}
         />
       </FormField>
     </>
