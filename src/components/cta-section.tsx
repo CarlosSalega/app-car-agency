@@ -14,16 +14,14 @@ export function CTASection() {
       <div className="flex flex-col justify-center gap-4 sm:flex-row">
         <Button
           asChild
-          size="lg"
-          className="h-12 px-8 text-base font-semibold transition duration-300 ease-in-out hover:scale-110"
+          className="px-8 text-base font-semibold transition duration-300 ease-in-out hover:scale-110"
         >
           <Link href="/autos">🔍 Mirá todo nuestro stock</Link>
         </Button>
         <Button
           asChild
           variant="outline"
-          size="lg"
-          className="hover:bg-foreground h-12 px-8 text-base transition duration-300 ease-in-out hover:scale-110"
+          className="hover:bg-foreground px-8 text-base transition duration-300 ease-in-out hover:scale-110"
         >
           <Link href="/contacto">💬 Quiero Asesoramiento</Link>
         </Button>
