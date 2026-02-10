@@ -575,7 +575,7 @@ async function main() {
         if (
           (wasBrandCreated || wasModelCreated) &&
           images.length > 0 &&
-          images[0] !== "/placeholder.jpg"
+          images[0] !== "/placeholder.webp"
         ) {
           console.log(
             `✅ Imágenes encontradas para ${carData.brand} ${carData.model}: ${images.length} imagen(es)`,
@@ -623,7 +623,7 @@ async function main() {
             currency: carData.currency,
             description: carData.description,
             locationId: randomLocation.id,
-            images: JSON.stringify(images),
+            images: images,
             tags: {
               connect: selectedTags.map((tag) => ({
                 id: tag.id,

@@ -191,7 +191,7 @@ model Car {
   description  String
   locationId   String?
   location     Location?     @relation(fields: [locationId], references: [id])
-  images       String
+  images       String[]
   tags         Tag[]
   status       CarStatus     @default(AVAILABLE)
   soldAt       DateTime?

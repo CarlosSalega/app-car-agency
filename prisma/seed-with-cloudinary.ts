@@ -18,7 +18,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
@@ -187,7 +187,7 @@ async function main() {
         "   El seed continuará pero usará rutas locales en lugar de URLs de Cloudinary.",
       );
       console.warn(
-        "   Configura NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY y CLOUDINARY_API_SECRET",
+        "   Configura CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY y CLOUDINARY_API_SECRET",
       );
     }
 
@@ -720,7 +720,7 @@ async function main() {
             currency: carData.currency,
             description: carData.description,
             locationId: randomLocation.id,
-            images: JSON.stringify(images),
+            images: images,
             tags: {
               connect: selectedTags.map((tag) => ({
                 id: tag.id,
