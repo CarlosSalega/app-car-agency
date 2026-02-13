@@ -12,7 +12,7 @@ interface AdminNavigationProps {
   user: AuthUser;
 }
 
-export default function AdminNavigation({ user }: AdminNavigationProps) {
+export function AdminNavigation({ user }: AdminNavigationProps) {
   const pathname = usePathname();
   const { styles } = ADMIN_HEADER_CONTENT;
 

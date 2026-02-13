@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ADMIN_HEADER_CONTENT } from "@/data/admin-header";
 
-export default function AdminLogo() {
+export function AdminLogo() {
   const { logo } = ADMIN_HEADER_CONTENT;
 
   return (
