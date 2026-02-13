@@ -19,11 +19,7 @@ export function carToFormValues(car?: CarWithRelations): Partial<CarInput> {
     currency: car.currency || "ARS",
     description: car.description || "",
     locationId: car.locationId || "",
-    images: car.images
-      ? typeof car.images === "string"
-        ? JSON.parse(car.images)
-        : car.images
-      : ([] as string[]),
+    images: Array.isArray(car.images) ? car.images : [],
     tags: car.tags
       ? Array.isArray(car.tags)
         ? car.tags.map((t) => t.name).join(",")
@@ -52,9 +48,7 @@ export function formValuesToPayload(
     currency: data.currency,
     description: data.description,
     locationId: data.locationId || null,
-    images: Array.isArray(data.images)
-      ? JSON.stringify(data.images)
-      : data.images,
+    images: Array.isArray(data.images) ? data.images : [],
     tags: selectedTags.length > 0 ? selectedTags : parseTagsString(data.tags),
     status: data.status,
   };

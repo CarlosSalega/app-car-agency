@@ -5,24 +5,25 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ImageUpload } from "@/components/image-upload";
-import { carSchema, type CarInput } from "@/lib/validations/car";
-import {
-  carToFormValues,
-  formValuesToPayload,
-} from "@/lib/utils/car-form-utils";
 import { useCarFormData } from "@/hooks/use-car-form-data";
 import { useBrandModels } from "@/hooks/use-brand-models";
 import { useImageCleanup } from "@/hooks/use-image-cleanup";
 import { useTagSelection } from "@/hooks/use-tag-selection";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ImageUpload } from "@/components/image-upload";
 import { CarFormFields } from "@/components/cars/car-form/car-form-fields";
 import { TagSelector } from "@/components/form/tag-selector";
 import { FormActions } from "@/components/form/form-actions";
 import { FormField } from "@/components/form/form-field";
 import { CarFormSkeleton } from "@/components/cars/car-form/car-form-skeleton";
+import { carSchema, type CarInput } from "@/lib/validations/car";
+import {
+  carToFormValues,
+  formValuesToPayload,
+} from "@/lib/utils/car-form-utils";
 import type { CarWithRelations } from "@/types/car-form";
 import { Plus, Edit } from "lucide-react";
+import { toast } from "sonner";
 
 interface CarFormProps {
   car?: CarWithRelations;
@@ -31,11 +32,12 @@ interface CarFormProps {
 
 export function CarForm({ car, mode }: CarFormProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { brands, locations, tags, loading: dataLoading } = useCarFormData();
+  const { brands, locations, tags, loading: isDataLoading } = useCarFormData();
 
   const initialFormValues = useMemo(() => carToFormValues(car), [car]);
+
   const initialImages = useMemo(
     () =>
       Array.isArray(initialFormValues.images) ? initialFormValues.images : [],
@@ -45,9 +47,10 @@ export function CarForm({ car, mode }: CarFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
     watch,
+    trigger,
   } = useForm<CarInput>({
     resolver: zodResolver(carSchema),
     defaultValues: initialFormValues,
@@ -56,10 +59,11 @@ export function CarForm({ car, mode }: CarFormProps) {
 
   const formData = watch();
 
-  const { brandId, models, handleBrandChange } = useBrandModels(
-    brands,
-    car?.brandId,
-  );
+  const {
+    brandId: selectedBrandId,
+    models,
+    handleBrandChange,
+  } = useBrandModels(brands, car?.brandId);
 
   const { tempUploaded, setTempUploaded, cleanupUsedImages } =
     useImageCleanup();
@@ -71,45 +75,78 @@ export function CarForm({ car, mode }: CarFormProps) {
   );
 
   const onSubmit = async (data: CarInput) => {
-    setLoading(true);
+    if (!data.images || data.images.length === 0) {
+      toast.error("Debes agregar al menos una imagen");
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      const url = mode === "create" ? "/api/cars" : `/api/cars/${car?.id}`;
-      const method = mode === "create" ? "POST" : "PUT";
-      const payload = formValuesToPayload(data, selectedTags);
-      const res = await fetch(url, {
-        method,
+      const apiUrl = mode === "create" ? "/api/cars" : `/api/cars/${car?.id}`;
+      const httpMethod = mode === "create" ? "POST" : "PUT";
+      const requestPayload = formValuesToPayload(data, selectedTags);
+
+      const response = await fetch(apiUrl, {
+        method: httpMethod,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(requestPayload),
       });
 
-      if (res.ok) {
-        const finalImages = Array.isArray(data.images) ? data.images : [];
+      if (response.ok) {
+        const responseData = await response.json();
+        const finalImageKeys = Array.isArray(data.images) ? data.images : [];
 
-        cleanupUsedImages(finalImages);
+        cleanupUsedImages(finalImageKeys);
+
+        const successMessage =
+          mode === "create"
+            ? "Vehículo creado exitosamente"
+            : "Vehículo actualizado";
+        toast.success(successMessage);
+
         router.push("/admin/cars");
         router.refresh();
       } else {
-        const errorData = await res.json().catch(() => ({}));
-        alert(
+        const errorData = await response
+          .json()
+          .catch(() => ({ error: "Error desconocido" }));
+
+        const errorMessage =
           errorData.error ||
-            errorData.details?.[0] ||
-            "Error al guardar el vehículo",
-        );
+          errorData.details?.[0] ||
+          "Error al guardar el vehículo";
+
+        toast.error(errorMessage);
+        console.error("API Error:", errorData);
       }
     } catch (error) {
       console.error("Submit error:", error);
-      alert("Error al guardar el vehículo");
+      toast.error(
+        error instanceof Error ? error.message : "Error al guardar el vehículo",
+      );
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  if (dataLoading) {
+  if (isDataLoading) {
     return <CarFormSkeleton />;
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const isFormValid = await trigger();
+        if (!isFormValid) {
+          toast.error(
+            "Por favor completa todos los campos requeridos correctamente",
+          );
+          return;
+        }
+        await handleSubmit(onSubmit)();
+      }}
+    >
       <Card className="mx-auto max-w-2xl px-2 py-6 md:px-4">
         <CardHeader className="px-2">
           <CardTitle className="text-primary flex items-center gap-2 underline">
@@ -121,6 +158,7 @@ export function CarForm({ car, mode }: CarFormProps) {
             {mode === "create" ? "Nuevo Vehículo" : "Editar Vehículo"}
           </CardTitle>
         </CardHeader>
+
         <CardContent className="space-y-6 px-2">
           <CarFormFields
             register={register}
@@ -130,32 +168,40 @@ export function CarForm({ car, mode }: CarFormProps) {
             brands={brands}
             models={models}
             locations={locations}
-            selectedBrandId={brandId}
+            selectedBrandId={selectedBrandId}
             onBrandChange={(brandId) => handleBrandChange(brandId, setValue)}
           />
 
           <FormField label="Imágenes" error={errors.images} required>
             <ImageUpload
               value={Array.isArray(formData.images) ? formData.images : []}
-              onChange={(urls) => {
-                const prev = Array.isArray(formData.images)
+              onChange={(imageKeys) => {
+                const previousImageKeys = Array.isArray(formData.images)
                   ? formData.images
                   : [];
-                const newOnes = urls.filter(
-                  (url) => !prev.includes(url) && !initialImages.includes(url),
+
+                const newImageKeys = imageKeys.filter(
+                  (imageKey) =>
+                    !previousImageKeys.includes(imageKey) &&
+                    !initialImages.includes(imageKey),
                 );
-                if (newOnes.length) {
-                  setTempUploaded((temp) => {
-                    const existingSet = new Set(temp);
-                    const uniqueNewOnes = newOnes.filter(
-                      (url) => !existingSet.has(url),
+
+                if (newImageKeys.length) {
+                  setTempUploaded((temporaryUploaded) => {
+                    const existingKeysSet = new Set(temporaryUploaded);
+                    const uniqueNewKeys = newImageKeys.filter(
+                      (imageKey) => !existingKeysSet.has(imageKey),
                     );
-                    return uniqueNewOnes.length > 0
-                      ? [...temp, ...uniqueNewOnes]
-                      : temp;
+                    return uniqueNewKeys.length
+                      ? [...temporaryUploaded, ...uniqueNewKeys]
+                      : temporaryUploaded;
                   });
                 }
-                setValue("images", urls);
+
+                setValue("images", imageKeys, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
               }}
             />
           </FormField>
@@ -170,7 +216,7 @@ export function CarForm({ car, mode }: CarFormProps) {
           </FormField>
 
           <FormActions
-            loading={loading}
+            loading={isLoading}
             mode={mode}
             onCancel={() => router.back()}
           />

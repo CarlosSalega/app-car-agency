@@ -26,7 +26,7 @@ export interface CarPayload {
   currency: Car["currency"];
   description: string;
   locationId: string | null;
-  images: string;
+  images: string[];
   tags: string[];
   status: Car["status"];
 }
