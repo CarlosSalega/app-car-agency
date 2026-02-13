@@ -97,10 +97,10 @@ export function AdminDropdown({ user }: AdminDropdownProps) {
                   "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none",
 
                   !active &&
-                    "data-[highlighted]:bg-primary data-[highlighted]:text-background",
+                    "data-highlighted:bg-primary data-highlighted:text-background",
 
                   active &&
-                    "data-[highlighted]:text-primary data-[highlighted]:bg-transparent",
+                    "data-highlighted:text-primary data-highlighted:bg-transparent",
                 )}
               >
                 {Icon && (
@@ -110,7 +110,7 @@ export function AdminDropdown({ user }: AdminDropdownProps) {
 
                       active ? "text-primary" : "text-current",
 
-                      active && "data-[highlighted]:text-primary",
+                      active && "data-highlighted:text-primary",
                     )}
                   />
                 )}
