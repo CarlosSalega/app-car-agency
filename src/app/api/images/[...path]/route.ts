@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const PROVIDER = process.env.IMAGE_PROVIDER ?? "cloudinary";
+
 const CLOUDINARY_BASE_URL = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+const S3_BASE_URL = process.env.S3_PUBLIC_BASE_URL;
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> },
+  { params }: { params: { path: string[] } },
 ) {
   try {
-    const { path } = await params;
-    const imagePath = path.join("/");
+    const imagePath = params.path?.filter(Boolean).join("/");
 
     if (!imagePath) {
       return NextResponse.json(
@@ -17,11 +20,22 @@ export async function GET(
       );
     }
 
-    const cloudinaryUrl = `${CLOUDINARY_BASE_URL}/${imagePath}`;
+    if (PROVIDER !== "cloudinary" && !S3_BASE_URL) {
+      return NextResponse.json(
+        { error: "S3 base URL no configurada" },
+        { status: 500 },
+      );
+    }
 
-    const response = await fetch(cloudinaryUrl, {
+    const imageUrl =
+      PROVIDER === "cloudinary"
+        ? `${CLOUDINARY_BASE_URL}/${imagePath}`
+        : `${S3_BASE_URL}/${imagePath}`;
+
+    const response = await fetch(imageUrl, {
       headers: {
         "User-Agent": "Mozilla/5.0",
+        Accept: "image/*",
       },
       next: {
         revalidate: 86400,
@@ -35,22 +49,21 @@ export async function GET(
       );
     }
 
-    const imageBuffer = await response.arrayBuffer();
-    const contentType =
-      response.headers.get("content-type") || "image/jpeg";
+    const contentType = response.headers
+      .get("content-type")
+      ?.startsWith("image/")
+      ? response.headers.get("content-type")!
+      : "image/webp";
 
-    const headers = new Headers();
-    headers.set("Content-Type", contentType);
-    headers.set(
-      "Cache-Control",
-      "public, max-age=31536000, immutable, stale-while-revalidate=86400",
-    );
-    headers.set("X-Content-Type-Options", "nosniff");
-    headers.set("CDN-Cache-Control", "public, max-age=31536000");
-
-    return new NextResponse(imageBuffer, {
+    return new NextResponse(response.body, {
       status: 200,
-      headers,
+      headers: {
+        "Content-Type": contentType,
+        "Cache-Control":
+          "public, max-age=31536000, immutable, stale-while-revalidate=86400",
+        "X-Content-Type-Options": "nosniff",
+        "CDN-Cache-Control": "public, max-age=31536000",
+      },
     });
   } catch (error) {
     console.error("Error al obtener imagen:", error);
@@ -60,4 +73,3 @@ export async function GET(
     );
   }
 }
-
