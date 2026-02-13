@@ -8,10 +8,11 @@ const S3_BASE_URL = process.env.S3_PUBLIC_BASE_URL;
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } },
+  { params }: { params: Promise<{ path: string[] }> },
 ) {
   try {
-    const imagePath = params.path?.filter(Boolean).join("/");
+    const resolvedParams = await params;
+    const imagePath = resolvedParams.path?.filter(Boolean).join("/");
 
     if (!imagePath) {
       return NextResponse.json(
