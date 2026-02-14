@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/session";
+
 import { prisma } from "@/lib/db";
 import { ImageService } from "@/lib/images/image-service";
+import { getSession } from "@/lib/session";
 
 export const config = {
   api: {

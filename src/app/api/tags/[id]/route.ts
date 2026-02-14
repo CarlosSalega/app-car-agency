@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
+import slugify from "slugify";
+
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
-import slugify from "slugify";
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -17,13 +18,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "El nombre del tag es requerido" }, { status: 400 });
     }
 
-    // Convertir el nombre a slug para almacenamiento
     const slugName = slugify(data.name.trim(), {
       lower: true,
       strict: true,
     });
 
-    // Verificar si ya existe otro tag con ese nombre
     const existingTag = await prisma.tag.findUnique({
       where: { name: slugName },
     });
@@ -42,7 +41,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       },
     });
 
-    // Log action
     await prisma.log.create({
       data: {
         action: "UPDATE",
@@ -72,7 +70,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const { id } = await params;
 
-    // Verificar si hay autos asociados
     const tag = await prisma.tag.findUnique({
       where: { id },
       include: {
@@ -101,7 +98,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       where: { id },
     });
 
-    // Log action
     await prisma.log.create({
       data: {
         action: "DELETE",

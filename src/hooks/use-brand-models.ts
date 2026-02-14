@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import type { UseFormSetValue } from "react-hook-form";
-import type { Model } from "@prisma/client";
-import type { BrandWithModels } from "@/types/car-form";
 import type { CarInput } from "@/lib/validations/car";
+import type { BrandWithModels } from "@/types/car-form";
+import type { Model } from "@prisma/client";
+import type { UseFormSetValue } from "react-hook-form";
+
+import { useEffect, useState } from "react";
 
 interface UseBrandModelsReturn {
   brandId: string;

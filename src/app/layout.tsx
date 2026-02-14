@@ -1,10 +1,12 @@
-import "./globals.css";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
+
 import ScrollLockFix from "@/components/scroll-lock-fix";
-import { siteMetadata } from "@/data/metadata";
 import { Toaster } from "@/components/ui/sonner";
+import { siteMetadata } from "@/data/metadata";
+
+import "./globals.css";
 
 export const metadata = {
   ...siteMetadata,

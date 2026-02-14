@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import type { Location, Tag } from "@prisma/client";
 import type { BrandWithModels } from "@/types/car-form";
+import type { Location, Tag } from "@prisma/client";
+
+import { useEffect, useState } from "react";
 
 interface UseCarFormDataReturn {
   brands: BrandWithModels[];

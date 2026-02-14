@@ -1,9 +1,10 @@
-import { requireAuthSession } from "@/lib/session";
-import { prisma } from "@/lib/db";
+import Link from "next/link";
+
 import { AdminHeader } from "@/components/admin/admin-header";
 import { DashboardStats } from "@/components/dashboard-stats";
 import { RecentActivity } from "@/components/recent-activity";
-import Link from "next/link";
+import { prisma } from "@/lib/db";
+import { requireAuthSession } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
 

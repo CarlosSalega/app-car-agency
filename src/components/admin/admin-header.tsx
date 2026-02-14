@@ -1,7 +1,7 @@
-import { AuthUser } from "@/types/auth";
+import { AdminDropdown } from "@/components/admin/admin-dropdown";
 import { AdminLogo } from "@/components/admin/admin-logo";
 import { AdminNavigation } from "@/components/admin/admin-navigation";
-import { AdminDropdown } from "@/components/admin/admin-dropdown";
+import { AuthUser } from "@/types/auth";
 
 interface AdminHeaderProps {
   user: AuthUser;

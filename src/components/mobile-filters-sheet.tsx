@@ -1,10 +1,12 @@
 "use client";
+import { Filter as FilterIcon } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import React from "react";
+
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Filter as FilterIcon } from "lucide-react";
+
 import { SearchFilters } from "./search-filters";
-import { useSearchParams } from "next/navigation";
 export function MobileFiltersSheet({ brands }: { brands: any[] }) {
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();

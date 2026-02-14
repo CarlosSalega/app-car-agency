@@ -1,4 +1,5 @@
 import { FALLBACK_IMAGE } from "@/lib/constants";
+
 import { CLOUDINARY_RESPONSIVE_TRANSFORMS } from "./cloudinary-config";
 
 export function resolveImageUrl(key: string) {

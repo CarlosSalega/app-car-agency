@@ -1,9 +1,10 @@
 import Image from "next/image";
-import { redirect } from "next/navigation";
-import { getSession } from "@/lib/session";
-import { LoginForm } from "@/components/login-form";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { LoginForm } from "@/components/login-form";
 import { HEADER_CONTENT } from "@/data/header";
+import { getSession } from "@/lib/session";
 
 export default async function LoginPage() {
   const session = await getSession();

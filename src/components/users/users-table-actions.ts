@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import type { UserWithCount } from "@/types/users";
+
+import { useState } from "react";
 
 export function useUsersTable(initialUsers: UserWithCount[]) {
   const [users, setUsers] = useState(initialUsers);

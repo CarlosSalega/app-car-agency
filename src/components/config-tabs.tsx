@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BrandsConfig } from "./brands-config";
-import { ModelsConfig } from "./models-config";
-import { LocationsConfig } from "./locations-config";
-import { TagsConfig } from "./tags-config";
-import { DepositConfig } from "./deposit-config";
 import type { Brand, Model, Location, Tag } from "@prisma/client";
+
+import { useState } from "react";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { BrandsConfig } from "./brands-config";
+import { DepositConfig } from "./deposit-config";
+import { LocationsConfig } from "./locations-config";
+import { ModelsConfig } from "./models-config";
+import { TagsConfig } from "./tags-config";
 
 type BrandWithModels = Brand & {
   models: Model[];

@@ -1,10 +1,11 @@
-import { requireAuthSession } from "@/lib/session";
-import { prisma } from "@/lib/db";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+
 import { AdminHeader } from "@/components/admin/admin-header";
 import { CarsTable } from "@/components/cars/cars-table";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Plus } from "lucide-react";
+import { prisma } from "@/lib/db";
+import { requireAuthSession } from "@/lib/session";
 
 interface AdminCarsPageProps {
   searchParams: {

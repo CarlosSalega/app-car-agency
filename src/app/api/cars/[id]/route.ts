@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/session";
 import { ImageService } from "@/lib/images/image-service";
+import { getSession } from "@/lib/session";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {

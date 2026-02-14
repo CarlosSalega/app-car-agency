@@ -1,4 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand } from "@aws-sdk/client-s3";
+
 import { ImageProvider } from "../image-provider.interface";
 
 const s3Client = new S3Client({
@@ -16,23 +17,20 @@ const PUBLIC_BASE_URL = process.env.S3_PUBLIC_BASE_URL!;
 export class S3Provider implements ImageProvider {
   async upload(file: File): Promise<{ key: string; url: string }> {
     try {
-      // Generar key único
       const timestamp = Date.now();
       const randomString = Math.random().toString(36).substring(2, 15);
       const fileExtension = file.name.split(".").pop() || "jpg";
       const key = `car-agency/${timestamp}-${randomString}.${fileExtension}`;
 
-      // Convertir File a buffer
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
-      // Subir a S3
       const command = new PutObjectCommand({
         Bucket: BUCKET_NAME,
         Key: key,
         Body: buffer,
         ContentType: file.type || "image/jpeg",
-        // Para buckets públicos
+
         ACL: "public-read",
       });
 

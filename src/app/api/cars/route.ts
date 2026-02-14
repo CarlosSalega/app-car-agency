@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import slugify from "slugify";
+
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
-import slugify from "slugify";
 
 function generateSlugBase(brand: string, model: string, version: string, year: number, km: number) {
   return slugify(`${brand} ${model} ${version} ${year} ${km}`, {
@@ -79,7 +80,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error creating car:", error);
 
-    // Detectar errores específicos de Prisma
     if (error instanceof Error) {
       if (error.message.includes("unique constraint")) {
         return NextResponse.json(

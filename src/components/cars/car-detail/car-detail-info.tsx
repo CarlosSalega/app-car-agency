@@ -1,6 +1,8 @@
 import type { Car, Brand, Model, Location, Tag } from "@prisma/client";
-import { Badge } from "@/components/ui/badge";
+
 import { MapPin } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
 import { formatTagName } from "@/lib/tag-utils";
 
 interface CarDetailInfoProps {

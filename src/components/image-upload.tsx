@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
 import { X, ImagePlus, Loader2 } from "lucide-react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
 import { resolveImageUrl } from "@/lib/images/resolve-image-url";
 
 interface ImageUploadProps {

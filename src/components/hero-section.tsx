@@ -1,4 +1,5 @@
 import React from "react";
+
 import { HERO_CONTENT, HERO_FEATURES } from "@/data/hero";
 
 export function HeroSection() {

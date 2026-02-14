@@ -1,9 +1,9 @@
-import { prisma } from "@/lib/db";
-import { SearchFilters } from "@/components/search-filters";
 import { CarGrid } from "@/components/cars/car-grid";
-import { Header } from "@/components/header/header";
 import { Footer } from "@/components/footer";
+import { Header } from "@/components/header/header";
 import MobileFiltersSheet from "@/components/mobile-filters-sheet";
+import { SearchFilters } from "@/components/search-filters";
+import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 

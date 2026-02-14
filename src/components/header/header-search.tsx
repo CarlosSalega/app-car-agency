@@ -2,10 +2,10 @@
 
 import { Search } from "lucide-react";
 
-import { HERO_CONTENT } from "@/data/hero";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { HERO_CONTENT } from "@/data/hero";
 
 export function HeaderSearch() {
   const { search } = HERO_CONTENT;

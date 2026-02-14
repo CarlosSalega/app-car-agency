@@ -1,7 +1,8 @@
 "use client";
 
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import type { UserWithCount } from "@/types/users";
+
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 interface DeleteUserDialogProps {
   open: boolean;

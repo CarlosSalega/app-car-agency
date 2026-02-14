@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
-import type { UseFormSetValue } from "react-hook-form";
-import type { Tag } from "@prisma/client";
 import type { CarInput } from "@/lib/validations/car";
+import type { Tag } from "@prisma/client";
+import type { UseFormSetValue } from "react-hook-form";
+
+import { useState, useEffect } from "react";
 
 interface UseTagSelectionReturn {
   selectedTags: string[];

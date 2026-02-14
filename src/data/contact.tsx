@@ -1,4 +1,5 @@
 import { MapPin, Instagram, PhoneCall, Mail } from "lucide-react";
+
 import { WhatsAppIcon } from "@/components/ui/whatsapp";
 export type ContactLink = {
   id: string;

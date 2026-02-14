@@ -1,5 +1,5 @@
-import { Header } from "@/components/header/header";
 import { Footer } from "@/components/footer";
+import { Header } from "@/components/header/header";
 import { LatestArrivals } from "@/components/latest-arrivals";
 
 export default function HomePage() {

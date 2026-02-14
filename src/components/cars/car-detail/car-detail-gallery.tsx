@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useMemo, useState } from "react";
+
+import { CarImage } from "@/components/cars/car-image";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { CarImage } from "@/components/cars/car-image";
 
 interface CarDetailGalleryProps {
   id?: string | number;

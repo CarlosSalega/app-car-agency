@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+
 import { ImageSkeleton } from "@/components/ui/image-skeleton";
-import { cn } from "@/lib/utils";
 import { FALLBACK_IMAGE } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 interface CarImageProps {
   imageKey?: string | null;

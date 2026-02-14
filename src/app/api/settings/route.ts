@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
 

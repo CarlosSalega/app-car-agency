@@ -1,4 +1,5 @@
 import type { Car, Brand, Model } from "@prisma/client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface CarDetailSpecsProps {

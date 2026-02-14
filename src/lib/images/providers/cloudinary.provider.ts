@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
-import { ImageProvider } from "../image-provider.interface";
+
 import { CLOUDINARY_UPLOAD_OPTIONS } from "../cloudinary-config";
+import { ImageProvider } from "../image-provider.interface";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!,

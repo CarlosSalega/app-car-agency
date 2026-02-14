@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ReactNode } from "react";
+
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 type ConfirmOptions = {
   title: string;

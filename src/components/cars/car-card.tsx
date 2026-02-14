@@ -1,13 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import type { Car } from "@prisma/client";
-import { safeJsonParse, formatPrice, formatKm } from "@/lib/utils";
-import { fuelLabels, transmissionLabels, statusColors } from "@/lib/constants";
+
 import { Calendar, Gauge, Fuel, Settings } from "lucide-react";
+import Link from "next/link";
+
+import { CarImage } from "@/components/cars/car-image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { CarImage } from "@/components/cars/car-image";
+import { fuelLabels, transmissionLabels, statusColors } from "@/lib/constants";
+import { safeJsonParse, formatPrice, formatKm } from "@/lib/utils";
 
 interface CarCardProps {
   car: Car & {

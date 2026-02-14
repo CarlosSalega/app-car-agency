@@ -1,13 +1,15 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { prisma } from "@/lib/db";
-import { FALLBACK_IMAGE } from "@/lib/constants";
-import { Header } from "@/components/header/header";
-import { Footer } from "@/components/footer";
+
+import { notFound } from "next/navigation";
+
 import { CarDetailGallery } from "@/components/cars/car-detail/car-detail-gallery";
 import { CarDetailInfo } from "@/components/cars/car-detail/car-detail-info";
 import { CarDetailSpecs } from "@/components/cars/car-detail/car-detail-specs";
+import { Footer } from "@/components/footer";
+import { Header } from "@/components/header/header";
 import { ReserveButton } from "@/components/reserve-button";
+import { FALLBACK_IMAGE } from "@/lib/constants";
+import { prisma } from "@/lib/db";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

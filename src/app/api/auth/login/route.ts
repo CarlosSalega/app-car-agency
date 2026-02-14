@@ -1,9 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+
 import { verifyPassword } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { isRateLimited, getTimeUntilReset } from "@/lib/rate-limit";
 import { createSession } from "@/lib/session";
 import { loginSchema } from "@/lib/validations/auth";
-import { isRateLimited, getTimeUntilReset } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {

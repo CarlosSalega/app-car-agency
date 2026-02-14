@@ -1,4 +1,6 @@
-import { prisma } from "../src/lib/db";
+import * as fs from "fs";
+import * as path from "path";
+
 import {
   PaymentMethod,
   PaymentStatus,
@@ -9,13 +11,13 @@ import {
   FuelType,
   Transmission,
 } from "@prisma/client";
-import { brands } from "../src/data/brands";
-import { modelsByBrand } from "../src/data/modelsByBrand";
-import slugify from "slugify";
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
-import * as fs from "fs";
-import * as path from "path";
+import slugify from "slugify";
+
+import { brands } from "../src/data/brands";
+import { modelsByBrand } from "../src/data/modelsByBrand";
+import { prisma } from "../src/lib/db";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -27,13 +29,7 @@ function hashPassword(password: string): string {
   return bcrypt.hashSync(password, 10);
 }
 
-function generateSlugBase(
-  brand: string,
-  model: string,
-  version: string,
-  year: number,
-  km: number,
-): string {
+function generateSlugBase(brand: string, model: string, version: string, year: number, km: number): string {
   return slugify(`${brand} ${model} ${version} ${year} ${km}`, {
     lower: true,
     strict: true,
@@ -59,7 +55,7 @@ function getImagesForCar(brand: string, model: string): string[] {
   try {
     const files = fs.readdirSync(imagesDir);
     const brandLower = brand.toLowerCase();
-    let modelLower = model.toLowerCase();
+    const modelLower = model.toLowerCase();
 
     const brandVariations: Record<string, string[]> = {
       nissan: ["nissa", "nissan"],
@@ -74,24 +70,16 @@ function getImagesForCar(brand: string, model: string): string[] {
       modelSearchTerms = ["corolla"];
       excludeTerms = ["corollacross", "corolla-cross"];
     } else {
-      modelSearchTerms = [
-        modelLower,
-        modelLower.replace(/\s+/g, ""),
-        modelLower.replace(/\s+/g, "-"),
-      ];
+      modelSearchTerms = [modelLower, modelLower.replace(/\s+/g, ""), modelLower.replace(/\s+/g, "-")];
     }
     const matchingFiles = files.filter((file) => {
       const fileLower = file.toLowerCase();
-      const matchesBrand = brandSearchTerms.some((term) =>
-        fileLower.includes(term),
-      );
+      const matchesBrand = brandSearchTerms.some((term) => fileLower.includes(term));
       if (!matchesBrand) return false;
       if (excludeTerms.some((term) => fileLower.includes(term))) {
         return false;
       }
-      const matchesModel = modelSearchTerms.some((term) =>
-        fileLower.includes(term),
-      );
+      const matchesModel = modelSearchTerms.some((term) => fileLower.includes(term));
       return matchesModel;
     });
     matchingFiles.sort((a, b) => {
@@ -112,17 +100,12 @@ function getImagesForCar(brand: string, model: string): string[] {
       images.push(path.join(imagesDir, file));
     });
   } catch (error) {
-    console.warn(
-      `No se pudieron leer las imágenes para ${brand} ${model}:`,
-      error,
-    );
+    console.warn(`No se pudieron leer las imágenes para ${brand} ${model}:`, error);
   }
   return images;
 }
 
-async function uploadImageToCloudinary(
-  filePath: string,
-): Promise<string | null> {
+async function uploadImageToCloudinary(filePath: string): Promise<string | null> {
   try {
     const fileName = path.basename(filePath, path.extname(filePath));
     const result = await cloudinary.uploader.upload(filePath, {
@@ -139,16 +122,12 @@ async function uploadImageToCloudinary(
   }
 }
 
-async function uploadImagesToCloudinary(
-  localImagePaths: string[],
-): Promise<string[]> {
+async function uploadImagesToCloudinary(localImagePaths: string[]): Promise<string[]> {
   if (localImagePaths.length === 0) {
     return ["/placeholder.webp"];
   }
 
-  const uploadPromises = localImagePaths.map((imagePath) =>
-    uploadImageToCloudinary(imagePath),
-  );
+  const uploadPromises = localImagePaths.map((imagePath) => uploadImageToCloudinary(imagePath));
 
   const results = await Promise.allSettled(uploadPromises);
 
@@ -158,16 +137,12 @@ async function uploadImagesToCloudinary(
     if (result.status === "fulfilled" && result.value) {
       cloudinaryUrls.push(result.value);
     } else {
-      console.warn(
-        `⚠️  No se pudo subir imagen: ${path.basename(localImagePaths[i])}`,
-      );
+      console.warn(`⚠️  No se pudo subir imagen: ${path.basename(localImagePaths[i])}`);
     }
   }
 
   if (cloudinaryUrls.length === 0) {
-    console.warn(
-      "⚠️  No se pudieron subir imágenes a Cloudinary, usando placeholder",
-    );
+    console.warn("⚠️  No se pudieron subir imágenes a Cloudinary, usando placeholder");
     return ["/placeholder.webp"];
   }
 
@@ -183,12 +158,8 @@ async function main() {
 
     if (!isCloudinaryConfigured) {
       console.warn("⚠️  Variables de entorno de Cloudinary no configuradas.");
-      console.warn(
-        "   El seed continuará pero usará rutas locales en lugar de URLs de Cloudinary.",
-      );
-      console.warn(
-        "   Configura CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY y CLOUDINARY_API_SECRET",
-      );
+      console.warn("   El seed continuará pero usará rutas locales en lugar de URLs de Cloudinary.");
+      console.warn("   Configura CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY y CLOUDINARY_API_SECRET");
     }
 
     await prisma.$connect();
@@ -459,8 +430,7 @@ async function main() {
         transmission: Transmission.AUTOMATIC,
         price: 18500000,
         currency: Currency.ARS,
-        description:
-          "SUV compacta y moderna. Full equipo, excelente para ciudad y ruta. Único dueño, service oficial.",
+        description: "SUV compacta y moderna. Full equipo, excelente para ciudad y ruta. Único dueño, service oficial.",
       },
       {
         title: "Chevrolet Cruze LTZ 2023",
@@ -475,8 +445,7 @@ async function main() {
         transmission: Transmission.AUTOMATIC,
         price: 16500000,
         currency: Currency.ARS,
-        description:
-          "Sedán premium con diseño moderno. Full equipo, tecnología avanzada, excelente consumo y confort.",
+        description: "Sedán premium con diseño moderno. Full equipo, tecnología avanzada, excelente consumo y confort.",
       },
       {
         title: "Toyota Corolla XEI 2022",
@@ -491,8 +460,7 @@ async function main() {
         transmission: Transmission.AUTOMATIC,
         price: 19500000,
         currency: Currency.ARS,
-        description:
-          "Sedán confiable y eficiente. Excelente calidad Toyota, service oficial, perfecto estado.",
+        description: "Sedán confiable y eficiente. Excelente calidad Toyota, service oficial, perfecto estado.",
       },
       {
         title: "Toyota Corolla Cross XRE 2024",
@@ -507,8 +475,7 @@ async function main() {
         transmission: Transmission.AUTOMATIC,
         price: 32000000,
         currency: Currency.ARS,
-        description:
-          "SUV moderna con tecnología híbrida. Excelente consumo, espacio amplio, ideal para familia.",
+        description: "SUV moderna con tecnología híbrida. Excelente consumo, espacio amplio, ideal para familia.",
       },
       {
         title: "Toyota Yaris XLS 2023",
@@ -523,8 +490,7 @@ async function main() {
         transmission: Transmission.MANUAL,
         price: 12500000,
         currency: Currency.ARS,
-        description:
-          "Hatchback compacto y eficiente. Ideal para ciudad, bajo consumo, excelente maniobrabilidad.",
+        description: "Hatchback compacto y eficiente. Ideal para ciudad, bajo consumo, excelente maniobrabilidad.",
       },
       {
         title: "Volkswagen Taos Comfortline 2025",
@@ -539,8 +505,7 @@ async function main() {
         transmission: Transmission.AUTOMATIC,
         price: 28500000,
         currency: Currency.ARS,
-        description:
-          "SUV moderna con diseño alemán. Full equipo, tecnología avanzada, excelente para ciudad y ruta.",
+        description: "SUV moderna con diseño alemán. Full equipo, tecnología avanzada, excelente para ciudad y ruta.",
       },
       {
         title: "Renault Sandero Stepway Zen 2023",
@@ -555,8 +520,7 @@ async function main() {
         transmission: Transmission.MANUAL,
         price: 9800000,
         currency: Currency.ARS,
-        description:
-          "Hatchback elevado con estilo. Excelente para ciudad, amplio espacio interior, buen consumo.",
+        description: "Hatchback elevado con estilo. Excelente para ciudad, amplio espacio interior, buen consumo.",
       },
       {
         title: "Renault Kangoo Express 2022",
@@ -571,8 +535,7 @@ async function main() {
         transmission: Transmission.MANUAL,
         price: 11500000,
         currency: Currency.ARS,
-        description:
-          "Utilitario versátil y espacioso. Ideal para trabajo, gran capacidad de carga, confiable.",
+        description: "Utilitario versátil y espacioso. Ideal para trabajo, gran capacidad de carga, confiable.",
       },
       {
         title: "Nissan Frontier SE 2023",
@@ -587,8 +550,7 @@ async function main() {
         transmission: Transmission.MANUAL,
         price: 32000000,
         currency: Currency.ARS,
-        description:
-          "Pickup robusta y confiable. Excelente para trabajo, 4x4, gran capacidad off-road.",
+        description: "Pickup robusta y confiable. Excelente para trabajo, 4x4, gran capacidad off-road.",
       },
     ];
 
@@ -620,9 +582,7 @@ async function main() {
         let modelId = modelMap[modelKey];
         let wasModelCreated = false;
         if (!modelId) {
-          console.log(
-            `📝 Creando modelo no encontrado: ${carData.brand} ${carData.model}`,
-          );
+          console.log(`📝 Creando modelo no encontrado: ${carData.brand} ${carData.model}`);
           const newModel = await prisma.model.upsert({
             where: {
               name_brandId: {
@@ -650,18 +610,13 @@ async function main() {
           console.log(
             `📤 Subiendo ${localImagePaths.length} imagen(es) a Cloudinary para ${carData.brand} ${carData.model}...`,
           );
-          const cloudinaryUrls =
-            await uploadImagesToCloudinary(localImagePaths);
+          const cloudinaryUrls = await uploadImagesToCloudinary(localImagePaths);
           images = cloudinaryUrls;
-          imagesUploadedCount += cloudinaryUrls.filter((url) =>
-            url.includes("cloudinary.com"),
-          ).length;
+          imagesUploadedCount += cloudinaryUrls.filter((url) => url.includes("cloudinary.com")).length;
           imagesFailedCount += localImagePaths.length - cloudinaryUrls.length;
         } else {
           if (!isCloudinaryConfigured) {
-            console.warn(
-              `⚠️  Cloudinary no configurado, usando rutas locales para ${carData.brand} ${carData.model}`,
-            );
+            console.warn(`⚠️  Cloudinary no configurado, usando rutas locales para ${carData.brand} ${carData.model}`);
           }
           images =
             localImagePaths.length > 0
@@ -669,14 +624,8 @@ async function main() {
               : ["/placeholder.webp"];
         }
 
-        if (
-          (wasBrandCreated || wasModelCreated) &&
-          images.length > 0 &&
-          images[0] !== "/placeholder.webp"
-        ) {
-          console.log(
-            `✅ Imágenes procesadas para ${carData.brand} ${carData.model}: ${images.length} imagen(es)`,
-          );
+        if ((wasBrandCreated || wasModelCreated) && images.length > 0 && images[0] !== "/placeholder.webp") {
+          console.log(`✅ Imágenes procesadas para ${carData.brand} ${carData.model}: ${images.length} imagen(es)`);
         }
 
         const baseSlug = generateSlugBase(
@@ -689,13 +638,10 @@ async function main() {
         const uniqueSlug = await generateUniqueSlug(baseSlug);
 
         if (carData.model === "Corolla Cross") {
-          console.log(
-            `🔍 Slug generado para ${carData.title}: ${uniqueSlug} (base: ${baseSlug})`,
-          );
+          console.log(`🔍 Slug generado para ${carData.title}: ${uniqueSlug} (base: ${baseSlug})`);
         }
 
-        const randomLocation =
-          locations[Math.floor(Math.random() * locations.length)];
+        const randomLocation = locations[Math.floor(Math.random() * locations.length)];
 
         const randomTagCount = Math.floor(Math.random() * 3) + 1;
         const shuffledTags = [...tags].sort(() => 0.5 - Math.random());
@@ -738,21 +684,15 @@ async function main() {
         if (error instanceof Error) {
           console.error(`   Mensaje: ${error.message}`);
           if (error.message.includes("Unique constraint")) {
-            console.error(
-              `   ⚠️ Conflicto de unicidad detectado. Verificar slug o relaciones únicas.`,
-            );
+            console.error(`   ⚠️ Conflicto de unicidad detectado. Verificar slug o relaciones únicas.`);
           }
         }
       }
     }
 
-    console.log(
-      `✅ ${carsCreated}/${carsData.length} vehículos creados exitosamente`,
-    );
+    console.log(`✅ ${carsCreated}/${carsData.length} vehículos creados exitosamente`);
     if (isCloudinaryConfigured) {
-      console.log(
-        `📊 Imágenes: ${imagesUploadedCount} subidas exitosamente, ${imagesFailedCount} fallaron`,
-      );
+      console.log(`📊 Imágenes: ${imagesUploadedCount} subidas exitosamente, ${imagesFailedCount} fallaron`);
     }
 
     console.log("💳 Creando pagos de ejemplo...");
@@ -763,10 +703,7 @@ async function main() {
       await prisma.payment.create({
         data: {
           amount: depositAmount,
-          method:
-            Math.random() > 0.5
-              ? PaymentMethod.CASH
-              : PaymentMethod.BANK_TRANSFER,
+          method: Math.random() > 0.5 ? PaymentMethod.CASH : PaymentMethod.BANK_TRANSFER,
           status: PaymentStatus.PENDING,
           carId: car.id,
           userId: collaborator.id,
@@ -788,8 +725,7 @@ async function main() {
       create: {
         key: "deposit_percentage",
         value: "30",
-        description:
-          "Porcentaje de seña a recibir como parte de pago del valor del vehículo",
+        description: "Porcentaje de seña a recibir como parte de pago del valor del vehículo",
       },
     });
     console.log("✅ Configuración de porcentaje de seña creada (30%)");
@@ -819,8 +755,7 @@ async function main() {
         data: {
           carId: car.id,
           ip: `192.168.1.${Math.floor(Math.random() * 255)}`,
-          userAgent:
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         },
       });
     }
@@ -839,9 +774,7 @@ async function main() {
     console.log(`   👁️ Visitas: ${someCars.length}`);
     console.log(`   ⚙️ Configuración: 1 setting`);
     if (isCloudinaryConfigured) {
-      console.log(
-        `   📸 Imágenes subidas a Cloudinary: ${imagesUploadedCount}`,
-      );
+      console.log(`   📸 Imágenes subidas a Cloudinary: ${imagesUploadedCount}`);
       if (imagesFailedCount > 0) {
         console.log(`   ⚠️  Imágenes fallidas: ${imagesFailedCount}`);
       }

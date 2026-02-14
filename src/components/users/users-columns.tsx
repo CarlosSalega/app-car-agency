@@ -1,7 +1,8 @@
 import type { AdminColumn } from "@/components/admin/admin-table";
-import { UserRoleBadge, ActiveStatusBadge } from "@/components/status-badges";
-import { ActionButtonsGroup } from "@/components/admin/admin-action-buttons";
 import type { UserWithCount } from "@/types/users";
+
+import { ActionButtonsGroup } from "@/components/admin/admin-action-buttons";
+import { UserRoleBadge, ActiveStatusBadge } from "@/components/status-badges";
 
 interface Params {
   onEdit: (user: UserWithCount) => void;

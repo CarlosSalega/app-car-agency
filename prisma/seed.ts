@@ -1,4 +1,6 @@
-import { prisma } from "../src/lib/db";
+import * as fs from "fs";
+import * as path from "path";
+
 import {
   PaymentMethod,
   PaymentStatus,
@@ -9,12 +11,12 @@ import {
   FuelType,
   Transmission,
 } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import slugify from "slugify";
+
 import { brands } from "../src/data/brands";
 import { modelsByBrand } from "../src/data/modelsByBrand";
-import slugify from "slugify";
-import bcrypt from "bcryptjs";
-import * as fs from "fs";
-import * as path from "path";
+import { prisma } from "../src/lib/db";
 
 function hashPassword(password: string): string {
   return bcrypt.hashSync(password, 10);
@@ -52,7 +54,7 @@ function getImagesForCar(brand: string, model: string): string[] {
   try {
     const files = fs.readdirSync(imagesDir);
     const brandLower = brand.toLowerCase();
-    let modelLower = model.toLowerCase();
+    const modelLower = model.toLowerCase();
 
     const brandVariations: Record<string, string[]> = {
       nissan: ["nissa", "nissan"],

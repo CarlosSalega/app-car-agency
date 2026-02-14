@@ -1,7 +1,8 @@
-import { prisma } from "@/lib/db";
 import { NextResponse, type NextRequest } from "next/server";
-import { getSession } from "@/lib/session";
 import slugify from "slugify";
+
+import { prisma } from "@/lib/db";
+import { getSession } from "@/lib/session";
 export async function GET() {
   try {
     const tags = await prisma.tag.findMany({ orderBy: { name: "asc" } });

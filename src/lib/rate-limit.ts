@@ -10,7 +10,7 @@ interface RateLimitEntry {
 
 const rateLimitMap = new Map<string, RateLimitEntry>();
 
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+const WINDOW_MS = 15 * 60 * 1000;
 const MAX_ATTEMPTS = 5;
 
 /**
@@ -102,7 +102,6 @@ export function cleanupExpiredEntries(): void {
   }
 }
 
-// Auto cleanup every 30 minutes
 if (typeof setInterval !== "undefined") {
   setInterval(cleanupExpiredEntries, 30 * 60 * 1000);
 }

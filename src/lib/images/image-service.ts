@@ -1,5 +1,5 @@
-import { CloudinaryProvider } from "./providers/cloudinary.provider";
 import { ImageProvider } from "./image-provider.interface";
+import { CloudinaryProvider } from "./providers/cloudinary.provider";
 
 function getProvider(): ImageProvider {
   const provider = process.env.IMAGE_PROVIDER ?? "cloudinary";

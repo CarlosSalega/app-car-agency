@@ -1,16 +1,16 @@
 "use client";
 
-import { UserPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { AdminTable } from "@/components/admin/admin-table";
-
 import type { PaginationProps } from "@/components/pagination";
 import type { UserWithCount } from "@/types/users";
 
-import { useUsersTable } from "@/components/users/users-table-actions";
-import { getUsersColumns } from "@/components/users/users-columns";
-import { UserFormDialog } from "@/components/users/user-form-dialog";
+import { UserPlus } from "lucide-react";
+
+import { AdminTable } from "@/components/admin/admin-table";
+import { Button } from "@/components/ui/button";
 import { DeleteUserDialog } from "@/components/users/delete-user-dialog";
+import { UserFormDialog } from "@/components/users/user-form-dialog";
+import { getUsersColumns } from "@/components/users/users-columns";
+import { useUsersTable } from "@/components/users/users-table-actions";
 
 interface UsersTableProps {
   initialUsers: UserWithCount[];

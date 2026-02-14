@@ -1,9 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { Plus, Edit, Trash2, LogIn, LogOut, UserPlus, Calendar, X, DollarSign, RefreshCw } from "lucide-react";
-import { WithPagination } from "./with-pagination";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { PaginationProps } from "./pagination";
+import { WithPagination } from "./with-pagination";
 interface RecentActivityProps {
   logs: Array<{
     id: string;

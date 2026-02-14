@@ -1,8 +1,9 @@
 import type { AdminColumn } from "@/components/admin/admin-table";
-import { ActionButtonsGroup } from "@/components/admin/admin-action-buttons";
-import { CarStatusBadge } from "@/components/status-badges";
-import { CarImage } from "@/components/cars/car-image";
 import type { CarWithRelations } from "@/types/cars";
+
+import { ActionButtonsGroup } from "@/components/admin/admin-action-buttons";
+import { CarImage } from "@/components/cars/car-image";
+import { CarStatusBadge } from "@/components/status-badges";
 
 const formatPrice = (price: number, currency: string) =>
   new Intl.NumberFormat("es-AR", {

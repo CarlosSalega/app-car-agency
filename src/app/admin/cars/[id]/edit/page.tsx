@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
-import { requireAuthSession } from "@/lib/session";
-import { prisma } from "@/lib/db";
+
 import { AdminHeader } from "@/components/admin/admin-header";
 import { CarForm } from "@/components/cars/car-form/car-form";
+import { prisma } from "@/lib/db";
+import { requireAuthSession } from "@/lib/session";
 
 export default async function EditCarPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await requireAuthSession();

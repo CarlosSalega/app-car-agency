@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/db";
 import { CarCard } from "@/components/cars/car-card";
+import { prisma } from "@/lib/db";
 
 export async function LatestArrivals() {
   const cars = await prisma.car.findMany({
