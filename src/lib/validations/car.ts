@@ -1,13 +1,6 @@
 import { z } from "zod";
-import {
-  CarType,
-  FuelType,
-  Transmission,
-  Currency,
-  CarStatus,
-} from "@prisma/client";
+import { CarType, FuelType, Transmission, Currency, CarStatus } from "@prisma/client";
 
-// Create Zod enums from Prisma enum types
 const CarTypeEnum = z.nativeEnum(CarType);
 const FuelTypeEnum = z.nativeEnum(FuelType);
 const TransmissionEnum = z.nativeEnum(Transmission);
@@ -15,10 +8,7 @@ const CurrencyEnum = z.nativeEnum(Currency);
 const CarStatusEnum = z.nativeEnum(CarStatus);
 
 export const carSchema = z.object({
-  title: z
-    .string()
-    .min(1, "El título es requerido")
-    .max(200, "El título no puede exceder 200 caracteres"),
+  title: z.string().min(1, "El título es requerido").max(200, "El título no puede exceder 200 caracteres"),
   brandId: z.string().min(1, "La marca es requerida"),
   modelId: z.string().min(1, "El modelo es requerido"),
   version: z.string().optional(),
@@ -29,14 +19,10 @@ export const carSchema = z.object({
     .refine(
       (val) => {
         const num = parseInt(val, 10);
-        return (
-          !isNaN(num) && num >= 1900 && num <= new Date().getFullYear() + 1
-        );
+        return !isNaN(num) && num >= 1900 && num <= new Date().getFullYear() + 1;
       },
       {
-        message: `El año debe ser un número válido entre 1900 y ${
-          new Date().getFullYear() + 1
-        }`,
+        message: `El año debe ser un número válido entre 1900 y ${new Date().getFullYear() + 1}`,
       },
     ),
   kilometers: z
@@ -73,22 +59,7 @@ export const carSchema = z.object({
     .min(10, "La descripción debe tener al menos 10 caracteres"),
   locationId: z.string().optional(),
   images: z
-    .array(
-      z.string().refine(
-        (val) => {
-          if (val.startsWith("/")) return true;
-          try {
-            new URL(val);
-            return true;
-          } catch {
-            return false;
-          }
-        },
-        {
-          message: "Cada imagen debe ser una URL válida o una ruta local",
-        },
-      ),
-    )
+    .array(z.string().min(1, "Cada imagen debe tener un identificador válido"))
     .min(1, "Debes agregar al menos una imagen"),
   tags: z.union([z.array(z.string()), z.string()]).optional(),
   status: CarStatusEnum,

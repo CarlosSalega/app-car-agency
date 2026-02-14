@@ -9,12 +9,10 @@ export async function GET() {
     return NextResponse.json(locations);
   } catch (error) {
     console.error("Error al obtener las sucursales", error);
-    return NextResponse.json(
-      { error: "Error al obtener las sucursales" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al obtener las sucursales" }, { status: 500 });
   }
 }
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
@@ -23,37 +21,22 @@ export async function POST(request: NextRequest) {
     }
     const data = await request.json();
     if (!data.name?.trim()) {
-      return NextResponse.json(
-        { error: "El nombre de la sucursal es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El nombre de la sucursal es requerido" }, { status: 400 });
     }
     if (!data.address?.trim()) {
-      return NextResponse.json(
-        { error: "La dirección es requerida" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "La dirección es requerida" }, { status: 400 });
     }
     if (!data.city?.trim()) {
-      return NextResponse.json(
-        { error: "La ciudad es requerida" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "La ciudad es requerida" }, { status: 400 });
     }
     if (!data.state?.trim()) {
-      return NextResponse.json(
-        { error: "La provincia/estado es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "La provincia/estado es requerido" }, { status: 400 });
     }
     const existingLocation = await prisma.location.findUnique({
       where: { name: data.name.trim() },
     });
     if (existingLocation) {
-      return NextResponse.json(
-        { error: "Ya existe una sucursal con este nombre" },
-        { status: 409 },
-      );
+      return NextResponse.json({ error: "Ya existe una sucursal con este nombre" }, { status: 409 });
     }
     const location = await prisma.location.create({
       data: {
@@ -85,9 +68,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("[SUCURSALES] Error al crear la sucursal:", error);
-    return NextResponse.json(
-      { error: "Error al crear la sucursal" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al crear la sucursal" }, { status: 500 });
   }
 }

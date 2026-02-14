@@ -10,15 +10,7 @@ interface FormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export function FormField({
-  label,
-  error,
-  required = false,
-  htmlFor,
-  children,
-  className,
-  ...props
-}: FormFieldProps) {
+export function FormField({ label, error, required = false, htmlFor, children, className, ...props }: FormFieldProps) {
   return (
     <div className={cn("space-y-2", className)} {...props}>
       <Label htmlFor={htmlFor}>

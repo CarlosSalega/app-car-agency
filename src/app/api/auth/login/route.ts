@@ -7,10 +7,7 @@ import { isRateLimited, getTimeUntilReset } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
-    const ip =
-      request.headers.get("x-forwarded-for")?.split(",")[0] ||
-      request.headers.get("x-real-ip") ||
-      "unknown";
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || request.headers.get("x-real-ip") || "unknown";
 
     if (isRateLimited(ip)) {
       const timeUntilReset = getTimeUntilReset(ip);
@@ -29,9 +26,7 @@ export async function POST(request: NextRequest) {
     const validationResult = loginSchema.safeParse(json);
 
     if (!validationResult.success) {
-      const errorMessages = validationResult.error.issues.map(
-        (issue) => `${issue.path.join(".")}: ${issue.message}`,
-      );
+      const errorMessages = validationResult.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`);
 
       return NextResponse.json(
         {
@@ -57,10 +52,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Email o contraseña incorrectos" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: "Email o contraseña incorrectos" }, { status: 401 });
     }
 
     if (!user.isActive) {
@@ -84,10 +76,7 @@ export async function POST(request: NextRequest) {
     const isValid = await verifyPassword(password, user.hashedPassword);
 
     if (!isValid) {
-      return NextResponse.json(
-        { error: "Email o contraseña incorrectos" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: "Email o contraseña incorrectos" }, { status: 401 });
     }
 
     await createSession(user.id);
@@ -115,15 +104,9 @@ export async function POST(request: NextRequest) {
     console.error("[AUTH] Error al iniciar sesión:", error);
 
     if (error instanceof SyntaxError) {
-      return NextResponse.json(
-        { error: "Formato de datos inválido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Formato de datos inválido" }, { status: 400 });
     }
 
-    return NextResponse.json(
-      { error: "Error interno del servidor. Intenta nuevamente." },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error interno del servidor. Intenta nuevamente." }, { status: 500 });
   }
 }

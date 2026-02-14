@@ -52,13 +52,10 @@ export class CloudinaryProvider implements ImageProvider {
   }
 
   async deleteMany(keys: string[]) {
-    const deleteResults = await Promise.allSettled(
-      keys.map((key) => this.delete(key)),
-    );
+    const deleteResults = await Promise.allSettled(keys.map((key) => this.delete(key)));
 
     const successfulDeletions = deleteResults.filter(
-      (deleteResult) =>
-        deleteResult.status === "fulfilled" && deleteResult.value.success,
+      (deleteResult) => deleteResult.status === "fulfilled" && deleteResult.value.success,
     ).length;
 
     return {

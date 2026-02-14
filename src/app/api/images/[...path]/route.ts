@@ -6,32 +6,20 @@ const CLOUDINARY_BASE_URL = `https://res.cloudinary.com/${process.env.NEXT_PUBLI
 
 const S3_BASE_URL = process.env.S3_PUBLIC_BASE_URL;
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> },
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   try {
     const resolvedParams = await params;
     const imagePath = resolvedParams.path?.filter(Boolean).join("/");
 
     if (!imagePath) {
-      return NextResponse.json(
-        { error: "Ruta de imagen no proporcionada" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Ruta de imagen no proporcionada" }, { status: 400 });
     }
 
     if (PROVIDER !== "cloudinary" && !S3_BASE_URL) {
-      return NextResponse.json(
-        { error: "S3 base URL no configurada" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "S3 base URL no configurada" }, { status: 500 });
     }
 
-    const imageUrl =
-      PROVIDER === "cloudinary"
-        ? `${CLOUDINARY_BASE_URL}/${imagePath}`
-        : `${S3_BASE_URL}/${imagePath}`;
+    const imageUrl = PROVIDER === "cloudinary" ? `${CLOUDINARY_BASE_URL}/${imagePath}` : `${S3_BASE_URL}/${imagePath}`;
 
     const response = await fetch(imageUrl, {
       headers: {
@@ -44,15 +32,10 @@ export async function GET(
     });
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: "Imagen no encontrada" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: "Imagen no encontrada" }, { status: 404 });
     }
 
-    const contentType = response.headers
-      .get("content-type")
-      ?.startsWith("image/")
+    const contentType = response.headers.get("content-type")?.startsWith("image/")
       ? response.headers.get("content-type")!
       : "image/webp";
 
@@ -60,17 +43,13 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": contentType,
-        "Cache-Control":
-          "public, max-age=31536000, immutable, stale-while-revalidate=86400",
+        "Cache-Control": "public, max-age=31536000, immutable, stale-while-revalidate=86400",
         "X-Content-Type-Options": "nosniff",
         "CDN-Cache-Control": "public, max-age=31536000",
       },
     });
   } catch (error) {
     console.error("Error al obtener imagen:", error);
-    return NextResponse.json(
-      { error: "Error al obtener la imagen" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al obtener la imagen" }, { status: 500 });
   }
 }

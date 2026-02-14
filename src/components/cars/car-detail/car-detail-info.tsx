@@ -30,9 +30,7 @@ export function CarDetailInfo({ car }: CarDetailInfoProps) {
             <MapPin className="h-4 w-4" />
             <div>
               <div className="font-medium">{car.location.name}</div>
-              <div className="text-muted-foreground text-sm">
-                {car.location.address}
-              </div>
+              <div className="text-muted-foreground text-sm">{car.location.address}</div>
             </div>
           </div>
         ) : null}
@@ -51,17 +49,13 @@ export function CarDetailInfo({ car }: CarDetailInfoProps) {
       </div>
 
       <div className="border-border border-t border-b py-6">
-        <p className="text-foreground text-4xl font-bold">
-          {formatPrice(car.price)}
-        </p>
+        <p className="text-foreground text-4xl font-bold">{formatPrice(car.price)}</p>
         <p className="text-muted-foreground mt-1 text-sm">Precio final</p>
       </div>
 
       <div>
         <h2 className="mb-3 text-xl font-semibold">Descripción</h2>
-        <p className="text-muted-foreground leading-relaxed text-pretty">
-          {car.description}
-        </p>
+        <p className="text-muted-foreground leading-relaxed text-pretty">{car.description}</p>
       </div>
 
       {car.tags && car.tags.length > 0 && (

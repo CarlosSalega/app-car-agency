@@ -1,11 +1,4 @@
-import {
-  LayoutDashboard,
-  Car,
-  Users,
-  Settings,
-  LogOut,
-  Globe,
-} from "lucide-react";
+import { LayoutDashboard, Car, Users, Settings, LogOut, Globe } from "lucide-react";
 import { AdminNavItem } from "@/types/navigation";
 
 export const ADMIN_NAVIGATION: AdminNavItem[] = [

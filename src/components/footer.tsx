@@ -30,10 +30,7 @@ export function Footer() {
             <ul className="text-muted-foreground space-y-2 text-sm">
               {sections.links.items.map((link, index) => (
                 <li key={index}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-foreground transition-colors"
-                  >
+                  <Link href={link.href} className="hover:text-foreground transition-colors">
                     {link.label}
                   </Link>
                 </li>

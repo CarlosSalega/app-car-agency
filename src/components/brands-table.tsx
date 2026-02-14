@@ -2,22 +2,9 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Edit, Trash2, Plus } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Brand } from "@prisma/client";
@@ -102,18 +89,10 @@ export function BrandsTable({ initialBrands }: Props) {
                 <TableCell>{b.createdAt.toLocaleString()}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => openEdit(b)}
-                    >
+                    <Button variant="ghost" size="icon" onClick={() => openEdit(b)}>
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleDelete(b.id)}
-                    >
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(b.id)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -127,27 +106,16 @@ export function BrandsTable({ initialBrands }: Props) {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {editing ? "Editar Marca" : "Nueva Marca"}
-            </DialogTitle>
+            <DialogTitle>{editing ? "Editar Marca" : "Nueva Marca"}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="mt-4 space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Nombre</Label>
-              <Input
-                id="name"
-                value={form.name}
-                onChange={(e) => setForm({ name: e.target.value })}
-                required
-              />
+              <Input id="name" value={form.name} onChange={(e) => setForm({ name: e.target.value })} required />
             </div>
             <div className="flex gap-2">
               <Button type="submit">Guardar</Button>
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => setIsOpen(false)}
-              >
+              <Button variant="outline" type="button" onClick={() => setIsOpen(false)}>
                 Cancelar
               </Button>
             </div>

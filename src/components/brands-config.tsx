@@ -2,22 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EditButton, DeleteButton } from "./admin/admin-action-buttons";
@@ -89,9 +76,7 @@ export function BrandsConfig({ brands, onBrandsChange }: BrandsConfigProps) {
       }
 
       if (editing) {
-        onBrandsChange(
-          brands.map((b) => (b.id === json.brand.id ? json.brand : b)),
-        );
+        onBrandsChange(brands.map((b) => (b.id === json.brand.id ? json.brand : b)));
       } else {
         onBrandsChange([json.brand, ...brands]);
       }
@@ -116,9 +101,7 @@ export function BrandsConfig({ brands, onBrandsChange }: BrandsConfigProps) {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>
-                {editing ? "Editar Marca" : "Nueva Marca"}
-              </DialogTitle>
+              <DialogTitle>{editing ? "Editar Marca" : "Nueva Marca"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -136,11 +119,7 @@ export function BrandsConfig({ brands, onBrandsChange }: BrandsConfigProps) {
                 />
               </div>
               <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsOpen(false)}
-                >
+                <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                   Cancelar
                 </Button>
                 <Button type="submit" disabled={loading}>
@@ -164,10 +143,7 @@ export function BrandsConfig({ brands, onBrandsChange }: BrandsConfigProps) {
           <TableBody>
             {brands.length === 0 ? (
               <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="text-muted-foreground text-center"
-                >
+                <TableCell colSpan={3} className="text-muted-foreground text-center">
                   No hay marcas registradas
                 </TableCell>
               </TableRow>

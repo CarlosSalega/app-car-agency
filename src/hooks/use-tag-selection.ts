@@ -14,15 +14,11 @@ export function useTagSelection(
   initialTags?: Tag[],
   setValue?: UseFormSetValue<CarInput>,
 ): UseTagSelectionReturn {
-  const [selectedTags, setSelectedTags] = useState<string[]>(
-    initialTags ? initialTags.map((tag) => tag.id) : [],
-  );
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialTags ? initialTags.map((tag) => tag.id) : []);
 
   useEffect(() => {
     if (tagsList.length && selectedTags.length && setValue) {
-      const names = selectedTags
-        .map((id) => tagsList.find((tag) => tag.id === id)?.name)
-        .filter(Boolean) as string[];
+      const names = selectedTags.map((id) => tagsList.find((tag) => tag.id === id)?.name).filter(Boolean) as string[];
       setValue("tags", names.join(","));
     }
   }, [selectedTags, tagsList, setValue]);

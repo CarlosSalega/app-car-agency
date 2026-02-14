@@ -81,18 +81,10 @@ interface ActiveStatusBadgeProps {
   inactiveLabel?: string;
 }
 
-export function ActiveStatusBadge({
-  isActive,
-  activeLabel,
-  inactiveLabel,
-}: ActiveStatusBadgeProps) {
-  const statusInfo = isActive
-    ? activeStatusMap.active
-    : activeStatusMap.inactive;
+export function ActiveStatusBadge({ isActive, activeLabel, inactiveLabel }: ActiveStatusBadgeProps) {
+  const statusInfo = isActive ? activeStatusMap.active : activeStatusMap.inactive;
 
-  const label = isActive
-    ? activeLabel || statusInfo.label
-    : inactiveLabel || statusInfo.label;
+  const label = isActive ? activeLabel || statusInfo.label : inactiveLabel || statusInfo.label;
 
   return <Badge className={statusInfo.className}>{label}</Badge>;
 }

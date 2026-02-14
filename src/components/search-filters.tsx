@@ -4,13 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import { setIfParam } from "@/lib/utils";
@@ -23,28 +17,15 @@ interface SearchFiltersProps {
   }>;
 }
 
-export function SearchFilters({
-  brands,
-  onApply,
-}: SearchFiltersProps & { onApply?: () => void }) {
+export function SearchFilters({ brands, onApply }: SearchFiltersProps & { onApply?: () => void }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [selectedBrand, setSelectedBrand] = useState(
-    searchParams.get("brand") || "",
-  );
-  const [selectedModel, setSelectedModel] = useState(
-    searchParams.get("model") || "",
-  );
-  const [selectedType, setSelectedType] = useState(
-    searchParams.get("type") || "",
-  );
-  const [selectedFuel, setSelectedFuel] = useState(
-    searchParams.get("fuel") || "",
-  );
-  const [selectedTransmission, setSelectedTransmission] = useState(
-    searchParams.get("transmission") || "",
-  );
+  const [selectedBrand, setSelectedBrand] = useState(searchParams.get("brand") || "");
+  const [selectedModel, setSelectedModel] = useState(searchParams.get("model") || "");
+  const [selectedType, setSelectedType] = useState(searchParams.get("type") || "");
+  const [selectedFuel, setSelectedFuel] = useState(searchParams.get("fuel") || "");
+  const [selectedTransmission, setSelectedTransmission] = useState(searchParams.get("transmission") || "");
   const [minYear, setMinYear] = useState(searchParams.get("minYear") || "");
   const [maxYear, setMaxYear] = useState(searchParams.get("maxYear") || "");
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
@@ -172,10 +153,7 @@ export function SearchFilters({
 
         <div>
           <Label>Transmisión</Label>
-          <Select
-            value={selectedTransmission}
-            onValueChange={setSelectedTransmission}
-          >
+          <Select value={selectedTransmission} onValueChange={setSelectedTransmission}>
             <SelectTrigger>
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
@@ -190,36 +168,16 @@ export function SearchFilters({
         <div>
           <Label>Año</Label>
           <div className="grid grid-cols-2 gap-2">
-            <Input
-              type="number"
-              placeholder="Desde"
-              value={minYear}
-              onChange={(e) => setMinYear(e.target.value)}
-            />
-            <Input
-              type="number"
-              placeholder="Hasta"
-              value={maxYear}
-              onChange={(e) => setMaxYear(e.target.value)}
-            />
+            <Input type="number" placeholder="Desde" value={minYear} onChange={(e) => setMinYear(e.target.value)} />
+            <Input type="number" placeholder="Hasta" value={maxYear} onChange={(e) => setMaxYear(e.target.value)} />
           </div>
         </div>
 
         <div>
           <Label>Precio (ARS)</Label>
           <div className="grid grid-cols-2 gap-2">
-            <Input
-              type="number"
-              placeholder="Mínimo"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-            />
-            <Input
-              type="number"
-              placeholder="Máximo"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-            />
+            <Input type="number" placeholder="Mínimo" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
+            <Input type="number" placeholder="Máximo" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
           </div>
         </div>
 

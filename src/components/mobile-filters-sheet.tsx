@@ -1,13 +1,7 @@
 "use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Filter as FilterIcon } from "lucide-react";
 import { SearchFilters } from "./search-filters";
 import { useSearchParams } from "next/navigation";
@@ -43,9 +37,7 @@ export function MobileFiltersSheet({ brands }: { brands: any[] }) {
             <Button
               variant="default"
               className="relative rounded-full p-3 shadow-lg"
-              aria-label={`Abrir filtros${
-                activeFilters ? `, ${activeFilters} aplicados` : ""
-              }`}
+              aria-label={`Abrir filtros${activeFilters ? `, ${activeFilters} aplicados` : ""}`}
             >
               <FilterIcon className="size-5" />
               {activeFilters > 0 && (
@@ -69,4 +61,5 @@ export function MobileFiltersSheet({ brands }: { brands: any[] }) {
     </div>
   );
 }
+
 export default MobileFiltersSheet;

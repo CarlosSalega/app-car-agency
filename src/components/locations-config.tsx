@@ -2,22 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -30,10 +17,7 @@ interface LocationsConfigProps {
   onLocationsChange: (locations: Location[]) => void;
 }
 
-export function LocationsConfig({
-  locations,
-  onLocationsChange,
-}: LocationsConfigProps) {
+export function LocationsConfig({ locations, onLocationsChange }: LocationsConfigProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [editing, setEditing] = useState<Location | null>(null);
   const [form, setForm] = useState({
@@ -125,9 +109,7 @@ export function LocationsConfig({
       }
 
       if (editing) {
-        onLocationsChange(
-          locations.map((l) => (l.id === json.location.id ? json.location : l)),
-        );
+        onLocationsChange(locations.map((l) => (l.id === json.location.id ? json.location : l)));
       } else {
         onLocationsChange([json.location, ...locations]);
       }
@@ -152,9 +134,7 @@ export function LocationsConfig({
           </DialogTrigger>
           <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>
-                {editing ? "Editar Sucursal" : "Nueva Sucursal"}
-              </DialogTitle>
+              <DialogTitle>{editing ? "Editar Sucursal" : "Nueva Sucursal"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -312,11 +292,7 @@ export function LocationsConfig({
                 </div>
               </div>
               <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsOpen(false)}
-                >
+                <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                   Cancelar
                 </Button>
                 <Button type="submit" disabled={loading}>
@@ -343,10 +319,7 @@ export function LocationsConfig({
           <TableBody>
             {locations.length === 0 ? (
               <TableRow>
-                <TableCell
-                  colSpan={5}
-                  className="text-muted-foreground text-center"
-                >
+                <TableCell colSpan={5} className="text-muted-foreground text-center">
                   No hay sucursales registradas
                 </TableCell>
               </TableRow>
@@ -358,11 +331,7 @@ export function LocationsConfig({
                   <TableCell>{location.city}</TableCell>
                   <TableCell>{location.state}</TableCell>
                   <TableCell>
-                    <ActiveStatusBadge
-                      isActive={location.isActive}
-                      activeLabel="Activa"
-                      inactiveLabel="Inactiva"
-                    />
+                    <ActiveStatusBadge isActive={location.isActive} activeLabel="Activa" inactiveLabel="Inactiva" />
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">

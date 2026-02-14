@@ -9,8 +9,7 @@ interface UseCarFormDataReturn {
   loading: boolean;
 }
 
-const safeJson = async <T>(res: Response, fallback: T): Promise<T> =>
-  res.ok ? res.json() : fallback;
+const safeJson = async <T>(res: Response, fallback: T): Promise<T> => (res.ok ? res.json() : fallback);
 
 export function useCarFormData(): UseCarFormDataReturn {
   const [brands, setBrands] = useState<BrandWithModels[]>([]);

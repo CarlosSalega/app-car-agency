@@ -1,31 +1,12 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { EditButton, DeleteButton } from "./admin/admin-action-buttons";
 import type { Brand, Model } from "@prisma/client";
 type BrandWithModels = Brand & {
@@ -104,20 +85,12 @@ export function ModelsConfig({ brands }: ModelsConfigProps) {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>
-                {editing ? "Editar Modelo" : "Nuevo Modelo"}
-              </DialogTitle>
+              <DialogTitle>{editing ? "Editar Modelo" : "Nuevo Modelo"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="brandId">Marca</Label>
-                <Select
-                  value={form.brandId}
-                  onValueChange={(value) =>
-                    setForm({ ...form, brandId: value })
-                  }
-                  required
-                >
+                <Select value={form.brandId} onValueChange={(value) => setForm({ ...form, brandId: value })} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccionar marca" />
                   </SelectTrigger>
@@ -145,11 +118,7 @@ export function ModelsConfig({ brands }: ModelsConfigProps) {
                 />
               </div>
               <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsOpen(false)}
-                >
+                <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                   Cancelar
                 </Button>
                 <Button type="submit" disabled={loading}>
@@ -177,10 +146,7 @@ export function ModelsConfig({ brands }: ModelsConfigProps) {
             <TableBody>
               {models.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="text-muted-foreground text-center"
-                  >
+                  <TableCell colSpan={3} className="text-muted-foreground text-center">
                     No hay modelos registrados
                   </TableCell>
                 </TableRow>
@@ -190,15 +156,11 @@ export function ModelsConfig({ brands }: ModelsConfigProps) {
                   return (
                     <TableRow key={model.id}>
                       <TableCell>{brand?.name || "N/A"}</TableCell>
-                      <TableCell className="font-medium">
-                        {model.name}
-                      </TableCell>
+                      <TableCell className="font-medium">{model.name}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <EditButton onClick={() => openEdit(model)} />
-                          <DeleteButton
-                            onClick={() => handleDelete(model.id)}
-                          />
+                          <DeleteButton onClick={() => handleDelete(model.id)} />
                         </div>
                       </TableCell>
                     </TableRow>

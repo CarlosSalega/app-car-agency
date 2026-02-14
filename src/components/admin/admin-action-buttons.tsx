@@ -8,11 +8,7 @@ interface ViewButtonProps {
   openInNewTab?: boolean;
 }
 
-export function ViewButton({
-  href,
-  label = "Ver",
-  openInNewTab = false,
-}: ViewButtonProps) {
+export function ViewButton({ href, label = "Ver", openInNewTab = false }: ViewButtonProps) {
   return (
     <Button
       className="hover:text-background hover:bg-info"
@@ -35,11 +31,7 @@ interface EditButtonProps {
   label?: string;
 }
 
-export function EditButton({
-  href,
-  onClick,
-  label = "Editar",
-}: EditButtonProps) {
+export function EditButton({ href, onClick, label = "Editar" }: EditButtonProps) {
   if (href) {
     return (
       <Button
@@ -77,11 +69,7 @@ interface DeleteButtonProps {
   disabled?: boolean;
 }
 
-export function DeleteButton({
-  onClick,
-  label = "Eliminar",
-  disabled = false,
-}: DeleteButtonProps) {
+export function DeleteButton({ onClick, label = "Eliminar", disabled = false }: DeleteButtonProps) {
   return (
     <Button
       className="hover:text-background hover:bg-destructive"
@@ -122,23 +110,9 @@ export function ActionButtonsGroup({
 }: ActionButtonsGroupProps) {
   return (
     <div className="flex items-center justify-end gap-2">
-      {viewHref && (
-        <ViewButton
-          href={viewHref}
-          label={viewLabel}
-          openInNewTab={viewOpenInNewTab}
-        />
-      )}
-      {(editHref || editOnClick) && (
-        <EditButton href={editHref} onClick={editOnClick} label={editLabel} />
-      )}
-      {onDelete && (
-        <DeleteButton
-          onClick={onDelete}
-          label={deleteLabel}
-          disabled={deleteDisabled}
-        />
-      )}
+      {viewHref && <ViewButton href={viewHref} label={viewLabel} openInNewTab={viewOpenInNewTab} />}
+      {(editHref || editOnClick) && <EditButton href={editHref} onClick={editOnClick} label={editLabel} />}
+      {onDelete && <DeleteButton onClick={onDelete} label={deleteLabel} disabled={deleteDisabled} />}
     </div>
   );
 }

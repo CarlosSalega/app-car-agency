@@ -1,9 +1,7 @@
 import { Metadata } from "next";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000");
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 export const SITE_CONFIG = {
   name: "Tu Agencia",
   description: "Vení a Tu Agencia y encontrá el auto de tus sueños.",
@@ -24,6 +22,7 @@ export const SITE_CONFIG = {
     },
   },
 } as const;
+
 export const siteMetadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: SITE_CONFIG.name,

@@ -8,12 +8,10 @@ export async function GET() {
     return NextResponse.json(tags);
   } catch (error) {
     console.error("Error al obtener los tags", error);
-    return NextResponse.json(
-      { error: "Error al obtener los tags" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al obtener los tags" }, { status: 500 });
   }
 }
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
@@ -22,10 +20,7 @@ export async function POST(request: NextRequest) {
     }
     const data = await request.json();
     if (!data.name?.trim()) {
-      return NextResponse.json(
-        { error: "El nombre del tag es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El nombre del tag es requerido" }, { status: 400 });
     }
     const slugName = slugify(data.name.trim(), {
       lower: true,
@@ -35,10 +30,7 @@ export async function POST(request: NextRequest) {
       where: { name: slugName },
     });
     if (existingTag) {
-      return NextResponse.json(
-        { error: "Ya existe un tag con este nombre" },
-        { status: 409 },
-      );
+      return NextResponse.json({ error: "Ya existe un tag con este nombre" }, { status: 409 });
     }
     const tag = await prisma.tag.create({
       data: {
@@ -64,9 +56,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("[TAGS] Create tag error:", error);
-    return NextResponse.json(
-      { error: "Error al crear el tag" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al crear el tag" }, { status: 500 });
   }
 }

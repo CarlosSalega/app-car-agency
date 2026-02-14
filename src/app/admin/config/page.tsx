@@ -42,9 +42,7 @@ export default async function ConfigPage() {
           initialBrands={brands}
           initialLocations={locations}
           initialTags={tags}
-          initialDepositPercentage={
-            depositSetting ? Number.parseFloat(depositSetting.value) : 30
-          }
+          initialDepositPercentage={depositSetting ? Number.parseFloat(depositSetting.value) : 30}
         />
       </div>
     </div>

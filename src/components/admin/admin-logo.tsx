@@ -7,13 +7,7 @@ export function AdminLogo() {
 
   return (
     <Link href="/" className="flex items-center gap-2">
-      <Image
-        src={logo.src}
-        alt={logo.alt}
-        width={logo.width}
-        height={logo.height}
-        className={logo.className}
-      />
+      <Image src={logo.src} alt={logo.alt} width={logo.width} height={logo.height} className={logo.className} />
     </Link>
   );
 }

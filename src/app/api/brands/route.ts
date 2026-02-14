@@ -14,12 +14,10 @@ export async function GET() {
     return NextResponse.json(brands);
   } catch (error) {
     console.error("[BRANDS] Error al obtener las marcas:", error);
-    return NextResponse.json(
-      { error: "Error al obtener las marcas" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al obtener las marcas" }, { status: 500 });
   }
 }
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
@@ -28,19 +26,13 @@ export async function POST(request: NextRequest) {
     }
     const data = await request.json();
     if (!data.name?.trim()) {
-      return NextResponse.json(
-        { error: "El nombre de la marca es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El nombre de la marca es requerido" }, { status: 400 });
     }
     const existingBrand = await prisma.brand.findUnique({
       where: { name: data.name.trim() },
     });
     if (existingBrand) {
-      return NextResponse.json(
-        { error: "Ya existe una marca con este nombre" },
-        { status: 409 },
-      );
+      return NextResponse.json({ error: "Ya existe una marca con este nombre" }, { status: 409 });
     }
     const brand = await prisma.brand.create({
       data: {
@@ -63,9 +55,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("[BRANDS] Error al crear la marca:", error);
-    return NextResponse.json(
-      { error: "Error al crear la marca" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al crear la marca" }, { status: 500 });
   }
 }

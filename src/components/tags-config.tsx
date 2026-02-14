@@ -2,22 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -128,9 +115,7 @@ export function TagsConfig({ tags, onTagsChange }: TagsConfigProps) {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>
-                {editing ? "Editar Etiqueta" : "Nueva Etiqueta"}
-              </DialogTitle>
+              <DialogTitle>{editing ? "Editar Etiqueta" : "Nueva Etiqueta"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -210,11 +195,7 @@ export function TagsConfig({ tags, onTagsChange }: TagsConfigProps) {
                 </div>
               </div>
               <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsOpen(false)}
-                >
+                <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                   Cancelar
                 </Button>
                 <Button type="submit" disabled={loading}>
@@ -240,10 +221,7 @@ export function TagsConfig({ tags, onTagsChange }: TagsConfigProps) {
           <TableBody>
             {tags.length === 0 ? (
               <TableRow>
-                <TableCell
-                  colSpan={5}
-                  className="text-muted-foreground text-center"
-                >
+                <TableCell colSpan={5} className="text-muted-foreground text-center">
                   No hay tags registrados
                 </TableCell>
               </TableRow>
@@ -253,16 +231,10 @@ export function TagsConfig({ tags, onTagsChange }: TagsConfigProps) {
                   <TableCell className="font-medium">
                     {formatTagName(tag.name)}
                     <br />
-                    <span className="text-muted-foreground text-xs">
-                      ({tag.name})
-                    </span>
+                    <span className="text-muted-foreground text-xs">({tag.name})</span>
                   </TableCell>
                   <TableCell>
-                    {tag.description || (
-                      <span className="text-muted-foreground">
-                        Sin descripción
-                      </span>
-                    )}
+                    {tag.description || <span className="text-muted-foreground">Sin descripción</span>}
                   </TableCell>
                   <TableCell>
                     {tag.color ? (
@@ -280,11 +252,7 @@ export function TagsConfig({ tags, onTagsChange }: TagsConfigProps) {
                     )}
                   </TableCell>
                   <TableCell>
-                    <ActiveStatusBadge
-                      isActive={tag.isActive}
-                      activeLabel="Activo"
-                      inactiveLabel="Inactivo"
-                    />
+                    <ActiveStatusBadge isActive={tag.isActive} activeLabel="Activo" inactiveLabel="Inactivo" />
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">

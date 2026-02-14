@@ -16,9 +16,7 @@ const ITEMS_PER_PAGE = 5;
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminCarsPage({
-  searchParams,
-}: AdminCarsPageProps) {
+export default async function AdminCarsPage({ searchParams }: AdminCarsPageProps) {
   const session = await requireAuthSession();
 
   const params = await searchParams;

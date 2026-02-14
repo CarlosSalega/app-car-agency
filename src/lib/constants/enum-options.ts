@@ -1,10 +1,4 @@
-import {
-  CarType,
-  FuelType,
-  Transmission,
-  Currency,
-  CarStatus,
-} from "@prisma/client";
+import { CarType, FuelType, Transmission, Currency, CarStatus } from "@prisma/client";
 
 export const CAR_TYPE_OPTIONS = [
   { value: CarType.SEDAN, label: "Sedán" },

@@ -10,9 +10,7 @@ export function FeaturesSection() {
               <Shield className="text-primary size-8" />
             </div>
             <h3 className="mb-2 text-xl font-bold">Trato Directo</h3>
-            <p className="text-muted-foreground">
-              Garantía y confianza. Tu inversión siempre segura.
-            </p>
+            <p className="text-muted-foreground">Garantía y confianza. Tu inversión siempre segura.</p>
           </div>
 
           <div className="text-center">
@@ -20,9 +18,7 @@ export function FeaturesSection() {
               <CheckCircle className="text-primary size-8" />
             </div>
             <h3 className="mb-2 text-xl font-bold">Verificación Completa</h3>
-            <p className="text-muted-foreground">
-              Inspección rigurosa para garantizar calidad y seguridad.
-            </p>
+            <p className="text-muted-foreground">Inspección rigurosa para garantizar calidad y seguridad.</p>
           </div>
 
           <div className="text-center">
@@ -30,9 +26,7 @@ export function FeaturesSection() {
               <TrendingUp className="text-primary size-8" />
             </div>
             <h3 className="mb-2 text-xl font-bold">Mejor Precio</h3>
-            <p className="text-muted-foreground">
-              Ahorrá hasta 30% vs concesionarias oficiales.
-            </p>
+            <p className="text-muted-foreground">Ahorrá hasta 30% vs concesionarias oficiales.</p>
           </div>
         </div>
       </div>

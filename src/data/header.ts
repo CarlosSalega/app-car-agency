@@ -8,8 +8,7 @@ export const HEADER_CONTENT = {
   },
   brand: {
     text: "",
-    className:
-      "lg:text-2xl font-bold text-foreground uppercase hidden md:block md:text-xl",
+    className: "lg:text-2xl font-bold text-foreground uppercase hidden md:block md:text-xl",
   },
   api: {
     authEndpoint: "/api/auth/me",

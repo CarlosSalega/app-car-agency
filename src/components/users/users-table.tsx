@@ -18,16 +18,8 @@ interface UsersTableProps {
 }
 
 export function UsersTable({ initialUsers, pagination }: UsersTableProps) {
-  const {
-    users,
-    isLoading,
-    editingUser,
-    userToDelete,
-    setEditingUser,
-    setUserToDelete,
-    upsertUser,
-    deactivateUser,
-  } = useUsersTable(initialUsers);
+  const { users, isLoading, editingUser, userToDelete, setEditingUser, setUserToDelete, upsertUser, deactivateUser } =
+    useUsersTable(initialUsers);
 
   const columns = getUsersColumns({
     onEdit: setEditingUser,

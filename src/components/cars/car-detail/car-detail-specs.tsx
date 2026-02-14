@@ -22,12 +22,7 @@ export function CarDetailSpecs({ car }: CarDetailSpecsProps) {
     { label: "Tipo", value: car.type },
     {
       label: "Combustible",
-      value:
-        car.fuelType === "GASOLINE"
-          ? "Nafta"
-          : car.fuelType === "DIESEL"
-            ? "Diesel"
-            : car.fuelType,
+      value: car.fuelType === "GASOLINE" ? "Nafta" : car.fuelType === "DIESEL" ? "Diesel" : car.fuelType,
     },
     {
       label: "Transmisión",

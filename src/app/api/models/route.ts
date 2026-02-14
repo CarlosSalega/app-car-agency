@@ -15,12 +15,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(models);
   } catch (error) {
     console.error("[MODELOS] Error al obtener los modelos:", error);
-    return NextResponse.json(
-      { error: "Error al obtener los modelos" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al obtener los modelos" }, { status: 500 });
   }
 }
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
@@ -29,25 +27,16 @@ export async function POST(request: NextRequest) {
     }
     const data = await request.json();
     if (!data.name?.trim()) {
-      return NextResponse.json(
-        { error: "El nombre del modelo es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El nombre del modelo es requerido" }, { status: 400 });
     }
     if (!data.brandId?.trim()) {
-      return NextResponse.json(
-        { error: "La marca es requerida" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "La marca es requerida" }, { status: 400 });
     }
     const brand = await prisma.brand.findUnique({
       where: { id: data.brandId },
     });
     if (!brand) {
-      return NextResponse.json(
-        { error: "La marca no existe" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: "La marca no existe" }, { status: 404 });
     }
     const existingModel = await prisma.model.findUnique({
       where: {
@@ -90,9 +79,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("[MODELOS] Error al crear el modelo:", error);
-    return NextResponse.json(
-      { error: "Error al crear el modelo" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al crear el modelo" }, { status: 500 });
   }
 }

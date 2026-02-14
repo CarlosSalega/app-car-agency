@@ -7,16 +7,9 @@ interface CarPlaceholderSVGProps {
   alt?: string;
 }
 
-export function CarPlaceholderSVG({
-  className,
-  alt = "Imagen no disponible",
-}: CarPlaceholderSVGProps) {
+export function CarPlaceholderSVG({ className, alt = "Imagen no disponible" }: CarPlaceholderSVGProps) {
   return (
-    <div
-      className={cn("bg-muted flex items-center justify-center", className)}
-      role="img"
-      aria-label={alt}
-    >
+    <div className={cn("bg-muted flex items-center justify-center", className)} role="img" aria-label={alt}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"

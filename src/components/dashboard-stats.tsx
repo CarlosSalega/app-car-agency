@@ -9,13 +9,7 @@ interface DashboardStatsProps {
   totalVisits: number;
 }
 
-export function DashboardStats({
-  totalCars,
-  availableCars,
-  reservedCars,
-  soldCars,
-  totalVisits,
-}: DashboardStatsProps) {
+export function DashboardStats({ totalCars, availableCars, reservedCars, soldCars, totalVisits }: DashboardStatsProps) {
   const stats = [
     {
       title: "Total Vehículos",
@@ -56,16 +50,12 @@ export function DashboardStats({
         return (
           <Card key={stat.title} className="py-6">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-muted-foreground text-sm font-medium">
-                {stat.title}
-              </CardTitle>
+              <CardTitle className="text-muted-foreground text-sm font-medium">{stat.title}</CardTitle>
               <Icon className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-muted-foreground mt-1 text-xs">
-                {stat.description}
-              </p>
+              <p className="text-muted-foreground mt-1 text-xs">{stat.description}</p>
             </CardContent>
           </Card>
         );

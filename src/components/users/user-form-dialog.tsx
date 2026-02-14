@@ -3,23 +3,11 @@
 import { useEffect, useState } from "react";
 import type { Role } from "@prisma/client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import type { UserWithCount } from "@/types/users";
 
@@ -46,12 +34,7 @@ const DEFAULT_FORM: FormData = {
   isActive: true,
 };
 
-export function UserFormDialog({
-  open,
-  user,
-  onClose,
-  onSuccess,
-}: UserFormDialogProps) {
+export function UserFormDialog({ open, user, onClose, onSuccess }: UserFormDialogProps) {
   const isEditing = Boolean(user?.id);
   const [formData, setFormData] = useState<FormData>(DEFAULT_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -101,13 +84,9 @@ export function UserFormDialog({
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Editar usuario" : "Nuevo usuario"}
-          </DialogTitle>
+          <DialogTitle>{isEditing ? "Editar usuario" : "Nuevo usuario"}</DialogTitle>
           <DialogDescription>
-            {isEditing
-              ? "Modificá los datos del usuario"
-              : "Creá un nuevo usuario del sistema"}
+            {isEditing ? "Modificá los datos del usuario" : "Creá un nuevo usuario del sistema"}
           </DialogDescription>
         </DialogHeader>
 
@@ -116,9 +95,7 @@ export function UserFormDialog({
             <Label>Nombre</Label>
             <Input
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
@@ -128,35 +105,24 @@ export function UserFormDialog({
             <Input
               type="email"
               value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label>
-              Contraseña {isEditing && "(dejar vacío para no modificar)"}
-            </Label>
+            <Label>Contraseña {isEditing && "(dejar vacío para no modificar)"}</Label>
             <Input
               type="password"
               value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required={!isEditing}
             />
           </div>
 
           <div className="space-y-2">
             <Label>Rol</Label>
-            <Select
-              value={formData.role}
-              onValueChange={(value) =>
-                setFormData({ ...formData, role: value as Role })
-              }
-            >
+            <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value as Role })}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

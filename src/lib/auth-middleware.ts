@@ -33,55 +33,36 @@ export async function requireAdmin(request?: NextRequest) {
   const user = await requireAuth(request);
 
   if (user.role !== "ADMIN") {
-    throw new AuthError(
-      "Acceso denegado. Se requiere rol de administrador",
-      403,
-    );
+    throw new AuthError("Acceso denegado. Se requiere rol de administrador", 403);
   }
 
   return user;
 }
 
-export function withAuth(
-  handler: (request: NextRequest, user: any) => Promise<NextResponse>,
-) {
+export function withAuth(handler: (request: NextRequest, user: any) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const user = await requireAuth(request);
       return handler(request, user);
     } catch (error) {
       if (error instanceof AuthError) {
-        return NextResponse.json(
-          { error: error.message },
-          { status: error.statusCode },
-        );
+        return NextResponse.json({ error: error.message }, { status: error.statusCode });
       }
-      return NextResponse.json(
-        { error: "Error de autenticación" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "Error de autenticación" }, { status: 500 });
     }
   };
 }
 
-export function withAdmin(
-  handler: (request: NextRequest, user: any) => Promise<NextResponse>,
-) {
+export function withAdmin(handler: (request: NextRequest, user: any) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const user = await requireAdmin(request);
       return handler(request, user);
     } catch (error) {
       if (error instanceof AuthError) {
-        return NextResponse.json(
-          { error: error.message },
-          { status: error.statusCode },
-        );
+        return NextResponse.json({ error: error.message }, { status: error.statusCode });
       }
-      return NextResponse.json(
-        { error: "Error de autenticación" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "Error de autenticación" }, { status: 500 });
     }
   };
 }

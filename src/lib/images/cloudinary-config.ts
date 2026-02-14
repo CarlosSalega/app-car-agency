@@ -32,8 +32,7 @@ export const CLOUDINARY_UPLOAD_OPTIONS = {
   tags: ["car-agency", "vehicle"],
 };
 
-export const CLOUDINARY_RESPONSIVE_TRANSFORMS =
-  "w_auto,dpr_auto,f_auto,q_auto,c_scale";
+export const CLOUDINARY_RESPONSIVE_TRANSFORMS = "w_auto,dpr_auto,f_auto,q_auto,c_scale";
 
 export const CLOUDINARY_SIZES = {
   thumbnail: {

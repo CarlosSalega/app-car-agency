@@ -1,11 +1,5 @@
 import type { Tag } from "@prisma/client";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { formatTagName } from "@/lib/tag-utils";
 
 interface TagSelectorProps {
@@ -15,12 +9,7 @@ interface TagSelectorProps {
   onRemoveTag: (tagId: string) => void;
 }
 
-export function TagSelector({
-  tags,
-  selectedTags,
-  onAddTag,
-  onRemoveTag,
-}: TagSelectorProps) {
+export function TagSelector({ tags, selectedTags, onAddTag, onRemoveTag }: TagSelectorProps) {
   return (
     <div className="space-y-2">
       <Select
@@ -54,11 +43,7 @@ export function TagSelector({
               }}
             >
               {formatTagName(tag.name)}
-              <button
-                type="button"
-                onClick={() => onRemoveTag(id)}
-                className="ml-1 text-xs opacity-80"
-              >
+              <button type="button" onClick={() => onRemoveTag(id)} className="ml-1 text-xs opacity-80">
                 ✕
               </button>
             </span>

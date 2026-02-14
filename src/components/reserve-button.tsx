@@ -2,13 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { CreditCard } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 interface ReserveButtonProps {
   carId: string;
   carTitle: string;
@@ -38,9 +32,7 @@ export function ReserveButton({ carId, carTitle, price }: ReserveButtonProps) {
   const handleReserve = async () => {
     setIsProcessing(true);
     setTimeout(() => {
-      alert(
-        "¡Reserva simulada exitosa! En producción, esto redirigiría a MercadoPago.",
-      );
+      alert("¡Reserva simulada exitosa! En producción, esto redirigiría a MercadoPago.");
       setIsProcessing(false);
       setIsOpen(false);
     }, 2000);
@@ -55,9 +47,7 @@ export function ReserveButton({ carId, carTitle, price }: ReserveButtonProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Reservar vehículo</DialogTitle>
-            <DialogDescription>
-              Estás por reservar: {carTitle}
-            </DialogDescription>
+            <DialogDescription>Estás por reservar: {carTitle}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="bg-muted rounded-lg p-4">
@@ -69,19 +59,12 @@ export function ReserveButton({ carId, carTitle, price }: ReserveButtonProps) {
                   minimumFractionDigits: 0,
                 }).format(price * (depositPercentage / 100))}
               </p>
-              <p className="text-muted-foreground mt-1 text-xs">
-                {depositPercentage}% del valor total
-              </p>
+              <p className="text-muted-foreground mt-1 text-xs">{depositPercentage}% del valor total</p>
             </div>
             <p className="text-muted-foreground text-sm">
-              Al confirmar, serás redirigido a MercadoPago para completar el
-              pago de la reserva.
+              Al confirmar, serás redirigido a MercadoPago para completar el pago de la reserva.
             </p>
-            <Button
-              onClick={handleReserve}
-              disabled={isProcessing}
-              className="w-full"
-            >
+            <Button onClick={handleReserve} disabled={isProcessing} className="w-full">
               {isProcessing ? "Procesando..." : "Confirmar reserva"}
             </Button>
           </div>

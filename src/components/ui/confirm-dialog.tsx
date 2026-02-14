@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
 
@@ -50,11 +44,7 @@ export function ConfirmDialog({
             {cancelLabel}
           </Button>
 
-          <Button
-            variant={destructive ? "destructive" : "default"}
-            onClick={onConfirm}
-            disabled={loading}
-          >
+          <Button variant={destructive ? "destructive" : "default"} onClick={onConfirm} disabled={loading}>
             {confirmLabel}
           </Button>
         </div>

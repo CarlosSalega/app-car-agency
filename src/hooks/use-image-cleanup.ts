@@ -40,10 +40,7 @@ export function useImageCleanup(): UseImageCleanupReturn {
 
     const unused = urls.filter((url) => {
       const normalized = normalizeUrl(url);
-      return (
-        !usedImagesRef.current.has(url) &&
-        !usedImagesRef.current.has(normalized)
-      );
+      return !usedImagesRef.current.has(url) && !usedImagesRef.current.has(normalized);
     });
 
     if (unused.length) {

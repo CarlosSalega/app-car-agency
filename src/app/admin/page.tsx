@@ -12,18 +12,17 @@ export default async function AdminPage() {
 
   const isAdmin = session.user.role === "ADMIN";
 
-  const [totalCars, availableCars, reservedCars, soldCars, totalVisits] =
-    await Promise.all([
-      prisma.car.count({ where: { deletedAt: null } }),
-      prisma.car.count({
-        where: { status: "AVAILABLE", deletedAt: null },
-      }),
-      prisma.car.count({
-        where: { status: "RESERVED", deletedAt: null },
-      }),
-      prisma.car.count({ where: { status: "SOLD", deletedAt: null } }),
-      prisma.visit.count(),
-    ]);
+  const [totalCars, availableCars, reservedCars, soldCars, totalVisits] = await Promise.all([
+    prisma.car.count({ where: { deletedAt: null } }),
+    prisma.car.count({
+      where: { status: "AVAILABLE", deletedAt: null },
+    }),
+    prisma.car.count({
+      where: { status: "RESERVED", deletedAt: null },
+    }),
+    prisma.car.count({ where: { status: "SOLD", deletedAt: null } }),
+    prisma.visit.count(),
+  ]);
 
   const recentLogs = await prisma.log.findMany({
     include: { user: true },
@@ -61,8 +60,7 @@ export default async function AdminPage() {
         ) : (
           <div className="py-12 text-center">
             <p className="text-muted-foreground">
-              Bienvenido, {session.user.name}. Usá el menú para gestionar los
-              vehículos.
+              Bienvenido, {session.user.name}. Usá el menú para gestionar los vehículos.
             </p>
           </div>
         )}

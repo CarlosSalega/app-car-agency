@@ -3,10 +3,7 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import slugify from "slugify";
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getSession();
     if (!session || session.user.role !== "ADMIN") {
@@ -17,10 +14,7 @@ export async function PUT(
     const data = await request.json();
 
     if (!data.name?.trim()) {
-      return NextResponse.json(
-        { error: "El nombre del tag es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El nombre del tag es requerido" }, { status: 400 });
     }
 
     // Convertir el nombre a slug para almacenamiento
@@ -35,10 +29,7 @@ export async function PUT(
     });
 
     if (existingTag && existingTag.id !== id) {
-      return NextResponse.json(
-        { error: "Ya existe un tag con este nombre" },
-        { status: 409 },
-      );
+      return NextResponse.json({ error: "Ya existe un tag con este nombre" }, { status: 409 });
     }
 
     const tag = await prisma.tag.update({
@@ -68,17 +59,11 @@ export async function PUT(
     });
   } catch (error) {
     console.error("[TAGS] Update tag error:", error);
-    return NextResponse.json(
-      { error: "Error al actualizar el tag" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al actualizar el tag" }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getSession();
     if (!session || session.user.role !== "ADMIN") {
@@ -132,9 +117,6 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("[TAGS] Delete tag error:", error);
-    return NextResponse.json(
-      { error: "Error al eliminar el tag" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al eliminar el tag" }, { status: 500 });
   }
 }

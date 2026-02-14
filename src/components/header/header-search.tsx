@@ -5,22 +5,14 @@ import { Search } from "lucide-react";
 import { HERO_CONTENT } from "@/data/hero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@/components/ui/dropdown-menu";
 
 export function HeaderSearch() {
   const { search } = HERO_CONTENT;
 
   return (
     <>
-      <form
-        action="/autos"
-        method="GET"
-        className="mx-auto hidden max-w-2xl md:block"
-      >
+      <form action="/autos" method="GET" className="mx-auto hidden max-w-2xl md:block">
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Input name="search" placeholder={search.placeholder} />
@@ -51,12 +43,7 @@ export function HeaderSearch() {
           className="max-w-64 lg:hidden"
         >
           <form action="/autos" method="GET">
-            <Input
-              name="search"
-              placeholder={search.placeholder}
-              autoFocus
-              className="truncate"
-            />
+            <Input name="search" placeholder={search.placeholder} autoFocus className="truncate" />
           </form>
         </DropdownMenuContent>
       </DropdownMenu>

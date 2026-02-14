@@ -19,9 +19,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
 
     if (files.length === 0) return;
@@ -66,22 +64,17 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
         const uploadResult = await response.json();
         uploadedKeys.push(uploadResult.key);
 
-        const progressPercentage = Math.round(
-          ((fileIndex + 1) / files.length) * 100,
-        );
+        const progressPercentage = Math.round(((fileIndex + 1) / files.length) * 100);
         setUploadProgress(progressPercentage);
       }
 
       onChange([...value, ...uploadedKeys]);
 
-      const imageWord =
-        uploadedKeys.length > 1 ? "imágenes subidas" : "imagen subida";
+      const imageWord = uploadedKeys.length > 1 ? "imágenes subidas" : "imagen subida";
       toast.success(`${uploadedKeys.length} ${imageWord}`);
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Error al subir imágenes",
-      );
+      toast.error(error instanceof Error ? error.message : "Error al subir imágenes");
     } finally {
       setIsUploading(false);
       setUploadProgress(0);
@@ -128,11 +121,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
         disabled={isUploading || value.length >= MAX_IMAGES}
       />
 
-      <Button
-        type="button"
-        onClick={handleButtonClick}
-        disabled={isUploading || value.length >= MAX_IMAGES}
-      >
+      <Button type="button" onClick={handleButtonClick} disabled={isUploading || value.length >= MAX_IMAGES}>
         {isUploading ? (
           <>
             <Loader2 className="mr-2 size-4 animate-spin" />
@@ -176,9 +165,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
 
       {value.length === 0 && (
         <div className="bg-muted/50 flex h-32 items-center justify-center rounded-lg border-2 border-dashed">
-          <p className="text-muted-foreground text-sm">
-            No hay imágenes. Haz clic en "Subir imágenes" para agregar.
-          </p>
+          <p className="text-muted-foreground text-sm">No hay imágenes. Haz clic en "Subir imágenes" para agregar.</p>
         </div>
       )}
     </div>

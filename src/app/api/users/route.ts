@@ -75,10 +75,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("[USERS] Error al obtener los usuarios:", error);
-    return NextResponse.json(
-      { error: "Error al obtener los usuarios" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al obtener los usuarios" }, { status: 500 });
   }
 }
 
@@ -92,39 +89,24 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
 
     if (!data.name?.trim()) {
-      return NextResponse.json(
-        { error: "El nombre es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El nombre es requerido" }, { status: 400 });
     }
 
     if (!data.email?.trim()) {
-      return NextResponse.json(
-        { error: "El email es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El email es requerido" }, { status: 400 });
     }
 
     if (!data.password?.trim()) {
-      return NextResponse.json(
-        { error: "La contraseña es requerida" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "La contraseña es requerida" }, { status: 400 });
     }
 
     if (data.password.length < 6) {
-      return NextResponse.json(
-        { error: "La contraseña debe tener al menos 6 caracteres" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "La contraseña debe tener al menos 6 caracteres" }, { status: 400 });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(data.email)) {
-      return NextResponse.json(
-        { error: "El formato del email es inválido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El formato del email es inválido" }, { status: 400 });
     }
 
     const existingUser = await prisma.user.findUnique({
@@ -132,10 +114,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: "Ya existe un usuario con este email" },
-        { status: 409 },
-      );
+      return NextResponse.json({ error: "Ya existe un usuario con este email" }, { status: 409 });
     }
 
     const hashedPassword = await hashPassword(data.password);
@@ -176,15 +155,9 @@ export async function POST(request: NextRequest) {
     console.error("[USUARIOS] Error al crear el usuario:", error);
 
     if (error instanceof Error && error.message.includes("Unique constraint")) {
-      return NextResponse.json(
-        { error: "Ya existe un usuario con este email" },
-        { status: 409 },
-      );
+      return NextResponse.json({ error: "Ya existe un usuario con este email" }, { status: 409 });
     }
 
-    return NextResponse.json(
-      { error: "Error al crear el usuario" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al crear el usuario" }, { status: 500 });
   }
 }

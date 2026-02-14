@@ -1,14 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
+import { Table, TableHeader, TableBody, TableFooter, TableRow, TableCell } from "@/components/ui/table";
 import { WithPagination } from "@/components/with-pagination";
 import type { PaginationProps } from "@/components/pagination";
 
@@ -63,9 +56,7 @@ export function AdminTable<T>({
           {/* Loading */}
           {isLoading && (
             <TableRow>
-              <TableCell colSpan={colSpan}>
-                {loadingState ?? "Cargando..."}
-              </TableCell>
+              <TableCell colSpan={colSpan}>{loadingState ?? "Cargando..."}</TableCell>
             </TableRow>
           )}
 
@@ -79,9 +70,7 @@ export function AdminTable<T>({
           {/* Empty */}
           {!isLoading && !error && data.length === 0 && (
             <TableRow>
-              <TableCell colSpan={colSpan}>
-                {emptyState ?? "Sin resultados"}
-              </TableCell>
+              <TableCell colSpan={colSpan}>{emptyState ?? "Sin resultados"}</TableCell>
             </TableRow>
           )}
 

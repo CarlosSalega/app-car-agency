@@ -6,6 +6,7 @@ export type ContactLink = {
   href: string;
   icon?: React.ReactNode;
 };
+
 export const CONTACT_LINKS: ContactLink[] = [
   {
     id: "telefono",

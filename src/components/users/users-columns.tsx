@@ -8,10 +8,7 @@ interface Params {
   onDelete: (user: UserWithCount) => void;
 }
 
-export function getUsersColumns({
-  onEdit,
-  onDelete,
-}: Params): AdminColumn<UserWithCount>[] {
+export function getUsersColumns({ onEdit, onDelete }: Params): AdminColumn<UserWithCount>[] {
   return [
     {
       key: "name",
@@ -43,11 +40,7 @@ export function getUsersColumns({
       header: <span className="text-right">Acciones</span>,
       className: "text-right",
       cell: (u) => (
-        <ActionButtonsGroup
-          editOnClick={() => onEdit(u)}
-          onDelete={() => onDelete(u)}
-          deleteDisabled={!u.isActive}
-        />
+        <ActionButtonsGroup editOnClick={() => onEdit(u)} onDelete={() => onDelete(u)} deleteDisabled={!u.isActive} />
       ),
     },
   ];

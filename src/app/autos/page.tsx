@@ -22,21 +22,15 @@ export default async function AutosPage({
     deletedAt: null,
   };
 
-  if (params.brand && params.brand !== "all")
-    where.brandId = params.brand as string;
-  if (params.model && params.model !== "all")
-    where.modelId = params.model as string;
+  if (params.brand && params.brand !== "all") where.brandId = params.brand as string;
+  if (params.model && params.model !== "all") where.modelId = params.model as string;
   if (params.type && params.type !== "all") where.type = params.type as string;
-  if (params.fuel && params.fuel !== "all")
-    where.fuelType = params.fuel as string;
-  if (params.transmission && params.transmission !== "all")
-    where.transmission = params.transmission as string;
+  if (params.fuel && params.fuel !== "all") where.fuelType = params.fuel as string;
+  if (params.transmission && params.transmission !== "all") where.transmission = params.transmission as string;
   if (params.minYear) where.year = { gte: Number(params.minYear) };
-  if (params.maxYear)
-    where.year = { ...where.year, lte: Number(params.maxYear) };
+  if (params.maxYear) where.year = { ...where.year, lte: Number(params.maxYear) };
   if (params.minPrice) where.price = { gte: Number(params.minPrice) };
-  if (params.maxPrice)
-    where.price = { ...where.price, lte: Number(params.maxPrice) };
+  if (params.maxPrice) where.price = { ...where.price, lte: Number(params.maxPrice) };
   if (params.search) {
     where.OR = [
       {

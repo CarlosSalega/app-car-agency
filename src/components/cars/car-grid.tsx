@@ -13,12 +13,7 @@ interface CarGridProps {
   totalPages?: number;
 }
 
-export function CarGrid({
-  cars,
-  pagination,
-  currentPage,
-  totalPages,
-}: CarGridProps) {
+export function CarGrid({ cars, pagination, currentPage, totalPages }: CarGridProps) {
   const finalPagination =
     pagination ||
     (currentPage && totalPages
@@ -28,18 +23,17 @@ export function CarGrid({
           baseUrl: "?",
         }
       : undefined);
+
   if (cars.length === 0) {
     return (
       <div className="py-12 text-center">
-        <p className="text-muted-foreground text-lg">
-          No se encontraron vehículos con los filtros seleccionados.
-        </p>
+        <p className="text-muted-foreground text-lg">No se encontraron vehículos con los filtros seleccionados.</p>
       </div>
     );
   }
 
   const gridContent = (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
       {cars.map((car) => (
         <CarCard key={car.id} car={car} />
       ))}

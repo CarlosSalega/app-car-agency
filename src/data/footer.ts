@@ -27,10 +27,7 @@ export const FOOTER_CONTENT = {
         { label: "Tel", value: "+54 9 123 456-7890" },
         {
           label: "Dirección",
-          value: [
-            "Calle 123 - Buenos Aires",
-            "Provincia de Buenos Aires, Argentina",
-          ],
+          value: ["Calle 123 - Buenos Aires", "Provincia de Buenos Aires, Argentina"],
         },
       ],
     },

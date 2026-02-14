@@ -17,10 +17,7 @@ import { FormActions } from "@/components/form/form-actions";
 import { FormField } from "@/components/form/form-field";
 import { CarFormSkeleton } from "@/components/cars/car-form/car-form-skeleton";
 import { carSchema, type CarInput } from "@/lib/validations/car";
-import {
-  carToFormValues,
-  formValuesToPayload,
-} from "@/lib/utils/car-form-utils";
+import { carToFormValues, formValuesToPayload } from "@/lib/utils/car-form-utils";
 import type { CarWithRelations } from "@/types/car-form";
 import { Plus, Edit } from "lucide-react";
 import { toast } from "sonner";
@@ -39,8 +36,7 @@ export function CarForm({ car, mode }: CarFormProps) {
   const initialFormValues = useMemo(() => carToFormValues(car), [car]);
 
   const initialImages = useMemo(
-    () =>
-      Array.isArray(initialFormValues.images) ? initialFormValues.images : [],
+    () => (Array.isArray(initialFormValues.images) ? initialFormValues.images : []),
     [initialFormValues.images],
   );
 
@@ -59,20 +55,11 @@ export function CarForm({ car, mode }: CarFormProps) {
 
   const formData = watch();
 
-  const {
-    brandId: selectedBrandId,
-    models,
-    handleBrandChange,
-  } = useBrandModels(brands, car?.brandId);
+  const { brandId: selectedBrandId, models, handleBrandChange } = useBrandModels(brands, car?.brandId);
 
-  const { tempUploaded, setTempUploaded, cleanupUsedImages } =
-    useImageCleanup();
+  const { tempUploaded, setTempUploaded, cleanupUsedImages } = useImageCleanup();
 
-  const { selectedTags, addTag, removeTag } = useTagSelection(
-    tags,
-    car?.tags,
-    setValue,
-  );
+  const { selectedTags, addTag, removeTag } = useTagSelection(tags, car?.tags, setValue);
 
   const onSubmit = async (data: CarInput) => {
     if (!data.images || data.images.length === 0) {
@@ -98,32 +85,22 @@ export function CarForm({ car, mode }: CarFormProps) {
 
         cleanupUsedImages(finalImageKeys);
 
-        const successMessage =
-          mode === "create"
-            ? "Vehículo creado exitosamente"
-            : "Vehículo actualizado";
+        const successMessage = mode === "create" ? "Vehículo creado exitosamente" : "Vehículo actualizado";
         toast.success(successMessage);
 
         router.push("/admin/cars");
         router.refresh();
       } else {
-        const errorData = await response
-          .json()
-          .catch(() => ({ error: "Error desconocido" }));
+        const errorData = await response.json().catch(() => ({ error: "Error desconocido" }));
 
-        const errorMessage =
-          errorData.error ||
-          errorData.details?.[0] ||
-          "Error al guardar el vehículo";
+        const errorMessage = errorData.error || errorData.details?.[0] || "Error al guardar el vehículo";
 
         toast.error(errorMessage);
         console.error("API Error:", errorData);
       }
     } catch (error) {
       console.error("Submit error:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Error al guardar el vehículo",
-      );
+      toast.error(error instanceof Error ? error.message : "Error al guardar el vehículo");
     } finally {
       setIsLoading(false);
     }
@@ -139,9 +116,7 @@ export function CarForm({ car, mode }: CarFormProps) {
         event.preventDefault();
         const isFormValid = await trigger();
         if (!isFormValid) {
-          toast.error(
-            "Por favor completa todos los campos requeridos correctamente",
-          );
+          toast.error("Por favor completa todos los campos requeridos correctamente");
           return;
         }
         await handleSubmit(onSubmit)();
@@ -150,11 +125,7 @@ export function CarForm({ car, mode }: CarFormProps) {
       <Card className="mx-auto max-w-2xl px-2 py-6 md:px-4">
         <CardHeader className="px-2">
           <CardTitle className="text-primary flex items-center gap-2 underline">
-            {mode === "create" ? (
-              <Plus className="size-5" />
-            ) : (
-              <Edit className="size-5" />
-            )}
+            {mode === "create" ? <Plus className="size-5" /> : <Edit className="size-5" />}
             {mode === "create" ? "Nuevo Vehículo" : "Editar Vehículo"}
           </CardTitle>
         </CardHeader>
@@ -176,25 +147,17 @@ export function CarForm({ car, mode }: CarFormProps) {
             <ImageUpload
               value={Array.isArray(formData.images) ? formData.images : []}
               onChange={(imageKeys) => {
-                const previousImageKeys = Array.isArray(formData.images)
-                  ? formData.images
-                  : [];
+                const previousImageKeys = Array.isArray(formData.images) ? formData.images : [];
 
                 const newImageKeys = imageKeys.filter(
-                  (imageKey) =>
-                    !previousImageKeys.includes(imageKey) &&
-                    !initialImages.includes(imageKey),
+                  (imageKey) => !previousImageKeys.includes(imageKey) && !initialImages.includes(imageKey),
                 );
 
                 if (newImageKeys.length) {
                   setTempUploaded((temporaryUploaded) => {
                     const existingKeysSet = new Set(temporaryUploaded);
-                    const uniqueNewKeys = newImageKeys.filter(
-                      (imageKey) => !existingKeysSet.has(imageKey),
-                    );
-                    return uniqueNewKeys.length
-                      ? [...temporaryUploaded, ...uniqueNewKeys]
-                      : temporaryUploaded;
+                    const uniqueNewKeys = newImageKeys.filter((imageKey) => !existingKeysSet.has(imageKey));
+                    return uniqueNewKeys.length ? [...temporaryUploaded, ...uniqueNewKeys] : temporaryUploaded;
                   });
                 }
 
@@ -207,19 +170,10 @@ export function CarForm({ car, mode }: CarFormProps) {
           </FormField>
 
           <FormField label="Tags">
-            <TagSelector
-              tags={tags}
-              selectedTags={selectedTags}
-              onAddTag={addTag}
-              onRemoveTag={removeTag}
-            />
+            <TagSelector tags={tags} selectedTags={selectedTags} onAddTag={addTag} onRemoveTag={removeTag} />
           </FormField>
 
-          <FormActions
-            loading={isLoading}
-            mode={mode}
-            onCancel={() => router.back()}
-          />
+          <FormActions loading={isLoading} mode={mode} onCancel={() => router.back()} />
         </CardContent>
       </Card>
     </form>

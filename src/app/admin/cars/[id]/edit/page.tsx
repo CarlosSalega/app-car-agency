@@ -4,11 +4,7 @@ import { prisma } from "@/lib/db";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { CarForm } from "@/components/cars/car-form/car-form";
 
-export default async function EditCarPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditCarPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await requireAuthSession();
 
   const { id } = await params;

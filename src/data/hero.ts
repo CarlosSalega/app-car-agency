@@ -19,6 +19,7 @@ export const HERO_FEATURES = [
     iconColor: "text-green-400",
   },
 ];
+
 export const HERO_CONTENT = {
   title: {
     main: "Tu auto ideal",

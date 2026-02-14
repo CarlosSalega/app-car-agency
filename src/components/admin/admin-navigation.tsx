@@ -19,10 +19,7 @@ export function AdminNavigation({ user }: AdminNavigationProps) {
   return (
     <nav className="hidden items-center gap-6 md:flex">
       {ADMIN_NAVIGATION.filter(
-        (item) =>
-          item.showInHeader &&
-          item.href &&
-          (!item.roles || item.roles.includes(user.role)),
+        (item) => item.showInHeader && item.href && (!item.roles || item.roles.includes(user.role)),
       ).map((item) => {
         const active = isActiveRoute(pathname, item.href!);
         const Icon = item.icon;
@@ -32,11 +29,7 @@ export function AdminNavigation({ user }: AdminNavigationProps) {
             key={item.id}
             href={item.href!}
             aria-current={active ? "page" : undefined}
-            className={cn(
-              styles.link.base,
-              active ? styles.link.active : styles.link.inactive,
-              active && "-mb-1 pb-1",
-            )}
+            className={cn(styles.link.base, active ? styles.link.active : styles.link.inactive, active && "-mb-1 pb-1")}
           >
             {Icon && <Icon className={styles.icon} />}
             <span

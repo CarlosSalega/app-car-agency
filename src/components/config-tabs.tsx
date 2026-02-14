@@ -53,10 +53,7 @@ export function ConfigTabs({
       </TabsContent>
 
       <TabsContent value="locations" className="mt-6">
-        <LocationsConfig
-          locations={locations}
-          onLocationsChange={setLocations}
-        />
+        <LocationsConfig locations={locations} onLocationsChange={setLocations} />
       </TabsContent>
 
       <TabsContent value="deposit" className="mt-6">

@@ -52,9 +52,7 @@ export default async function ActivityPage(props: ActivityPageProps) {
             </Button>
             <div>
               <h1 className="text-4xl font-bold">Actividad del Sistema</h1>
-              <p className="text-muted-foreground mt-2">
-                Registro completo de todas las actividades en el sistema
-              </p>
+              <p className="text-muted-foreground mt-2">Registro completo de todas las actividades en el sistema</p>
             </div>
           </div>
         </div>

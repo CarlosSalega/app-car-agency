@@ -1,3 +1,4 @@
+import { FALLBACK_IMAGE } from "@/lib/constants";
 import { CLOUDINARY_RESPONSIVE_TRANSFORMS } from "./cloudinary-config";
 
 export function resolveImageUrl(key: string) {
@@ -6,7 +7,7 @@ export function resolveImageUrl(key: string) {
 
   if (!cloudName || !base) {
     console.error("Variables de Cloudinary no están definidas");
-    return "/placeholder.webp";
+    return FALLBACK_IMAGE;
   }
 
   if (process.env.NEXT_PUBLIC_IMAGE_PROVIDER === "cloudinary") {

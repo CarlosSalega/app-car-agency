@@ -3,13 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 function Toast({
   message,
@@ -25,9 +19,7 @@ function Toast({
     <div className="animate-in slide-in-from-right fixed top-4 right-4 z-50">
       <div
         className={`rounded-md p-4 shadow-lg ${
-          type === "error"
-            ? "bg-destructive text-destructive-foreground"
-            : "bg-green-600 text-white"
+          type === "error" ? "bg-destructive text-destructive-foreground" : "bg-green-600 text-white"
         }`}
       >
         <div className="flex items-center gap-2">
@@ -38,6 +30,7 @@ function Toast({
     </div>
   );
 }
+
 interface DepositConfigProps {
   initialPercentage: number;
 }
@@ -80,39 +73,29 @@ export function DepositConfig({ initialPercentage }: DepositConfigProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           value: numValue,
-          description:
-            "Porcentaje de seña a recibir como parte de pago del valor del vehículo",
+          description: "Porcentaje de seña a recibir como parte de pago del valor del vehículo",
         }),
       });
       const json = await res.json();
       if (!res.ok) {
         let errorMessage = json.error || "Error desconocido";
         if (res.status === 401) {
-          errorMessage =
-            "No tienes permisos para realizar esta acción. Por favor, inicia sesión nuevamente.";
+          errorMessage = "No tienes permisos para realizar esta acción. Por favor, inicia sesión nuevamente.";
         } else if (res.status === 400) {
-          errorMessage =
-            json.error ||
-            "Los datos enviados no son válidos. Por favor, verifica el porcentaje.";
+          errorMessage = json.error || "Los datos enviados no son válidos. Por favor, verifica el porcentaje.";
         } else if (res.status === 404) {
-          errorMessage =
-            "La configuración no pudo ser encontrada. Por favor, intenta nuevamente.";
+          errorMessage = "La configuración no pudo ser encontrada. Por favor, intenta nuevamente.";
         } else if (res.status === 500) {
-          errorMessage =
-            "Ocurrió un error en el servidor. Por favor, intenta nuevamente más tarde.";
+          errorMessage = "Ocurrió un error en el servidor. Por favor, intenta nuevamente más tarde.";
         }
         showToast(errorMessage, "error");
         setTimeout(() => setLoading(false), 1500);
         return;
       }
-      showToast(
-        `El porcentaje de seña se ha actualizado exitosamente a ${numValue}%`,
-        "success",
-      );
+      showToast(`El porcentaje de seña se ha actualizado exitosamente a ${numValue}%`, "success");
       setTimeout(() => setLoading(false), 1500);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Error desconocido";
+      const errorMessage = err instanceof Error ? err.message : "Error desconocido";
       showToast(
         "No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet e intenta nuevamente.",
         "error",
@@ -123,21 +106,13 @@ export function DepositConfig({ initialPercentage }: DepositConfigProps) {
   };
   return (
     <>
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          isVisible={toast.isVisible}
-        />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} isVisible={toast.isVisible} />}
       <Card className="max-w-2xl py-6">
         <CardHeader>
           <CardTitle>Porcentaje de Seña</CardTitle>
           <CardDescription>
-            Configura el porcentaje de seña (depósito inicial) que se recibirá
-            como parte de pago del valor del vehículo. Este porcentaje se
-            aplicará al calcular el monto de la seña cuando un cliente reserve
-            un vehículo.
+            Configura el porcentaje de seña (depósito inicial) que se recibirá como parte de pago del valor del
+            vehículo. Este porcentaje se aplicará al calcular el monto de la seña cuando un cliente reserve un vehículo.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -156,13 +131,10 @@ export function DepositConfig({ initialPercentage }: DepositConfigProps) {
                   className="max-w-[200px]"
                   required
                 />
-                <span className="text-muted-foreground text-sm">
-                  % del valor del vehículo
-                </span>
+                <span className="text-muted-foreground text-sm">% del valor del vehículo</span>
               </div>
               <p className="text-muted-foreground text-sm">
-                Ejemplo: Si el valor del vehículo es $10,000 y el porcentaje es
-                30%, la seña sería de $3,000.
+                Ejemplo: Si el valor del vehículo es $10,000 y el porcentaje es 30%, la seña sería de $3,000.
               </p>
             </div>
             <div className="flex items-center gap-4">

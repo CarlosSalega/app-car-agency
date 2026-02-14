@@ -22,22 +22,13 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  if (
-    pathname.startsWith("/_next/image") ||
-    request.url.includes("cloudinary.com")
-  ) {
-    response.headers.set(
-      "Cache-Control",
-      "public, max-age=31536000, immutable, stale-while-revalidate=86400",
-    );
+  if (pathname.startsWith("/_next/image") || request.url.includes("cloudinary.com")) {
+    response.headers.set("Cache-Control", "public, max-age=31536000, immutable, stale-while-revalidate=86400");
   }
 
   return response;
 }
 
 export const config = {
-  matcher: [
-    "/admin/:path*",
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/admin/:path*", "/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

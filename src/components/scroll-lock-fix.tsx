@@ -5,9 +5,7 @@ import { useEffect } from "react";
 export default function ScrollLockFix() {
   useEffect(() => {
     const styleId = "scroll-lock-override-style";
-    let styleElement = document.getElementById(
-      styleId,
-    ) as HTMLStyleElement | null;
+    let styleElement = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!styleElement) {
       styleElement = document.createElement("style");
       styleElement.id = styleId;
@@ -39,16 +37,8 @@ export default function ScrollLockFix() {
         document.documentElement.style.removeProperty("padding-right");
         document.documentElement.style.removeProperty("margin-right");
         document.documentElement.style.removeProperty("width");
-        document.documentElement.style.setProperty(
-          "--removed-body-scroll-bar-size",
-          "0px",
-          "important",
-        );
-        document.body.style.setProperty(
-          "--removed-body-scroll-bar-size",
-          "0px",
-          "important",
-        );
+        document.documentElement.style.setProperty("--removed-body-scroll-bar-size", "0px", "important");
+        document.body.style.setProperty("--removed-body-scroll-bar-size", "0px", "important");
         if (styleElement && styleElement.parentElement !== document.head) {
           document.head.appendChild(styleElement);
         } else if (styleElement) {
@@ -61,19 +51,13 @@ export default function ScrollLockFix() {
 
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (
-          mutation.type === "attributes" &&
-          mutation.target instanceof HTMLElement
-        ) {
+        if (mutation.type === "attributes" && mutation.target instanceof HTMLElement) {
           const element = mutation.target as HTMLElement;
           if (element.hasAttribute("data-scroll-locked")) {
             applyFix();
             let attempts = 0;
             const interval = setInterval(() => {
-              if (
-                !document.body.hasAttribute("data-scroll-locked") ||
-                attempts > 10
-              ) {
+              if (!document.body.hasAttribute("data-scroll-locked") || attempts > 10) {
                 clearInterval(interval);
                 return;
               }

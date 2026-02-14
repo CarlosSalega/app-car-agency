@@ -11,12 +11,7 @@ export interface PaginationProps {
   className?: string;
 }
 
-export function Pagination({
-  currentPage,
-  totalPages,
-  baseUrl = "?",
-  className = "",
-}: PaginationProps) {
+export function Pagination({ currentPage, totalPages, baseUrl = "?", className = "" }: PaginationProps) {
   if (totalPages <= 1) return null;
 
   const buildUrl = (page: number) => {

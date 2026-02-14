@@ -57,80 +57,69 @@ export function AdminDropdown({ user }: AdminDropdownProps) {
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium">{user.name}</p>
             <p className="text-muted-foreground text-xs">{user.email}</p>
-            <p className="text-muted-foreground text-xs capitalize">
-              {user.role.toLowerCase()}
-            </p>
+            <p className="text-muted-foreground text-xs capitalize">{user.role.toLowerCase()}</p>
           </div>
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator />
 
-        {ADMIN_NAVIGATION.filter(
-          (item) =>
-            item.showInDropdown &&
-            (!item.roles || item.roles.includes(user.role)),
-        ).map((item) => {
-          const Icon = item.icon;
+        {ADMIN_NAVIGATION.filter((item) => item.showInDropdown && (!item.roles || item.roles.includes(user.role))).map(
+          (item) => {
+            const Icon = item.icon;
 
-          if (item.action === "logout") {
+            if (item.action === "logout") {
+              return (
+                <DropdownMenuItem key={item.id} onClick={handleLogout} className="focus:text-background">
+                  {Icon && <Icon className="focus:text-background mr-2 size-4" />}
+                  {item.label}
+                </DropdownMenuItem>
+              );
+            }
+
+            const active = isActiveRoute(pathname, item.href!);
+
             return (
-              <DropdownMenuItem
-                key={item.id}
-                onClick={handleLogout}
-                className="focus:text-background"
-              >
-                {Icon && <Icon className="focus:text-background mr-2 size-4" />}
-                {item.label}
-              </DropdownMenuItem>
-            );
-          }
-
-          const active = isActiveRoute(pathname, item.href!);
-
-          return (
-            <DropdownMenuItem key={item.id} asChild>
-              <Link
-                href={item.href!}
-                prefetch={false}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none",
-
-                  !active &&
-                    "data-highlighted:bg-primary data-highlighted:text-background",
-
-                  active &&
-                    "data-highlighted:text-primary data-highlighted:bg-transparent",
-                )}
-              >
-                {Icon && (
-                  <Icon
-                    className={cn(
-                      "mr-2 size-4 shrink-0",
-
-                      active ? "text-primary" : "text-current",
-
-                      active && "data-highlighted:text-primary",
-                    )}
-                  />
-                )}
-
-                <span
+              <DropdownMenuItem key={item.id} asChild>
+                <Link
+                  href={item.href!}
+                  prefetch={false}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
-                    "inline-block",
+                    "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none",
 
-                    active &&
-                      "text-primary border-primary -mb-1 border-b-2 pb-0.5",
+                    !active && "data-highlighted:bg-primary data-highlighted:text-background",
 
-                    active && "data-[highlighted]:no-border",
+                    active && "data-highlighted:text-primary data-highlighted:bg-transparent",
                   )}
                 >
-                  {item.label}
-                </span>
-              </Link>
-            </DropdownMenuItem>
-          );
-        })}
+                  {Icon && (
+                    <Icon
+                      className={cn(
+                        "mr-2 size-4 shrink-0",
+
+                        active ? "text-primary" : "text-current",
+
+                        active && "data-highlighted:text-primary",
+                      )}
+                    />
+                  )}
+
+                  <span
+                    className={cn(
+                      "inline-block",
+
+                      active && "text-primary border-primary -mb-1 border-b-2 pb-0.5",
+
+                      active && "data-[highlighted]:no-border",
+                    )}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              </DropdownMenuItem>
+            );
+          },
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

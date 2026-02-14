@@ -1,3 +1,5 @@
+export const FALLBACK_IMAGE = "/placeholder.webp";
+
 export const fuelLabels: Record<string, string> = {
   GASOLINE: "Nafta",
   DIESEL: "Diesel",

@@ -1,18 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import {
-  Plus,
-  Edit,
-  Trash2,
-  LogIn,
-  LogOut,
-  UserPlus,
-  Calendar,
-  X,
-  DollarSign,
-  RefreshCw,
-} from "lucide-react";
+import { Plus, Edit, Trash2, LogIn, LogOut, UserPlus, Calendar, X, DollarSign, RefreshCw } from "lucide-react";
 import { WithPagination } from "./with-pagination";
 import { PaginationProps } from "./pagination";
 interface RecentActivityProps {
@@ -30,10 +19,7 @@ interface RecentActivityProps {
   pagination?: PaginationProps;
   title?: string;
 }
-const actionConfig: Record<
-  string,
-  { text: string; icon: React.ComponentType<any>; color: string }
-> = {
+const actionConfig: Record<string, { text: string; icon: React.ComponentType<any>; color: string }> = {
   CREATE: { text: "creó", icon: Plus, color: "text-green-600" },
   UPDATE: { text: "actualizó", icon: Edit, color: "text-blue-600" },
   DELETE: { text: "eliminó", icon: Trash2, color: "text-red-600" },
@@ -57,22 +43,17 @@ const entityMap: Record<string, string> = {
   Account: "una cuenta",
   System: "el sistema",
 };
-const specialCases: Record<string, (action: string, entity: string) => string> =
-  {
-    LOGIN: () => "",
-    LOGOUT: () => "",
-    REGISTER: () => "",
-  };
+const specialCases: Record<string, (action: string, entity: string) => string> = {
+  LOGIN: () => "",
+  LOGOUT: () => "",
+  REGISTER: () => "",
+};
 const defaultActionConfig = {
   text: "realizó una acción en",
   icon: Edit,
   color: "text-gray-600",
 };
-export function RecentActivity({
-  logs,
-  pagination,
-  title = "Actividad Reciente",
-}: RecentActivityProps) {
+export function RecentActivity({ logs, pagination, title = "Actividad Reciente" }: RecentActivityProps) {
   const getActivityText = (action: string, entity: string) => {
     if (specialCases[action]) {
       return specialCases[action](action, entity);
@@ -92,9 +73,7 @@ export function RecentActivity({
       <CardContent>
         <div className="space-y-4">
           {logs.length === 0 ? (
-            <p className="text-muted-foreground text-sm">
-              No hay actividad reciente
-            </p>
+            <p className="text-muted-foreground text-sm">No hay actividad reciente</p>
           ) : (
             logs.map((log) => {
               const action = getActionConfig(log.action);
@@ -107,15 +86,8 @@ export function RecentActivity({
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">
-                      <span className="text-foreground">
-                        {log.user.name || log.user.email}
-                      </span>
-                      {activityText && (
-                        <span className="text-muted-foreground">
-                          {" "}
-                          {activityText}
-                        </span>
-                      )}
+                      <span className="text-foreground">{log.user.name || log.user.email}</span>
+                      {activityText && <span className="text-muted-foreground"> {activityText}</span>}
                     </p>
                     <p className="text-muted-foreground text-xs">
                       {formatDistanceToNow(new Date(log.createdAt), {
@@ -133,11 +105,7 @@ export function RecentActivity({
     </Card>
   );
   return pagination ? (
-    <WithPagination
-      pagination={pagination}
-      containerClassName="flex flex-col min-h-[600px]"
-      contentClassName="flex-1"
-    >
+    <WithPagination pagination={pagination} containerClassName="flex flex-col min-h-[600px]" contentClassName="flex-1">
       {activityContent}
     </WithPagination>
   ) : (

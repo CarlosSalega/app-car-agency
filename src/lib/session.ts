@@ -61,9 +61,7 @@ export async function deleteSession() {
 export async function requireAuthSession() {
   const session = await getSession();
   if (!session) {
-    throw new Error(
-      "Sesión no encontrada. Esto no debería ocurrir si el layout está funcionando correctamente.",
-    );
+    throw new Error("Sesión no encontrada. Esto no debería ocurrir si el layout está funcionando correctamente.");
   }
   return session;
 }

@@ -2,10 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getSession();
     if (!session || session.user.role !== "ADMIN") {
@@ -16,17 +13,11 @@ export async function PUT(
     const data = await request.json();
 
     if (!data.name?.trim()) {
-      return NextResponse.json(
-        { error: "El nombre del modelo es requerido" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "El nombre del modelo es requerido" }, { status: 400 });
     }
 
     if (!data.brandId?.trim()) {
-      return NextResponse.json(
-        { error: "La marca es requerida" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "La marca es requerida" }, { status: 400 });
     }
 
     const brand = await prisma.brand.findUnique({
@@ -34,10 +25,7 @@ export async function PUT(
     });
 
     if (!brand) {
-      return NextResponse.json(
-        { error: "La marca no existe" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: "La marca no existe" }, { status: 404 });
     }
 
     const existingModel = await prisma.model.findUnique({
@@ -50,10 +38,7 @@ export async function PUT(
     });
 
     if (existingModel && existingModel.id !== id) {
-      return NextResponse.json(
-        { error: "Ya existe un modelo con este nombre para esta marca" },
-        { status: 409 },
-      );
+      return NextResponse.json({ error: "Ya existe un modelo con este nombre para esta marca" }, { status: 409 });
     }
 
     const model = await prisma.model.update({
@@ -83,17 +68,11 @@ export async function PUT(
     });
   } catch (error) {
     console.error("[MODELOS] Error al actualizar el modelo:", error);
-    return NextResponse.json(
-      { error: "Error al actualizar el modelo" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al actualizar el modelo" }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getSession();
     if (!session || session.user.role !== "ADMIN") {
@@ -114,10 +93,7 @@ export async function DELETE(
     });
 
     if (!model) {
-      return NextResponse.json(
-        { error: "Modelo no encontrado" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: "Modelo no encontrado" }, { status: 404 });
     }
 
     if (model._count.cars > 0) {
@@ -148,9 +124,6 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("[MODELOS] Error al eliminar el modelo:", error);
-    return NextResponse.json(
-      { error: "Error al eliminar el modelo" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Error al eliminar el modelo" }, { status: 500 });
   }
 }

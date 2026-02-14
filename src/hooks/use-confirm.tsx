@@ -15,9 +15,7 @@ type ConfirmOptions = {
 
 export function useConfirm() {
   const [state, setState] = useState<ConfirmOptions | null>(null);
-  const [resolver, setResolver] = useState<((value: boolean) => void) | null>(
-    null,
-  );
+  const [resolver, setResolver] = useState<((value: boolean) => void) | null>(null);
 
   const confirm = useCallback((options: ConfirmOptions) => {
     setState(options);

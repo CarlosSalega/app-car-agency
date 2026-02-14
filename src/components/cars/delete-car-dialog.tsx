@@ -15,12 +15,7 @@ interface DeleteCarDialogProps {
   onConfirm: (carId: string) => Promise<void>;
 }
 
-export function DeleteCarDialog({
-  open,
-  car,
-  onCancel,
-  onConfirm,
-}: DeleteCarDialogProps) {
+export function DeleteCarDialog({ open, car, onCancel, onConfirm }: DeleteCarDialogProps) {
   if (!car) return null;
 
   return (
@@ -41,9 +36,7 @@ export function DeleteCarDialog({
           {car.year && ` · ${car.year}`}
         </div>
 
-        <div className="text-destructive text-sm">
-          Esta acción no se puede deshacer.
-        </div>
+        <div className="text-destructive text-sm">Esta acción no se puede deshacer.</div>
       </div>
     </ConfirmDialog>
   );

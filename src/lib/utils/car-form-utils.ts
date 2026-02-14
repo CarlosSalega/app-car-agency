@@ -20,19 +20,12 @@ export function carToFormValues(car?: CarWithRelations): Partial<CarInput> {
     description: car.description || "",
     locationId: car.locationId || "",
     images: Array.isArray(car.images) ? car.images : [],
-    tags: car.tags
-      ? Array.isArray(car.tags)
-        ? car.tags.map((t) => t.name).join(",")
-        : ""
-      : "",
+    tags: car.tags ? (Array.isArray(car.tags) ? car.tags.map((t) => t.name).join(",") : "") : "",
     status: car.status || "AVAILABLE",
   };
 }
 
-export function formValuesToPayload(
-  data: CarInput,
-  selectedTags: string[],
-): CarPayload {
+export function formValuesToPayload(data: CarInput, selectedTags: string[]): CarPayload {
   return {
     title: data.title,
     brandId: data.brandId,

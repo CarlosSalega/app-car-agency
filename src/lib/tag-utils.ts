@@ -43,8 +43,7 @@ export function formatTagName(slug: string): string {
       if (spanishWordMap[lowerWord]) {
         return spanishWordMap[lowerWord];
       }
-      const capitalized =
-        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      const capitalized = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
       return capitalized
         .replace(/unico/gi, "Único")
         .replace(/dueno/gi, "Dueño")
