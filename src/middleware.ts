@@ -2,6 +2,21 @@ import type { NextRequest } from "next/server";
 
 import { NextResponse } from "next/server";
 
+const PUBLIC_PATHS = ["/", "/autos", "/contacto"] as const;
+
+const CACHE_HEADERS = {
+  IMAGES: "public, max-age=31536000, immutable, stale-while-revalidate=86400",
+  PUBLIC_PAGES: "public, s-maxage=300, stale-while-revalidate=600",
+} as const;
+
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_PATHS.some((publicPath) => pathname === publicPath || pathname.startsWith("/autos/"));
+}
+
+function isImageRequest(pathname: string, url: string): boolean {
+  return pathname.startsWith("/_next/image") || url.includes("cloudinary.com");
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const response = NextResponse.next();
@@ -23,8 +38,12 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  if (pathname.startsWith("/_next/image") || request.url.includes("cloudinary.com")) {
-    response.headers.set("Cache-Control", "public, max-age=31536000, immutable, stale-while-revalidate=86400");
+  if (isImageRequest(pathname, request.url)) {
+    response.headers.set("Cache-Control", CACHE_HEADERS.IMAGES);
+  }
+
+  if (isPublicRoute(pathname)) {
+    response.headers.set("Cache-Control", CACHE_HEADERS.PUBLIC_PAGES);
   }
 
   return response;

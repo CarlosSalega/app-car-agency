@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
+import { revalidateLocations } from "@/lib/cache-revalidate";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
 
@@ -62,6 +63,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       },
     });
 
+    revalidateLocations();
+
     return NextResponse.json({
       success: true,
       location,
@@ -118,6 +121,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         userId: session.user.id,
       },
     });
+
+    revalidateLocations();
 
     return NextResponse.json({
       success: true,

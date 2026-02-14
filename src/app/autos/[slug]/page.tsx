@@ -10,18 +10,19 @@ import { Header } from "@/components/header/header";
 import { ReserveButton } from "@/components/reserve-button";
 import { FALLBACK_IMAGE } from "@/lib/constants";
 import { prisma } from "@/lib/db";
+import { getCarBySlug, getCarSlugs } from "@/lib/queries/cars";
+
+export const revalidate = 600;
+
+export async function generateStaticParams() {
+  const slugs = await getCarSlugs();
+  return slugs.map((s) => ({ slug: s.slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
 
-  const car = await prisma.car.findUnique({
-    where: { slug },
-    include: {
-      brand: true,
-      model: true,
-      location: true,
-    },
-  });
+  const car = await getCarBySlug(slug);
 
   if (!car || car.deletedAt) {
     return {
@@ -78,15 +79,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function CarDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const car = await prisma.car.findUnique({
-    where: { slug },
-    include: {
-      brand: true,
-      model: true,
-      location: true,
-      tags: true,
-    },
-  });
+  const car = await getCarBySlug(slug);
 
   if (!car || car.deletedAt) {
     notFound();

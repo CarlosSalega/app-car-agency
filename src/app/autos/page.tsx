@@ -3,9 +3,25 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header/header";
 import MobileFiltersSheet from "@/components/mobile-filters-sheet";
 import { SearchFilters } from "@/components/search-filters";
-import { prisma } from "@/lib/db";
+import { getBrandsWithModels } from "@/lib/queries/brands";
+import { type CarListFilters, getCarsCount, getCarsList } from "@/lib/queries/cars";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
+
+function buildFilters(params: { [key: string]: string | string[] | undefined }): CarListFilters {
+  const filters: CarListFilters = {};
+  if (params.brand && params.brand !== "all") filters.brandId = params.brand as string;
+  if (params.model && params.model !== "all") filters.modelId = params.model as string;
+  if (params.type && params.type !== "all") filters.type = params.type as string;
+  if (params.fuel && params.fuel !== "all") filters.fuelType = params.fuel as string;
+  if (params.transmission && params.transmission !== "all") filters.transmission = params.transmission as string;
+  if (params.minYear) filters.minYear = Number(params.minYear);
+  if (params.maxYear) filters.maxYear = Number(params.maxYear);
+  if (params.minPrice) filters.minPrice = Number(params.minPrice);
+  if (params.maxPrice) filters.maxPrice = Number(params.maxPrice);
+  if (params.search) filters.search = params.search as string;
+  return filters;
+}
 
 export default async function AutosPage({
   searchParams,
@@ -16,83 +32,12 @@ export default async function AutosPage({
   const page = Number(params.page) || 1;
   const limit = 6;
   const skip = (page - 1) * limit;
-
-  const where: any = {
-    status: "AVAILABLE",
-    deletedAt: null,
-  };
-
-  if (params.brand && params.brand !== "all") where.brandId = params.brand as string;
-  if (params.model && params.model !== "all") where.modelId = params.model as string;
-  if (params.type && params.type !== "all") where.type = params.type as string;
-  if (params.fuel && params.fuel !== "all") where.fuelType = params.fuel as string;
-  if (params.transmission && params.transmission !== "all") where.transmission = params.transmission as string;
-  if (params.minYear) where.year = { gte: Number(params.minYear) };
-  if (params.maxYear) where.year = { ...where.year, lte: Number(params.maxYear) };
-  if (params.minPrice) where.price = { gte: Number(params.minPrice) };
-  if (params.maxPrice) where.price = { ...where.price, lte: Number(params.maxPrice) };
-  if (params.search) {
-    where.OR = [
-      {
-        title: {
-          contains: params.search as string,
-          mode: "insensitive",
-        },
-      },
-      {
-        description: {
-          contains: params.search as string,
-          mode: "insensitive",
-        },
-      },
-      {
-        brand: {
-          name: {
-            contains: params.search as string,
-            mode: "insensitive",
-          },
-        },
-      },
-      {
-        model: {
-          name: {
-            contains: params.search as string,
-            mode: "insensitive",
-          },
-        },
-      },
-    ];
-  }
+  const filters = buildFilters(params);
 
   const [cars, total, brands] = await Promise.all([
-    prisma.car.findMany({
-      where,
-      include: {
-        brand: true,
-        model: true,
-      },
-      orderBy: { createdAt: "desc" },
-      skip,
-      take: limit,
-    }),
-    prisma.car.count({ where }),
-    prisma.brand.findMany({
-      include: {
-        models: true,
-      },
-    }),
-    prisma.car.findMany({
-      where: {
-        status: "AVAILABLE",
-        deletedAt: null,
-      },
-      include: {
-        brand: true,
-        model: true,
-      },
-      orderBy: { createdAt: "desc" },
-      take: 6,
-    }),
+    getCarsList(filters, skip, limit),
+    getCarsCount(filters),
+    getBrandsWithModels(),
   ]);
 
   const totalPages = Math.ceil(total / limit);

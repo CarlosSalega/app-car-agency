@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { revalidateCar, revalidateCars } from "@/lib/cache-revalidate";
 import { prisma } from "@/lib/db";
 import { ImageService } from "@/lib/images/image-service";
 import { getSession } from "@/lib/session";
@@ -67,6 +68,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       },
     });
 
+    revalidateCars();
+    revalidateCar(id);
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);
@@ -133,6 +137,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         userId: session.user.id,
       },
     });
+
+    revalidateCars();
+    revalidateCar(id);
 
     return NextResponse.json({ success: true, car });
   } catch (error) {

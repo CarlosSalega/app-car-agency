@@ -1,19 +1,8 @@
 import { CarCard } from "@/components/cars/car-card";
-import { prisma } from "@/lib/db";
+import { getLatestCars } from "@/lib/queries/cars";
 
 export async function LatestArrivals() {
-  const cars = await prisma.car.findMany({
-    where: {
-      status: "AVAILABLE",
-      deletedAt: null,
-    },
-    include: {
-      brand: true,
-      model: true,
-    },
-    orderBy: { createdAt: "desc" },
-    take: 6,
-  });
+  const cars = await getLatestCars(6);
 
   return (
     <section>

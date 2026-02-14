@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { revalidateBrands, revalidateModels } from "@/lib/cache-revalidate";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
 export async function GET(request: NextRequest) {
@@ -73,6 +74,8 @@ export async function POST(request: NextRequest) {
         userId: session.user.id,
       },
     });
+    revalidateModels();
+    revalidateBrands();
     return NextResponse.json({
       success: true,
       model,

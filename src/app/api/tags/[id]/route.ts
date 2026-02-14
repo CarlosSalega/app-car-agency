@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
+import { revalidateTags } from "@/lib/cache-revalidate";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
 
@@ -49,6 +50,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         userId: session.user.id,
       },
     });
+
+    revalidateTags();
 
     return NextResponse.json({
       success: true,
@@ -106,6 +109,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         userId: session.user.id,
       },
     });
+
+    revalidateTags();
 
     return NextResponse.json({
       success: true,

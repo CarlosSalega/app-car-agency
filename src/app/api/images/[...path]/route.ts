@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { CACHE_REVALIDATE } from "@/lib/db-cache";
+
 const PROVIDER = process.env.IMAGE_PROVIDER ?? "cloudinary";
 
 const CLOUDINARY_BASE_URL = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 const S3_BASE_URL = process.env.S3_PUBLIC_BASE_URL;
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   try {
     const resolvedParams = await params;
     const imagePath = resolvedParams.path?.filter(Boolean).join("/");
@@ -27,7 +29,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         Accept: "image/*",
       },
       next: {
-        revalidate: 86400,
+        revalidate: CACHE_REVALIDATE.IMAGES,
       },
     });
 
@@ -39,13 +41,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       ? response.headers.get("content-type")!
       : "image/webp";
 
+    const cacheMaxAge = CACHE_REVALIDATE.IMAGES;
     return new NextResponse(response.body, {
       status: 200,
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "public, max-age=31536000, immutable, stale-while-revalidate=86400",
+        "Cache-Control": `public, max-age=${cacheMaxAge}, immutable, stale-while-revalidate=${cacheMaxAge}`,
         "X-Content-Type-Options": "nosniff",
-        "CDN-Cache-Control": "public, max-age=31536000",
+        "CDN-Cache-Control": `public, max-age=${cacheMaxAge}`,
       },
     });
   } catch (error) {

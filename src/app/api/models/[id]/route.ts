@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
+import { revalidateBrands, revalidateModels } from "@/lib/cache-revalidate";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
 
@@ -62,6 +63,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       },
     });
 
+    revalidateModels();
+    revalidateBrands();
+
     return NextResponse.json({
       success: true,
       model,
@@ -118,6 +122,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         userId: session.user.id,
       },
     });
+
+    revalidateModels();
+    revalidateBrands();
 
     return NextResponse.json({
       success: true,

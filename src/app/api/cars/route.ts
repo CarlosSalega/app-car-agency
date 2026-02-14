@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
+import { revalidateCar, revalidateCars } from "@/lib/cache-revalidate";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/session";
 
@@ -75,6 +76,9 @@ export async function POST(request: NextRequest) {
         userId: session.user.id,
       },
     });
+
+    revalidateCars();
+    revalidateCar(car.id);
 
     return NextResponse.json({ success: true, car });
   } catch (error) {
