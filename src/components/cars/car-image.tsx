@@ -33,10 +33,15 @@ export function CarImage({
   useEffect(() => {
     if (skipSkeleton) return;
 
-    setState("loading");
-
     const img = imgRef.current;
     if (!img) return;
+
+    if (img.complete) {
+      setState(img.naturalWidth > 0 ? "loaded" : "error");
+      return;
+    }
+
+    setState("loading");
 
     const onLoad = () => setState("loaded");
     const onError = () => setState("error");

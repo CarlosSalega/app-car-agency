@@ -16,4 +16,5 @@ export const statusColors: Record<string, string> = {
   AVAILABLE: "bg-green-600",
   RESERVED: "bg-yellow-500",
   SOLD: "bg-red-600",
+  INACTIVE: "bg-gray-600",
 };
