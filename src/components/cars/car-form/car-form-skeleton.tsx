@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export function CarFormSkeleton() {
   return (
-    <Card className="mx-auto max-w-[920px] py-6">
+    <Card className="mx-auto max-w-230 py-6">
       <CardHeader>
         <div className="bg-muted h-8 w-48 animate-pulse rounded" />
       </CardHeader>
