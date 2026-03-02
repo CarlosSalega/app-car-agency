@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { CACHE_REVALIDATE } from "@/lib/db-cache";
+import { CACHE_REVALIDATE } from "@/lib/cache";
 
 const PROVIDER = process.env.IMAGE_PROVIDER ?? "cloudinary";
 

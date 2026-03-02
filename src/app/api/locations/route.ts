@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { revalidateLocations } from "@/lib/cache-revalidate";
+import { revalidateLocations } from "@/lib/cache";
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/session";
+import { getSession } from "@/lib/auth";
 export async function GET() {
   try {
     const locations = await prisma.location.findMany({

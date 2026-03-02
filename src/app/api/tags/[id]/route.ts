@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
-import { revalidateTags } from "@/lib/cache-revalidate";
+import { revalidateTags } from "@/lib/cache";
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/session";
+import { getSession } from "@/lib/auth";
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {

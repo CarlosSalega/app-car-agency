@@ -2,9 +2,8 @@ import type { Prisma } from "@prisma/client";
 
 import { type NextRequest, NextResponse } from "next/server";
 
-import { hashPassword } from "@/lib/auth";
+import { getSession, hashPassword } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/session";
 
 export async function GET(request: NextRequest) {
   try {

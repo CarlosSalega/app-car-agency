@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { revalidateBrands } from "@/lib/cache-revalidate";
+import { revalidateBrands } from "@/lib/cache";
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/session";
+import { getSession } from "@/lib/auth";
 export async function GET() {
   try {
     const brands = await prisma.brand.findMany({

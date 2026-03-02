@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
-import { revalidateCar, revalidateCars } from "@/lib/cache-revalidate";
+import { revalidateCar, revalidateCars } from "@/lib/cache";
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/session";
+import { getSession } from "@/lib/auth";
 
 function generateSlugBase(brand: string, model: string, version: string, year: number, km: number) {
   return slugify(`${brand} ${model} ${version} ${year} ${km}`, {

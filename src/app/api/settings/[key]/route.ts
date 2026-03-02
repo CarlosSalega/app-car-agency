@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/session";
+import { getSession } from "@/lib/auth";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ key: string }> }) {
   try {

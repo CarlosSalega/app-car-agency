@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { revalidateCar, revalidateCars } from "@/lib/cache-revalidate";
+import { revalidateCar, revalidateCars } from "@/lib/cache";
 import { prisma } from "@/lib/db";
 import { ImageService } from "@/lib/images/image-service";
-import { getSession } from "@/lib/session";
+import { getSession } from "@/lib/auth";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
