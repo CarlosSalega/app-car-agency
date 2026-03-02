@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { ADMIN_HEADER_CONTENT } from "@/data/admin-header";
 import { ADMIN_NAVIGATION } from "@/data/admin-navigation";
-import { isActiveRoute } from "@/lib/navigation";
+import { isActiveRoute } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { AuthUser } from "@/types/auth";
 

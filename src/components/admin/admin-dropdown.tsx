@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { HamburgerButton } from "@/components/ui/hamburger-button";
 import { ADMIN_NAVIGATION } from "@/data/admin-navigation";
-import { isActiveRoute } from "@/lib/navigation";
+import { isActiveRoute } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface AdminDropdownProps {
