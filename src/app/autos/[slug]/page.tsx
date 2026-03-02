@@ -2,15 +2,13 @@ import type { Metadata } from "next";
 
 import { notFound } from "next/navigation";
 
-import { CarDetailGallery } from "@/components/cars/car-detail/car-detail-gallery";
-import { CarDetailInfo } from "@/components/cars/car-detail/car-detail-info";
-import { CarDetailSpecs } from "@/components/cars/car-detail/car-detail-specs";
+import { CarDetailGallery, CarDetailInfo, CarDetailSpecs } from "@/components/cars";
 import { Footer } from "@/components/footer";
-import { Header } from "@/components/header/header";
+import { Header } from "@/components/header";
 import { ReserveButton } from "@/components/reserve-button";
 import { FALLBACK_IMAGE } from "@/lib/constants";
 import { prisma } from "@/lib/db";
-import { getCarBySlug, getCarSlugs } from "@/lib/queries/cars";
+import { getCarBySlug, getCarSlugs } from "@/lib/queries";
 
 export const revalidate = 600;
 
