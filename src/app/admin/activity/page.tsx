@@ -2,11 +2,11 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { AdminHeader } from "@/components/admin/admin-header";
+import { AdminHeader } from "@/components/admin";
 import { RecentActivity } from "@/components/recent-activity";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/db";
-import { requireAuthSession } from "@/lib/session";
+import { requireAuthSession } from "@/lib/auth";
 
 interface ActivityPageProps {
   searchParams: Promise<{

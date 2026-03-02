@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
-import { AdminHeader } from "@/components/admin/admin-header";
-import { UsersTable } from "@/components/users/users-table";
+import { AdminHeader } from "@/components/admin";
+import { UsersTable } from "@/components/users";
 import { prisma } from "@/lib/db";
-import { requireAuthSession } from "@/lib/session";
+import { requireAuthSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 

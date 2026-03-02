@@ -1,11 +1,11 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
-import { AdminHeader } from "@/components/admin/admin-header";
-import { CarsTable } from "@/components/cars/cars-table";
+import { AdminHeader } from "@/components/admin";
+import { CarsTable } from "@/components/cars";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/db";
-import { requireAuthSession } from "@/lib/session";
+import { requireAuthSession } from "@/lib/auth";
 
 interface AdminCarsPageProps {
   searchParams: {
