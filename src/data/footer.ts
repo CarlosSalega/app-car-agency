@@ -7,7 +7,7 @@ export const FOOTER_CONTENT = {
     height: 64,
   },
   brand: {
-    text: "AutoWeb Argentina",
+    text: "Tu Agencia",
     className: "font-bold text-foreground uppercase",
   },
   description: "Tu lugar de confianza para autos usados y 0km.",
