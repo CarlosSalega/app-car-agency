@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-import { prisma } from "./db";
+import { prisma } from "@/lib/db";
 
 export async function createSession(userId: string) {
   const sessionToken = crypto.randomUUID();

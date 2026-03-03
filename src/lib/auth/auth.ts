@@ -2,7 +2,7 @@ import type { User } from "@prisma/client";
 
 import bcrypt from "bcryptjs";
 
-import { prisma } from "./db";
+import { prisma } from "@/lib/db";
 
 export async function hashPassword(password: string): Promise<string> {
   return await bcrypt.hash(password, 10);
