@@ -1,6 +1,6 @@
 import { revalidateTag } from "next/cache";
 
-import { CACHE_TAGS } from "@/lib/db-cache";
+import { CACHE_TAGS } from "@/lib/cache";
 
 export function revalidateCars() {
   revalidateTag(CACHE_TAGS.CARS);
