@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { AdminDropdown } from "@/components/admin/admin-dropdown";
+import { AdminDropdown } from "@/components/admin";
 import { Button } from "@/components/ui/button";
 
 type HeaderUserProps = {

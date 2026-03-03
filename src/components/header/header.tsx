@@ -1,7 +1,5 @@
-import { HeaderLogo } from "@/components/header/header-logo";
-import { HeaderSearch } from "@/components/header/header-search";
-import { HeaderUser } from "@/components/header/header-user";
-import { getSession } from "@/lib/session";
+import { HeaderLogo, HeaderSearch, HeaderUser } from "@/components/header";
+import { getSession } from "@/lib/auth";
 
 export async function Header() {
   const session = await getSession();
