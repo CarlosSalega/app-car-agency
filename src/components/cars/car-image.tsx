@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { ImageSkeleton } from "@/components/ui/image-skeleton";
-import { FALLBACK_IMAGE } from "@/lib/constants";
+import { FALLBACK_IMAGE } from "@/lib/constants/constants";
 import { cn } from "@/lib/utils";
 
 interface CarImageProps {

@@ -3,7 +3,7 @@ import type { Car } from "@prisma/client";
 import { PaginationProps } from "@components/pagination";
 import { WithPagination } from "@components/with-pagination";
 
-import { CarCard } from "@/components/cars/car-card";
+import { CarCard } from "@/components/cars";
 
 interface CarGridProps {
   cars: (Car & {

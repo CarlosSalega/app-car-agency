@@ -5,7 +5,7 @@ import type { Car } from "@prisma/client";
 import { Calendar, Gauge, Fuel, Settings } from "lucide-react";
 import Link from "next/link";
 
-import { CarImage } from "@/components/cars/car-image";
+import { CarImage } from "@/components/cars";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { fuelLabels, transmissionLabels, statusColors } from "@/lib/constants";

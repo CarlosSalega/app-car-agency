@@ -6,9 +6,8 @@ import type { CarWithRelations } from "@/types/cars";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { AdminTable } from "@/components/admin/admin-table";
-import { getCarsColumns } from "@/components/cars/cars-columns";
-import { DeleteCarDialog } from "@/components/cars/delete-car-dialog";
+import { AdminTable } from "@/components/admin";
+import { getCarsColumns, DeleteCarDialog } from "@/components/cars";
 
 export interface CarsTableProps {
   cars: CarWithRelations[];
