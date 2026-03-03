@@ -7,7 +7,7 @@ export const FOOTER_CONTENT = {
     height: 64,
   },
   brand: {
-    text: "Tu Agencia",
+    text: "AutoWeb Argentina",
     className: "font-bold text-foreground uppercase",
   },
   description: "Tu lugar de confianza para autos usados y 0km.",
@@ -23,7 +23,7 @@ export const FOOTER_CONTENT = {
     contact: {
       title: "Contacto",
       items: [
-        { label: "Email", value: "contacto@tuagencia.com.ar" },
+        { label: "Email", value: "contacto@autowebargentina.com.ar" },
         { label: "Tel", value: "+54 9 123 456-7890" },
         {
           label: "Dirección",
@@ -33,7 +33,7 @@ export const FOOTER_CONTENT = {
     },
   },
   copyright: {
-    companyName: "Tu Agencia",
+    companyName: "AutoWeb Argentina",
     text: "Derechos reservados.",
   },
 };

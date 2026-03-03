@@ -3,12 +3,12 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 export const SITE_CONFIG = {
-  name: "Tu Agencia",
-  description: "Vení a Tu Agencia y encontrá el auto de tus sueños.",
+  name: "AutoWeb Argentina",
+  description: "Vení a AutoWeb Argentina y encontrá el auto de tus sueños.",
   url: SITE_URL,
   previewPath: "/preview.webp",
   locale: "es_AR",
-  twitterHandle: "@tuagencia",
+  twitterHandle: "@autoweb",
   imageConfig: {
     preview: {
       large: {
