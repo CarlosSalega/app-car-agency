@@ -46,7 +46,7 @@ export function AdminDropdown({ user }: AdminDropdownProps) {
           aria-label="Menú de usuario"
           className={cn(
             buttonVariants({ variant: "outline", size: "icon" }),
-            "hover:bg-background focus-visible:ring-0 focus-visible:ring-offset-0",
+            "hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0",
           )}
         >
           <HamburgerButton open={open} />
