@@ -1,7 +1,6 @@
-import type { AdminColumn } from "@/components/admin/admin-table";
 import type { UserWithCount } from "@/types/users";
 
-import { ActionButtonsGroup } from "@/components/admin/admin-action-buttons";
+import { ActionButtonsGroup, AdminColumn } from "@/components/admin";
 import { UserRoleBadge, ActiveStatusBadge } from "@/components/status-badges";
 
 interface Params {

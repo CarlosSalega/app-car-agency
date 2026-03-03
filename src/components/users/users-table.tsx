@@ -5,12 +5,9 @@ import type { UserWithCount } from "@/types/users";
 
 import { UserPlus } from "lucide-react";
 
-import { AdminTable } from "@/components/admin/admin-table";
+import { AdminTable } from "@/components/admin";
 import { Button } from "@/components/ui/button";
-import { DeleteUserDialog } from "@/components/users/delete-user-dialog";
-import { UserFormDialog } from "@/components/users/user-form-dialog";
-import { getUsersColumns } from "@/components/users/users-columns";
-import { useUsersTable } from "@/components/users/users-table-actions";
+import { DeleteUserDialog, getUsersColumns, UserFormDialog, useUsersTable } from "@/components/users";
 
 interface UsersTableProps {
   initialUsers: UserWithCount[];
