@@ -1,9 +1,8 @@
-import type { CarType, FuelType, Prisma, Transmission } from "@prisma/client";
-
 import { unstable_cache } from "next/cache";
-
+import type { CarType, FuelType, Prisma, Transmission } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { CACHE_REVALIDATE, CACHE_TAGS } from "@/lib/db-cache";
+import { prismaSafe } from "@/lib/prisma-safe";
+import { stableStringify, CACHE_REVALIDATE, CACHE_TAGS } from "@/lib/cache";
 
 export type CarListFilters = {
   brandId?: string;
@@ -52,40 +51,54 @@ function buildWhere(filters: CarListFilters): Prisma.CarWhereInput {
 }
 
 export async function getCarsList(filters: CarListFilters, skip: number, take: number) {
+  const filtersKey = stableStringify(filters);
+
   return unstable_cache(
     async (f: CarListFilters, s: number, t: number) =>
-      prisma.car.findMany({
-        where: buildWhere(f),
-        include: { brand: true, model: true },
-        orderBy: { createdAt: "desc" },
-        skip: s,
-        take: t,
-      }),
-    [CACHE_TAGS.CARS, "cars-list", JSON.stringify(filters), String(skip), String(take)],
-    { tags: [CACHE_TAGS.CARS], revalidate: CACHE_REVALIDATE.CARS_LIST },
+      prismaSafe(() =>
+        prisma.car.findMany({
+          where: buildWhere(f),
+          include: { brand: true, model: true },
+          orderBy: { createdAt: "desc" },
+          skip: s,
+          take: t,
+        }),
+      ),
+    [CACHE_TAGS.CARS, "cars-list", filtersKey, String(skip), String(take)],
+    {
+      tags: [CACHE_TAGS.CARS],
+      revalidate: CACHE_REVALIDATE.CARS_LIST,
+    },
   )(filters, skip, take);
 }
 
 export async function getCarsCount(filters: CarListFilters) {
+  const filtersKey = stableStringify(filters);
+
   return unstable_cache(
-    async (f: CarListFilters) => prisma.car.count({ where: buildWhere(f) }),
-    [CACHE_TAGS.CARS, "cars-count", JSON.stringify(filters)],
-    { tags: [CACHE_TAGS.CARS], revalidate: CACHE_REVALIDATE.CARS_LIST },
+    async (f: CarListFilters) => prismaSafe(() => prisma.car.count({ where: buildWhere(f) })),
+    [CACHE_TAGS.CARS, "cars-count", filtersKey],
+    {
+      tags: [CACHE_TAGS.CARS],
+      revalidate: CACHE_REVALIDATE.CARS_LIST,
+    },
   )(filters);
 }
 
 export async function getCarBySlug(slug: string) {
   return unstable_cache(
     async (s: string) =>
-      prisma.car.findUnique({
-        where: { slug: s },
-        include: {
-          brand: true,
-          model: true,
-          location: true,
-          tags: true,
-        },
-      }),
+      prismaSafe(() =>
+        prisma.car.findUnique({
+          where: { slug: s },
+          include: {
+            brand: true,
+            model: true,
+            location: true,
+            tags: true,
+          },
+        }),
+      ),
     [CACHE_TAGS.CARS, "car-by-slug", slug],
     { tags: [CACHE_TAGS.CARS], revalidate: CACHE_REVALIDATE.CAR_DETAIL },
   )(slug);
@@ -94,10 +107,12 @@ export async function getCarBySlug(slug: string) {
 export async function getCarSlugs() {
   return unstable_cache(
     async () =>
-      prisma.car.findMany({
-        where: { status: "AVAILABLE", deletedAt: null },
-        select: { slug: true },
-      }),
+      prismaSafe(() =>
+        prisma.car.findMany({
+          where: { status: "AVAILABLE", deletedAt: null },
+          select: { slug: true },
+        }),
+      ),
     [CACHE_TAGS.CARS, "car-slugs"],
     { tags: [CACHE_TAGS.CARS], revalidate: CACHE_REVALIDATE.CAR_DETAIL },
   )();
@@ -106,12 +121,14 @@ export async function getCarSlugs() {
 export async function getLatestCars(take: number) {
   return unstable_cache(
     async (t: number) =>
-      prisma.car.findMany({
-        where: { status: "AVAILABLE", deletedAt: null },
-        include: { brand: true, model: true },
-        orderBy: { createdAt: "desc" },
-        take: t,
-      }),
+      prismaSafe(() =>
+        prisma.car.findMany({
+          where: { status: "AVAILABLE", deletedAt: null },
+          include: { brand: true, model: true },
+          orderBy: { createdAt: "desc" },
+          take: t,
+        }),
+      ),
     [CACHE_TAGS.CARS, "latest-cars", String(take)],
     { tags: [CACHE_TAGS.CARS], revalidate: CACHE_REVALIDATE.CARS_LIST },
   )(take);
