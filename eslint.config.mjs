@@ -26,7 +26,6 @@ const eslintConfig = [
       "coverage/**",
       "next-env.d.ts",
       "prisma/**",
-      "prisma/seed-with-cloudinary.ts",
     ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),

@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import crypto from "crypto";
 
 import {
   PaymentMethod,
@@ -12,11 +13,20 @@ import {
   Transmission,
 } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { v2 as cloudinary } from "cloudinary";
 import slugify from "slugify";
 
 import { brands } from "../src/data/brands";
 import { modelsByBrand } from "../src/data/modelsByBrand";
 import { prisma } from "../src/lib/db";
+import { CLOUDINARY_UPLOAD_OPTIONS } from "../src/lib/images/cloudinary-config";
+
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  timeout: 60_000,
+});
 
 function hashPassword(password: string): string {
   return bcrypt.hashSync(password, 10);
@@ -42,7 +52,7 @@ async function generateUniqueSlug(base: string): Promise<string> {
   }
 }
 
-function getImagesForCar(brand: string, model: string): string[] {
+function getLocalImagePathsForCar(brand: string, model: string): string[] {
   const imagesDir = path.join(process.cwd(), "public", "autos");
   const images: string[] = [];
   try {
@@ -90,21 +100,121 @@ function getImagesForCar(brand: string, model: string): string[] {
       return a.localeCompare(b);
     });
     matchingFiles.forEach((file) => {
-      images.push(`/autos/${file}`);
+      images.push(path.join(imagesDir, file));
     });
   } catch (error) {
     console.warn(`No se pudieron leer las imágenes para ${brand} ${model}:`, error);
   }
-  if (images.length === 0) {
-    console.warn(`No se encontraron imágenes para ${brand} ${model}, usando placeholder`);
-    images.push("/placeholder.webp");
-  }
   return images;
+}
+
+function assertCloudinaryConfigured() {
+  const ok =
+    !!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME &&
+    !!process.env.CLOUDINARY_API_KEY &&
+    !!process.env.CLOUDINARY_API_SECRET;
+
+  if (!ok) {
+    throw new Error(
+      "Cloudinary no está configurado. Requerido: NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET",
+    );
+  }
+}
+
+function buildDeterministicPublicId(seed: string) {
+  return crypto.createHash("sha1").update(seed).digest("hex").slice(0, 20);
+}
+
+async function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  let timeoutHandle: NodeJS.Timeout | undefined;
+
+  const timeoutPromise = new Promise<never>((_resolve, reject) => {
+    timeoutHandle = setTimeout(() => reject(new Error(`Timeout (${ms}ms): ${label}`)), ms);
+  });
+
+  try {
+    return await Promise.race([promise, timeoutPromise]);
+  } finally {
+    if (timeoutHandle) clearTimeout(timeoutHandle);
+  }
+}
+
+async function uploadLocalImageToCloudinary(opts: { filePath: string; publicId: string }) {
+  const { filePath, publicId } = opts;
+
+  const result = await withTimeout(
+    cloudinary.uploader.upload(filePath, {
+      ...CLOUDINARY_UPLOAD_OPTIONS,
+      public_id: publicId,
+      overwrite: true,
+      invalidate: true,
+      timeout: 60_000,
+    }),
+    65_000,
+    `cloudinary.upload(${path.basename(filePath)})`,
+  );
+
+  return result.public_id as string;
+}
+
+async function getPlaceholderImageKey() {
+  const placeholderLocalPath = path.join(process.cwd(), "public", "placeholder.webp");
+  const placeholderKey = await uploadLocalImageToCloudinary({
+    filePath: placeholderLocalPath,
+    publicId: "placeholder",
+  });
+  return placeholderKey;
+}
+
+async function uploadCarImagesAndReturnKeys(opts: {
+  carSlug: string;
+  brand: string;
+  model: string;
+  placeholderKey: string;
+}) {
+  const { carSlug, brand, model, placeholderKey } = opts;
+
+  const localImagePaths = getLocalImagePathsForCar(brand, model);
+
+  if (localImagePaths.length === 0) {
+    console.warn(`No se encontraron imágenes para ${brand} ${model}, usando placeholder`);
+    return [placeholderKey];
+  }
+
+  const uploadResults = await Promise.allSettled(
+    localImagePaths.map((filePath, index) => {
+      const fileName = path.basename(filePath);
+      const publicId = buildDeterministicPublicId(`${carSlug}:${index}:${fileName}`);
+      return uploadLocalImageToCloudinary({ filePath, publicId });
+    }),
+  );
+
+  const keys: string[] = [];
+  for (let i = 0; i < uploadResults.length; i++) {
+    const r = uploadResults[i];
+    if (r.status === "fulfilled") {
+      keys.push(r.value);
+    } else {
+      console.warn(`⚠️  No se pudo subir imagen: ${path.basename(localImagePaths[i])}`);
+    }
+  }
+
+  if (keys.length === 0) {
+    console.warn(`⚠️  Todas las subidas fallaron para ${brand} ${model}, usando placeholder`);
+    return [placeholderKey];
+  }
+
+  return keys;
 }
 
 async function main() {
   try {
+    console.log("🌱 Iniciando seed...");
+    assertCloudinaryConfigured();
+
+    console.log("🔌 Conectando a la base de datos...");
     await prisma.$connect();
+    console.log("✅ Conectado. Limpiando tablas...");
     await prisma.paymentStatusHistory.deleteMany();
     await prisma.payment.deleteMany();
     await prisma.visit.deleteMany();
@@ -498,6 +608,12 @@ async function main() {
 
     console.log("🚗 Creando vehículos...");
     let carsCreated = 0;
+    let imagesUploaded = 0;
+    let imagesFailed = 0;
+
+    console.log("🖼️ Preparando placeholder en Cloudinary...");
+    const placeholderKey = await getPlaceholderImageKey();
+    console.log(`✅ Placeholder listo: ${placeholderKey}`);
 
     for (const carData of carsData) {
       try {
@@ -542,12 +658,6 @@ async function main() {
           wasModelCreated = true;
         }
 
-        const images = getImagesForCar(carData.brand, carData.model);
-
-        if ((wasBrandCreated || wasModelCreated) && images.length > 0 && images[0] !== "/placeholder.webp") {
-          console.log(`✅ Imágenes encontradas para ${carData.brand} ${carData.model}: ${images.length} imagen(es)`);
-        }
-
         const baseSlug = generateSlugBase(
           carData.brand,
           carData.model,
@@ -556,6 +666,15 @@ async function main() {
           carData.kilometers,
         );
         const uniqueSlug = await generateUniqueSlug(baseSlug);
+
+        const images = await uploadCarImagesAndReturnKeys({
+          carSlug: uniqueSlug,
+          brand: carData.brand,
+          model: carData.model,
+          placeholderKey,
+        });
+
+        imagesUploaded += images.length;
 
         if (carData.model === "Corolla Cross") {
           console.log(`🔍 Slug generado para ${carData.title}: ${uniqueSlug} (base: ${baseSlug})`);
@@ -601,6 +720,7 @@ async function main() {
         console.log(`✅ Auto creado: ${carData.title}`);
       } catch (error) {
         console.error(`❌ Error creando auto ${carData.title}:`, error);
+        imagesFailed++;
         if (error instanceof Error) {
           console.error(`   Mensaje: ${error.message}`);
           if (error.message.includes("Unique constraint")) {
@@ -611,11 +731,12 @@ async function main() {
     }
 
     console.log(`✅ ${carsCreated}/${carsData.length} vehículos creados exitosamente`);
+    console.log(`📸 Imágenes: ${imagesUploaded} keys guardadas, ${imagesFailed} autos fallaron`);
 
     console.log("💳 Creando pagos de ejemplo...");
     const someCars = await prisma.car.findMany({ take: 5 });
     for (const car of someCars) {
-      const depositAmount = car.price * 0.3; // 30% de seña
+      const depositAmount = car.price * 0.3;
 
       await prisma.payment.create({
         data: {
