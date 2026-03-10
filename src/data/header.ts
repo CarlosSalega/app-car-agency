@@ -7,8 +7,8 @@ export const HEADER_CONTENT = {
     height: 64,
   },
   brand: {
-    text: "",
-    className: "lg:text-2xl font-bold text-foreground uppercase hidden md:block md:text-xl",
+    text: "Tu Agencia",
+    className: "font-bold text-foreground uppercase hidden md:block",
   },
   api: {
     authEndpoint: "/api/auth/me",

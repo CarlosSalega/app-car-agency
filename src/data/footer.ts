@@ -23,7 +23,7 @@ export const FOOTER_CONTENT = {
     contact: {
       title: "Contacto",
       items: [
-        { label: "Email", value: "contacto@autowebargentina.com.ar" },
+        { label: "Email", value: "contacto@tuagencia.com.ar" },
         { label: "Tel", value: "+54 9 123 456-7890" },
         {
           label: "Dirección",
@@ -33,7 +33,7 @@ export const FOOTER_CONTENT = {
     },
   },
   copyright: {
-    companyName: "AutoWeb Argentina",
+    companyName: "Tu Agencia Argentina",
     text: "Derechos reservados.",
   },
 };
