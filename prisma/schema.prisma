@@ -206,11 +206,11 @@ model Car {
   // ========================================
   // 🆕 FINANCIACIÓN
   // ========================================
-  acceptsFinancing     Boolean   @default(false)
-  financingMinDeposit  Int?      // Porcentaje de anticipo mínimo (0-100)
-  financingMaxMonths   Int?      // Plazo máximo en meses (12, 24, 36, 48, 60)
-  financingRate        Float?    // TNA% personalizada (opcional, si null usa la global)
-  financingNotes       String?   @db.Text // Condiciones adicionales del vendedor
+
+  acceptsFinancing     Boolean @default(false)
+  financingDownPayment Int?
+  financingNotes       String?
+
 
   // ========================================
   // 🆕 PERMUTA

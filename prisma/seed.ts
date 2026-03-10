@@ -619,8 +619,10 @@ async function main() {
       try {
         let brandId = brandMap[carData.brand];
         let wasBrandCreated = false;
+
         if (!brandId) {
           console.log(`📝 Creando marca no encontrada: ${carData.brand}`);
+
           const newBrand = await prisma.brand.upsert({
             where: { name: carData.brand },
             update: {},
@@ -629,6 +631,7 @@ async function main() {
               createdById: admin.id,
             },
           });
+
           brandId = newBrand.id;
           brandMap[carData.brand] = brandId;
           wasBrandCreated = true;
@@ -636,9 +639,10 @@ async function main() {
 
         const modelKey = `${carData.brand}-${carData.model}`;
         let modelId = modelMap[modelKey];
-        let wasModelCreated = false;
+
         if (!modelId) {
           console.log(`📝 Creando modelo no encontrado: ${carData.brand} ${carData.model}`);
+
           const newModel = await prisma.model.upsert({
             where: {
               name_brandId: {
@@ -653,9 +657,9 @@ async function main() {
               createdById: admin.id,
             },
           });
+
           modelId = newModel.id;
           modelMap[modelKey] = modelId;
-          wasModelCreated = true;
         }
 
         const baseSlug = generateSlugBase(
@@ -665,6 +669,7 @@ async function main() {
           carData.year,
           carData.kilometers,
         );
+
         const uniqueSlug = await generateUniqueSlug(baseSlug);
 
         const images = await uploadCarImagesAndReturnKeys({
@@ -676,10 +681,6 @@ async function main() {
 
         imagesUploaded += images.length;
 
-        if (carData.model === "Corolla Cross") {
-          console.log(`🔍 Slug generado para ${carData.title}: ${uniqueSlug} (base: ${baseSlug})`);
-        }
-
         const randomLocation = locations[Math.floor(Math.random() * locations.length)];
 
         const randomTagCount = Math.floor(Math.random() * 3) + 1;
@@ -688,41 +689,69 @@ async function main() {
 
         const randomUser = Math.random() > 0.5 ? admin.id : collaborator.id;
 
+        const depositPercentOptions = [30, 35, 40, 50];
+        const depositPercent = depositPercentOptions[Math.floor(Math.random() * depositPercentOptions.length)];
+
+        const downPayment = Math.round(carData.price * (depositPercent / 100));
+
+        const financingMessage =
+          Math.random() < 0.15
+            ? "100% financiado"
+            : `Entrega $${downPayment.toLocaleString("es-AR")} y el resto en cuotas fijas`;
+
         await prisma.car.create({
           data: {
             title: carData.title,
             slug: uniqueSlug,
+
             brandId: brandId,
             modelId: modelId,
+
             version: carData.version || null,
             year: carData.year,
             color: carData.color || null,
+
             kilometers: carData.kilometers,
             type: carData.type,
             fuelType: carData.fuelType,
             transmission: carData.transmission,
+
             price: carData.price,
             currency: carData.currency,
+
             description: carData.description,
+
             locationId: randomLocation.id,
+
             images: images,
+
+            acceptsFinancing: true,
+            financingDownPayment: downPayment,
+            financingNotes: financingMessage,
+
             tags: {
               connect: selectedTags.map((tag) => ({
                 id: tag.id,
               })),
             },
+
             status: CarStatus.AVAILABLE,
+
             userId: randomUser,
           },
         });
 
         carsCreated++;
+
         console.log(`✅ Auto creado: ${carData.title}`);
       } catch (error) {
         console.error(`❌ Error creando auto ${carData.title}:`, error);
+
         imagesFailed++;
+
         if (error instanceof Error) {
           console.error(`   Mensaje: ${error.message}`);
+
           if (error.message.includes("Unique constraint")) {
             console.error(`   ⚠️ Conflicto de unicidad detectado. Verificar slug o relaciones únicas.`);
           }

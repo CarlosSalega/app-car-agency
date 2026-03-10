@@ -19,7 +19,19 @@ interface CarCardProps {
 }
 
 export function CarCard({ car }: CarCardProps) {
-  const { title, year, kilometers, fuelType, transmission, price, currency, status, slug } = car;
+  const {
+    title,
+    year,
+    kilometers,
+    fuelType,
+    transmission,
+    price,
+    currency,
+    status,
+    slug,
+    acceptsFinancing,
+    financingNotes,
+  } = car;
 
   const images: string[] = Array.isArray(car.images)
     ? car.images
@@ -71,8 +83,12 @@ export function CarCard({ car }: CarCardProps) {
           </div>
         </CardContent>
 
-        <CardFooter className="bg-muted/30 border-t p-3 sm:p-4">
-          <p className="text-foreground text-lg font-bold sm:text-xl">{formatPrice(price, currency)}</p>
+        <CardFooter className="bg-muted/30 flex flex-col items-start gap-1 border-t p-3 sm:p-4">
+          <p className="text-foreground text-lg font-bold sm:text-xl">{formatPrice(price, currency)} de contado</p>
+
+          {acceptsFinancing && financingNotes && (
+            <p className="text-xs leading-tight text-emerald-600">{financingNotes}</p>
+          )}
         </CardFooter>
       </Card>
     </Link>
