@@ -36,7 +36,7 @@ const DEFAULT_FORM: FormData = {
 
 export function UserFormDialog({ open, user, onClose, onSuccess }: UserFormDialogProps) {
   const isEditing = Boolean(user?.id);
-  const [formData, setFormData] = useState<FormData>(DEFAULT_FORM);
+  const [formData, setFormData] = useState<FormData>(() => DEFAULT_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -124,7 +124,7 @@ export function UserFormDialog({ open, user, onClose, onSuccess }: UserFormDialo
             <Label>Rol</Label>
             <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value as Role })}>
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Seleccionar rol" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="ADMIN">Administrador</SelectItem>
