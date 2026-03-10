@@ -84,7 +84,7 @@ export function CarCard({ car }: CarCardProps) {
         </CardContent>
 
         <CardFooter className="bg-muted/30 flex flex-col items-start gap-1 border-t p-3 sm:p-4">
-          <p className="text-foreground text-lg font-bold sm:text-xl">{formatPrice(price, currency)} de contado</p>
+          <p className="text-foreground text-lg font-bold sm:text-xl">{formatPrice(price, currency)}</p>
 
           {acceptsFinancing && financingNotes && (
             <p className="text-xs leading-tight text-emerald-600">{financingNotes}</p>

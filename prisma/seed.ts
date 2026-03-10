@@ -694,18 +694,19 @@ async function main() {
 
         const downPayment = Math.round(carData.price * (depositPercent / 100));
 
-        const financingMessage =
-          Math.random() < 0.15
-            ? "100% financiado"
-            : `Entrega $${downPayment.toLocaleString("es-AR")} y el resto en cuotas fijas`;
+        const isFullFinancing = Math.random() < 0.15;
+
+        const financingMessage = isFullFinancing
+          ? "100% financiado"
+          : `Entrega $${downPayment.toLocaleString("es-AR")} y el resto en cuotas fijas`;
 
         await prisma.car.create({
           data: {
             title: carData.title,
             slug: uniqueSlug,
 
-            brandId: brandId,
-            modelId: modelId,
+            brandId,
+            modelId,
 
             version: carData.version || null,
             year: carData.year,
@@ -722,11 +723,10 @@ async function main() {
             description: carData.description,
 
             locationId: randomLocation.id,
-
-            images: images,
+            images,
 
             acceptsFinancing: true,
-            financingDownPayment: downPayment,
+            financingDownPayment: isFullFinancing ? null : downPayment,
             financingNotes: financingMessage,
 
             tags: {
