@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { toast } from "sonner";
 
 import { CarFormFields } from "@/components/cars/car-form/car-form-fields";
@@ -50,7 +50,7 @@ export function CarForm({ car, mode }: CarFormProps) {
     watch,
     trigger,
   } = useForm<CarInput>({
-    resolver: zodResolver(carSchema),
+    resolver: zodResolver(carSchema) as Resolver<CarInput>,
     defaultValues: initialFormValues,
     mode: "onChange",
   });

@@ -10,17 +10,17 @@ export function carToFormValues(car?: CarWithRelations): Partial<CarInput> {
     modelId: car.modelId || "",
     version: car.version || "",
     color: car.color || "",
-    year: car.year?.toString() || "",
-    kilometers: car.kilometers?.toString() || "",
+    year: car.year ?? 0,
+    kilometers: car.kilometers ?? 0,
     type: car.type || "SEDAN",
     fuelType: car.fuelType || "GASOLINE",
     transmission: car.transmission || "MANUAL",
-    price: car.price?.toString() || "",
+    price: car.price ?? 0,
     currency: car.currency || "ARS",
     description: car.description || "",
-    locationId: car.locationId || "",
+    locationId: car.locationId ?? undefined,
     images: Array.isArray(car.images) ? car.images : [],
-    tags: car.tags ? (Array.isArray(car.tags) ? car.tags.map((t) => t.name).join(",") : "") : "",
+    tags: car.tags ? car.tags.map((t) => t.id) : [],
     status: car.status || "AVAILABLE",
   };
 }
@@ -32,17 +32,17 @@ export function formValuesToPayload(data: CarInput, selectedTags: string[]): Car
     modelId: data.modelId,
     version: data.version,
     color: data.color,
-    year: parseInt(data.year, 10),
-    kilometers: parseInt(data.kilometers, 10),
+    year: data.year,
+    kilometers: data.kilometers,
     type: data.type,
     fuelType: data.fuelType,
     transmission: data.transmission,
-    price: parseFloat(data.price),
+    price: data.price,
     currency: data.currency,
     description: data.description,
-    locationId: data.locationId || null,
+    locationId: data.locationId,
     images: Array.isArray(data.images) ? data.images : [],
-    tags: selectedTags.length > 0 ? selectedTags : parseTagsString(data.tags),
+    tags: selectedTags.length > 0 ? selectedTags : (data.tags ?? []),
     status: data.status,
   };
 }
@@ -60,20 +60,11 @@ export function getDefaultFormValues(): Partial<CarInput> {
     modelId: "",
     version: "",
     color: "",
-    year: "",
-    kilometers: "",
-    price: "",
+    year: 0,
+    kilometers: 0,
+    price: 0,
     description: "",
     locationId: "",
-    tags: "",
+    tags: [],
   };
-}
-
-function parseTagsString(tags?: string | string[]): string[] {
-  if (Array.isArray(tags)) return tags;
-  if (!tags) return [];
-  return tags
-    .split(",")
-    .map((t) => t.trim())
-    .filter(Boolean);
 }
