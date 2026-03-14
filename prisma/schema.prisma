@@ -184,7 +184,7 @@ model Car {
   kilometers   Int
   type         CarType
   fuelType     FuelType
-  transmission Transmission?
+  transmission Transmission
   patent       String?       @unique
   price        Float
   currency     Currency      @default(ARS)
@@ -202,36 +202,17 @@ model Car {
   user         User?         @relation("UserCars", fields: [userId], references: [id])
   payments     Payment[]
   visits       Visit[]
-
-  // ========================================
-  // 🆕 FINANCIACIÓN
-  // ========================================
-
   acceptsFinancing     Boolean @default(false)
   financingDownPayment Int?
   financingNotes       String?
-
-
-  // ========================================
-  // 🆕 PERMUTA
-  // ========================================
   acceptsTrade         Boolean   @default(false)
-  tradeNotes           String?   @db.Text // Condiciones de permuta
-
-  // ========================================
-  // 🆕 MÉTODOS DE PAGO
-  // ========================================
+  tradeNotes           String?   @db.Text
   acceptsCash          Boolean   @default(true)
   acceptsTransfer      Boolean   @default(true)
   acceptsCrypto        Boolean   @default(false)
-
-  // ========================================
-  // 🆕 ESTADÍSTICAS (para dashboard vendedor)
-  // ========================================
-  viewCount            Int       @default(0) // Contador de vistas
-  contactCount         Int       @default(0) // Clicks en WhatsApp/teléfono
-  favoriteCount        Int       @default(0) // Veces agregado a favoritos
-
+  viewCount            Int       @default(0) 
+  contactCount         Int       @default(0) 
+  favoriteCount        Int       @default(0) 
   @@index([userId])
   @@index([status])
   @@index([brandId])
