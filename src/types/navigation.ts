@@ -1,6 +1,5 @@
+import { Role } from "@prisma/client";
 import { LucideIcon } from "lucide-react";
-
-export type UserRole = "ADMIN" | "COLLABORATOR";
 
 export type NavAction = "logout";
 
@@ -10,7 +9,7 @@ export interface AdminNavItem {
   href?: string;
   action?: NavAction;
   icon?: LucideIcon;
-  roles?: UserRole[];
+  roles?: Role[];
   showInHeader?: boolean;
   showInDropdown?: boolean;
 }
