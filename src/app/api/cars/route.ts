@@ -1,24 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import slugify from "slugify";
 
+import { generateSlugBase, generateUniqueSlug } from "@/lib/cars/slug";
 import { revalidateCar, revalidateCars } from "@/lib/cache";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
-
-function generateSlugBase(brand: string, model: string, version: string, year: number, km: number) {
-  return slugify(`${brand} ${model} ${version} ${year} ${km}`, {
-    lower: true,
-    strict: true,
-  });
-}
-
-async function generateUniqueSlug(base: string) {
-  let slug = base;
-  while (await prisma.car.findFirst({ where: { slug } })) {
-    slug = `${base}-${Math.random().toString(36).slice(2, 6)}`;
-  }
-  return slug;
-}
+import { carSchema } from "@/lib/validations/car";
+import type { CreateCarPayload } from "@/types/car-form";
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +14,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const data = await request.json();
+    const body = await request.json();
+
+    const parsed = carSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    }
+
+    const data: CreateCarPayload = parsed.data;
 
     const brand = await prisma.brand.findUnique({
       where: { id: data.brandId },
@@ -88,7 +83,7 @@ export async function POST(request: NextRequest) {
       if (error.message.includes("unique constraint")) {
         return NextResponse.json(
           {
-            error: "Ese slug o patent ya existe. Intenta con valores diferentes.",
+            error: "Ese slug o patente ya existe. Intenta con valores diferentes.",
           },
           { status: 400 },
         );
