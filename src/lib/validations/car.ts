@@ -13,45 +13,16 @@ export const carSchema = z.object({
   modelId: z.string().min(1, "El modelo es requerido"),
   version: z.string().optional(),
   color: z.string().optional(),
-  year: z
-    .string()
-    .min(1, "El año es requerido")
-    .refine(
-      (val) => {
-        const num = parseInt(val, 10);
-        return !isNaN(num) && num >= 1900 && num <= new Date().getFullYear() + 1;
-      },
-      {
-        message: `El año debe ser un número válido entre 1900 y ${new Date().getFullYear() + 1}`,
-      },
-    ),
-  kilometers: z
-    .string()
-    .min(1, "Los kilómetros son requeridos")
-    .refine(
-      (val) => {
-        const num = parseInt(val, 10);
-        return !isNaN(num) && num >= 0;
-      },
-      {
-        message: "Los kilómetros deben ser un número válido mayor o igual a 0",
-      },
-    ),
+  year: z.coerce
+    .number()
+    .int()
+    .min(1900, "El año debe ser mayor o igual a 1900")
+    .max(new Date().getFullYear() + 1, "El año debe ser menor o igual a " + (new Date().getFullYear() + 1)),
+  kilometers: z.coerce.number().int().min(0, "Los kilómetros deben ser mayor o igual a 0"),
   type: CarTypeEnum,
   fuelType: FuelTypeEnum,
   transmission: TransmissionEnum,
-  price: z
-    .string()
-    .min(1, "El precio es requerido")
-    .refine(
-      (val) => {
-        const num = parseFloat(val);
-        return !isNaN(num) && num > 0;
-      },
-      {
-        message: "El precio debe ser un número válido mayor a 0",
-      },
-    ),
+  price: z.coerce.number().positive().min(1, "El precio debe ser mayor a 0"),
   currency: CurrencyEnum,
   description: z
     .string()
@@ -61,7 +32,13 @@ export const carSchema = z.object({
   images: z
     .array(z.string().min(1, "Cada imagen debe tener un identificador válido"))
     .min(1, "Debes agregar al menos una imagen"),
-  tags: z.union([z.array(z.string()), z.string()]).optional(),
+  tags: z
+    .union([z.array(z.string()), z.string()])
+    .optional()
+    .transform((val) => {
+      if (!val) return undefined;
+      return Array.isArray(val) ? val : [val];
+    }),
   status: CarStatusEnum,
 });
 
