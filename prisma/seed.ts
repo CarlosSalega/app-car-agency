@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import crypto from "crypto";
-
 import {
   PaymentMethod,
   PaymentStatus,
@@ -12,14 +11,13 @@ import {
   FuelType,
   Transmission,
 } from "@prisma/client";
-import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
-import slugify from "slugify";
-
-import { brands } from "../src/data/brands";
-import { modelsByBrand } from "../src/data/modelsByBrand";
-import { prisma } from "../src/lib/db";
-import { CLOUDINARY_UPLOAD_OPTIONS } from "../src/lib/images/cloudinary-config";
+import { generateSlugBase, generateUniqueSlug } from "@/lib/cars/slug";
+import { brands } from "@/data/brands";
+import { modelsByBrand } from "@/data/modelsByBrand";
+import { prisma } from "@/lib/db";
+import { CLOUDINARY_UPLOAD_OPTIONS } from "@/lib/images/cloudinary-config";
+import { hashPassword } from "@/lib/hash-password";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -27,30 +25,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
   timeout: 60_000,
 });
-
-function hashPassword(password: string): string {
-  return bcrypt.hashSync(password, 10);
-}
-
-function generateSlugBase(brand: string, model: string, version: string, year: number, km: number): string {
-  return slugify(`${brand} ${model} ${version} ${year} ${km}`, {
-    lower: true,
-    strict: true,
-  });
-}
-
-async function generateUniqueSlug(base: string): Promise<string> {
-  let slug = base;
-  let counter = 1;
-
-  while (true) {
-    const exists = await prisma.car.findFirst({ where: { slug } });
-    if (!exists) return slug;
-
-    slug = `${base}-${counter}`;
-    counter++;
-  }
-}
 
 function getLocalImagePathsForCar(brand: string, model: string): string[] {
   const imagesDir = path.join(process.cwd(), "public", "autos");
