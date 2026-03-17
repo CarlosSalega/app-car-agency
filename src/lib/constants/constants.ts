@@ -13,8 +13,8 @@ export const transmissionLabels: Record<string, string> = {
 };
 
 export const statusColors: Record<string, string> = {
-  AVAILABLE: "bg-green-600",
-  RESERVED: "bg-yellow-500",
-  SOLD: "bg-red-600",
-  INACTIVE: "bg-gray-600",
+  AVAILABLE: "bg-success",
+  RESERVED: "bg-warning",
+  SOLD: "bg-danger",
+  INACTIVE: "bg-info",
 };

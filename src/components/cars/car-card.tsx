@@ -51,7 +51,7 @@ export function CarCard({ car }: CarCardProps) {
           />
 
           <div className="absolute top-2 right-2 z-20">
-            <Badge className={`${statusColors[status] ?? "bg-gray-600"} text-white`}>
+            <Badge className={statusColors[status] ?? "bg-muted text-foreground"}>
               {status === "AVAILABLE" ? "Disponible" : String(status ?? "")}
             </Badge>
           </div>
@@ -87,7 +87,7 @@ export function CarCard({ car }: CarCardProps) {
           <p className="text-foreground text-lg font-bold sm:text-xl">{formatPrice(price, currency)}</p>
 
           {acceptsFinancing && financingNotes && (
-            <p className="text-xs leading-tight text-emerald-600">{financingNotes}</p>
+            <p className="text-success text-sm leading-tight font-bold">{financingNotes}</p>
           )}
         </CardFooter>
       </Card>
