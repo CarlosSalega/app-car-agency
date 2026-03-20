@@ -13,7 +13,7 @@ export const transmissionLabels: Record<string, string> = {
 };
 
 export const statusColors: Record<string, string> = {
-  AVAILABLE: "bg-success",
+  AVAILABLE: "bg-badge",
   RESERVED: "bg-warning",
   SOLD: "bg-danger",
   INACTIVE: "bg-info",

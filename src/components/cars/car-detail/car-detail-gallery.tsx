@@ -280,6 +280,7 @@ export function CarDetailGallery({ images, title }: CarDetailGalleryProps) {
           alt={`${title} - Imagen principal`}
           priority
           skipSkeleton
+          variant="detail"
           className="size-full object-cover"
         />
 
@@ -326,6 +327,7 @@ export function CarDetailGallery({ images, title }: CarDetailGalleryProps) {
                   imageKey={imageKey}
                   alt={`${title} - Miniatura ${index + 1}`}
                   skipSkeleton
+                  variant="thumbnail"
                   className="size-full object-cover"
                 />
                 {isLastWithOverlay && (
@@ -343,7 +345,7 @@ export function CarDetailGallery({ images, title }: CarDetailGalleryProps) {
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
         <DialogContent
           aria-describedby={undefined}
-          className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 !fixed !inset-0 !top-0 !left-0 !z-50 !m-0 !h-screen !w-screen !max-w-none !translate-x-0 !translate-y-0 !rounded-none border-none bg-black/90 !p-0 [&>button:first-of-type]:hidden"
+          className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 !fixed !inset-0 !top-0 !left-0 !z-50 !m-0 !h-full !w-full !max-w-none !translate-x-0 !translate-y-0 !rounded-none border-none bg-black/90 !p-0 [&>button:first-of-type]:hidden"
         >
           <VisuallyHidden>
             <DialogTitle>{title}</DialogTitle>
@@ -372,6 +374,7 @@ export function CarDetailGallery({ images, title }: CarDetailGalleryProps) {
                       imageKey={imageKey}
                       alt={`${title} - ${index + 1}`}
                       skipSkeleton
+                      variant="thumbnail"
                       className="size-full object-cover"
                     />
                   </button>
@@ -434,7 +437,13 @@ export function CarDetailGallery({ images, title }: CarDetailGalleryProps) {
                     willChange: "transform",
                   }}
                 >
-                  <CarImage imageKey={mainImageKey} alt={`${title} - Fullscreen`} skipSkeleton className="size-full" />
+                  <CarImage
+                    imageKey={mainImageKey}
+                    alt={`${title} - Fullscreen`}
+                    skipSkeleton
+                    variant="fullscreen"
+                    className="size-full"
+                  />
                 </div>
               </div>
 

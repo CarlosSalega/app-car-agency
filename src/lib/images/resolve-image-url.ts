@@ -1,20 +1,20 @@
 import { FALLBACK_IMAGE } from "@/lib/constants";
 
-import { CLOUDINARY_RESPONSIVE_TRANSFORMS } from "./cloudinary-config";
+const VARIANTS = {
+  thumbnail: "w_300,h_225,c_fill,f_auto,q_auto,dpr_auto",
+  card: "w_400,h_300,c_fill,f_auto,q_auto,dpr_auto",
+  detail: "w_800,h_600,c_fill,f_auto,q_auto,dpr_auto",
+  fullscreen: "w_1200,h_900,c_limit,f_auto,q_auto,dpr_auto",
+};
 
-export function resolveImageUrl(key: string) {
+export function resolveImageUrl(key: string, variant: keyof typeof VARIANTS = "card") {
   const base = process.env.NEXT_PUBLIC_IMAGE_CDN;
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
-  if (!cloudName || !base) {
-    console.error("Variables de Cloudinary no están definidas");
-    return FALLBACK_IMAGE;
-  }
+  if (!key || !cloudName || !base) return FALLBACK_IMAGE;
 
-  if (process.env.NEXT_PUBLIC_IMAGE_PROVIDER === "cloudinary") {
-    const url = `${base.replace("${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}", cloudName)}/${CLOUDINARY_RESPONSIVE_TRANSFORMS}/${key}.webp`;
-    return url;
-  }
+  const transform = VARIANTS[variant];
+  const cleanKey = key.replace(/\.webp$/, "");
 
-  return `${base}/${key}.webp`;
+  return `${base.replace("${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}", cloudName)}/${transform}/${cleanKey}`;
 }

@@ -3,19 +3,9 @@ export const CLOUDINARY_UPLOAD_OPTIONS = {
   resource_type: "image" as const,
 
   quality: "auto" as const,
-
   fetch_format: "auto" as const,
 
   eager: [
-    {
-      width: 800,
-      height: 600,
-      crop: "fill" as const,
-      gravity: "auto" as const,
-      quality: "auto" as const,
-      fetch_format: "auto" as const,
-      flags: ["progressive"],
-    },
     {
       width: 400,
       height: 300,
@@ -27,7 +17,8 @@ export const CLOUDINARY_UPLOAD_OPTIONS = {
     },
   ],
 
-  responsive_width: true,
+  overwrite: false,
+  invalidate: true,
 
   tags: ["car-agency", "vehicle"],
 };
@@ -36,8 +27,8 @@ export const CLOUDINARY_RESPONSIVE_TRANSFORMS = "w_auto,dpr_auto,f_auto,q_auto,c
 
 export const CLOUDINARY_SIZES = {
   thumbnail: {
-    width: 200,
-    height: 150,
+    width: 300,
+    height: 225,
   },
   mobile: {
     width: 400,

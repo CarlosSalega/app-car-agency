@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { ImageSkeleton } from "@/components/ui/image-skeleton";
 import { FALLBACK_IMAGE } from "@/lib/constants/constants";
 import { cn } from "@/lib/utils";
+import { resolveImageUrl } from "@/lib/images/resolve-image-url";
+
+type ImageVariant = "thumbnail" | "card" | "detail" | "fullscreen";
 
 interface CarImageProps {
   imageKey?: string | null;
@@ -13,6 +16,7 @@ interface CarImageProps {
   sizes?: string;
   priority?: boolean;
   skipSkeleton?: boolean;
+  variant?: ImageVariant;
 }
 
 type ImageState = "loading" | "loaded" | "error";
@@ -24,11 +28,12 @@ export function CarImage({
   priority = false,
   sizes = "(max-width: 768px) 100vw, 50vw",
   skipSkeleton = false,
+  variant = "card",
 }: CarImageProps) {
   const [state, setState] = useState<ImageState>(skipSkeleton ? "loaded" : "loading");
 
   const imgRef = useRef<HTMLImageElement>(null);
-  const src = imageKey ? `/api/images/${imageKey}` : FALLBACK_IMAGE;
+  const src = imageKey ? resolveImageUrl(imageKey, variant) : FALLBACK_IMAGE;
 
   useEffect(() => {
     if (skipSkeleton) return;
@@ -58,7 +63,13 @@ export function CarImage({
   if (state === "error") {
     return (
       <div className={cn("relative", className)}>
-        <img src={FALLBACK_IMAGE} alt={alt} className="size-full object-cover" loading={priority ? "eager" : "lazy"} />
+        <img
+          src={FALLBACK_IMAGE}
+          alt={alt}
+          decoding="async"
+          className="size-full object-cover"
+          loading={priority ? "eager" : "lazy"}
+        />
       </div>
     );
   }
@@ -71,8 +82,10 @@ export function CarImage({
         ref={imgRef}
         src={src}
         alt={alt}
-        sizes={sizes}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        fetchPriority={priority ? "high" : "auto"}
         className={cn(
           "size-full object-cover transition-opacity duration-300",
           !skipSkeleton && state === "loading" ? "opacity-0" : "opacity-100",

@@ -87,7 +87,7 @@ export function CarCard({ car }: CarCardProps) {
           <p className="text-foreground text-lg font-bold sm:text-xl">{formatPrice(price, currency)}</p>
 
           {acceptsFinancing && financingNotes && (
-            <p className="text-success text-sm leading-tight font-bold">{financingNotes}</p>
+            <p className="text-badge text-sm leading-tight font-bold">{financingNotes}</p>
           )}
         </CardFooter>
       </Card>

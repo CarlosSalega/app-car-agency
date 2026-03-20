@@ -45,12 +45,11 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
     setUploadProgress(0);
 
     try {
-      const uploadedKeys: string[] = [];
+      let completed = 0;
 
-      for (let fileIndex = 0; fileIndex < files.length; fileIndex++) {
-        const currentFile = files[fileIndex];
+      const uploadPromises = files.map(async (file) => {
         const formData = new FormData();
-        formData.append("file", currentFile);
+        formData.append("file", file);
 
         const response = await fetch("/api/upload", {
           method: "POST",
@@ -62,12 +61,15 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
           throw new Error(errorData.error || "Error al subir imagen");
         }
 
-        const uploadResult = await response.json();
-        uploadedKeys.push(uploadResult.key);
+        const result = await response.json();
 
-        const progressPercentage = Math.round(((fileIndex + 1) / files.length) * 100);
-        setUploadProgress(progressPercentage);
-      }
+        completed++;
+        setUploadProgress(Math.round((completed / files.length) * 100));
+
+        return result.key;
+      });
+
+      const uploadedKeys = await Promise.all(uploadPromises);
 
       onChange([...value, ...uploadedKeys]);
 
@@ -144,8 +146,11 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
               className="group bg-muted relative aspect-4/3 max-w-20 overflow-hidden rounded-lg border"
             >
               <img
-                src={resolveImageUrl(imageKey)}
+                src={resolveImageUrl(imageKey, "thumbnail")}
                 alt={`Imagen ${imageIndex + 1}`}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
                 className="size-full object-cover transition-transform group-hover:scale-105"
               />
               <button
