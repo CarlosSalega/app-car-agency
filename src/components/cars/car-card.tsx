@@ -43,13 +43,13 @@ export function CarCard({ car }: CarCardProps) {
   return (
     <Link href={`/autos/${slug}`} className="block">
       <Card className="group flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg">
-        <div className="relative aspect-4/5 overflow-hidden sm:aspect-4/3 lg:aspect-3/2">
+        {/* Imagen: square en mobile, 4/3 en sm, 3/2 en lg */}
+        <div className="relative aspect-square overflow-hidden sm:aspect-4/3 lg:aspect-3/2">
           <CarImage
             imageKey={imageKey}
             alt={title}
             className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
-
           <div className="absolute top-2 right-2 z-20">
             <Badge className={statusColors[status] ?? "bg-muted text-foreground"}>
               {status === "AVAILABLE" ? "Disponible" : String(status ?? "")}
@@ -57,37 +57,36 @@ export function CarCard({ car }: CarCardProps) {
           </div>
         </div>
 
-        <CardContent className="flex flex-1 flex-col gap-3 p-3 sm:p-4">
-          <h3 className="line-clamp-2 text-base font-semibold sm:line-clamp-1">{title}</h3>
+        <CardContent className="flex flex-1 flex-col gap-2 p-2 sm:gap-3 sm:p-4">
+          {/* Título: siempre 1 línea en mobile */}
+          <h3 className="line-clamp-1 text-sm leading-tight font-semibold sm:text-base">{title}</h3>
 
-          <div className="text-muted-foreground grid grid-cols-2 gap-2 text-xs sm:text-sm">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="size-4 shrink-0" />
+          {/* Metadata: más chica en mobile */}
+          <div className="text-muted-foreground grid grid-cols-2 gap-x-1 gap-y-1 text-[10px] sm:gap-2 sm:text-xs">
+            <div className="flex items-center gap-1">
+              <Calendar className="size-3 shrink-0 sm:size-4" />
               <span className="truncate">{year}</span>
             </div>
-
-            <div className="flex items-center gap-1.5">
-              <Gauge className="size-4 shrink-0" />
+            <div className="flex items-center gap-1">
+              <Gauge className="size-3 shrink-0 sm:size-4" />
               <span className="truncate">{formatKm(kilometers)} km</span>
             </div>
-
-            <div className="flex items-center gap-1.5">
-              <Fuel className="size-4 shrink-0" />
+            <div className="flex items-center gap-1">
+              <Fuel className="size-3 shrink-0 sm:size-4" />
               <span className="truncate">{fuelLabels[fuelType] ?? fuelType}</span>
             </div>
-
-            <div className="flex items-center gap-1.5">
-              <Settings className="size-4 shrink-0" />
+            <div className="flex items-center gap-1">
+              <Settings className="size-3 shrink-0 sm:size-4" />
               <span className="truncate">{transmissionLabel}</span>
             </div>
           </div>
         </CardContent>
 
-        <CardFooter className="bg-muted/30 flex flex-col items-start gap-1 border-t p-3 sm:p-4">
-          <p className="text-foreground text-lg font-bold sm:text-xl">{formatPrice(price, currency)}</p>
-
+        <CardFooter className="bg-muted/30 flex flex-col items-start gap-0.5 border-t p-2 sm:gap-1 sm:p-4">
+          {/* Precio más chico en mobile */}
+          <p className="text-foreground text-sm font-bold sm:text-xl">{formatPrice(price, currency)}</p>
           {acceptsFinancing && financingNotes && (
-            <p className="text-badge text-sm leading-tight font-bold">{financingNotes}</p>
+            <p className="text-badge line-clamp-1 text-[10px] leading-tight font-bold sm:text-sm">{financingNotes}</p>
           )}
         </CardFooter>
       </Card>
